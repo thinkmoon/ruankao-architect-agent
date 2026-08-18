@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "xisai-study-pack",
+      "name": "希赛网·系统架构设计师学习资料包",
+      "url": "https://wangxiao.xisaiwang.com/rk/xxzl/n131.html",
+      "domain": "xisaiwang.com",
+      "type": "培训机构资料",
+      "retrieved_date": "2026-08-17",
+      "notes": "含2026下半年考点自查清单、经典100题、案例模拟题合集、2026上半年综合知识真题（回忆版）、2025下半年论文真题、2024年真题等；部分免费，部分付费",
+      "free_resources": [
+        "2026年下半年考点自查清单.pdf",
+        "2026年下半年案例模拟题合集.pdf",
+        "2026年下半年经典100题.pdf",
+        "2026上半年综合知识真题（回忆版）",
+        "2025下半年论文真题",
+        "2024年上下半年真题"
+      ]
+    },
+    {
+      "id": "xisai-tiku",
+      "name": "希赛网·在线题库（历年真题+每日一练+章节练习）",
+      "url": "https://wangxiao.xisaiwang.com/tiku2/list-dp132.html",
+      "domain": "xisaiwang.com",
+      "type": "在线题库",
+      "retrieved_date": "2026-08-17",
+      "notes": "免费刷题，含历年真题、每日10题、章节专项；付费可解锁高频错题集与视频解析"
+    },
+    {
+      "id": "xisai-2024-xh-zhenti",
+      "name": "希赛网·2024年下半年系统架构设计师综合知识真题（8题样本）",
+      "url": "https://www.educity.cn/rk/5443164.html",
+      "domain": "educity.cn",
+      "type": "历年真题",
+      "retrieved_date": "2026-08-17",
+      "notes": "页面含2024年下半年综合知识部分真题及答案，可核验；完整题目需登录题库"
+    },
+    {
+      "id": "github-system-architect",
+      "name": "GitHub·系统架构设计师备考资源库（xiaomabenten）",
+      "url": "https://github.com/xiaomabenten/system_architect",
+      "mirror_used": "https://gitcode.com/xiaomabenten/system_architect.git",
+      "local_path": "materials/github-system-architect/",
+      "domain": "github.com",
+      "type": "开源备考资源库",
+      "retrieved_date": "2026-08-17",
+      "notes": "已克隆到本地。含官方教程第2版（带搜索版+划重点版）、历年真题2009-2025+答案解析、论文范文95篇、案例分析知识点整理、考试笔记、计算题解析、错题集、设计模式速记、60天/30天备考计划等",
+      "highlights": [
+        "02/03、【带搜索】系统架构设计师第二版.pdf",
+        "02/系统架构第二版 大纲.pdf",
+        "03、历年真题2009-2025年+答案解析",
+        "04/02范文（真题26篇+参考19篇+老版50篇）",
+        "09/系统架构设计师教程（第4版）-划重点版本.pdf",
+        "09/系统架构设计师考试笔记.pdf",
+        "09/系统架构师案例分析知识点整理.pdf",
+        "09/系统架构设计师部分计算题解析.pdf",
+        "11/设计模式速记.pdf"
+      ]
+    },
+    {
+      "id": "51cto-tiku",
+      "name": "51CTO题库·系统架构设计师历年试题",
+      "url": "https://t.51cto.com/list/years/sub-240",
+      "domain": "51cto.com",
+      "type": "在线题库",
+      "retrieved_date": "2026-08-17",
+      "notes": "含2022-2026年各期回忆版真题（选择题、案例分析、论文），2026年5月三科均已收录；可在线做题"
+    },
+    {
+      "id": "hqwx-zhenti",
+      "name": "环球网校·系统架构历年真题及解析",
+      "url": "https://www.hqwx.com/leraning/class_xtjgsjs/zhenti/",
+      "domain": "hqwx.com",
+      "type": "历年真题",
+      "retrieved_date": "2026-08-17",
+      "notes": "含2026上半年、2025上下半年、2024下半年真题+答案解析；2026上半年回忆版已整理"
+    },
+    {
+      "id": "zhenti-md-younghong",
+      "name": "YoungHong1992/ruankao-senior-architecture-designer（历年真题 Markdown 清洗版）",
+      "url": "https://github.com/YoungHong1992/ruankao-senior-architecture-designer",
+      "local_path": "materials/zhenti-md/",
+      "domain": "github.com",
+      "type": "开源真题资源库",
+      "retrieved_date": "2026-08-18",
+      "notes": "已 clone 至本地。含 2016-2025 年历年真题 Markdown 清洗版（三科：综合知识、案例分析、论文），重点使用 02.历年真题-清洗版/ 目录下 2020-2025 年共 25 个文件。同时含官方教材第2版和大纲的 Markdown 整理版。",
+      "highlights": [
+        "02.历年真题-清洗版/ 2020-2025（25文件，三科齐全）",
+        "01.系统架构设计师教材-清洗版/",
+        "00.系统架构设计师考试大纲-清洗版/"
+      ]
+    },
+    {
+      "id": "xisai-baodian-2026s",
+      "name": "希赛·2026年上半年系统架构设计师核心宝典",
+      "local_path": "materials/2026年上半年系统架构设计师核心宝典.pdf",
+      "markdown_path": "materials/preprocessed/2026-baodian/全文合并.md",
+      "domain": "xisaiwang.com",
+      "type": "培训机构资料",
+      "retrieved_date": "2026-08-18",
+      "pages": 158,
+      "notes": "希赛网2026上半年核心宝典，扫描图片型PDF。已于2026-08-18通过qwen3.6-27b视觉识别转写为Markdown（materials/baodian-md/），共16批次，全文约13.4万字符，300KB。"
+    },
+    {
+      "id": "official-textbook",
+      "name": "官方教材·系统架构设计师教程（第2版）",
+      "url": "https://www.educity.cn/rk/5416494.html",
+      "domain": "educity.cn",
+      "type": "官方教材",
+      "retrieved_date": "2026-08-17",
+      "notes": "全国计算机专业技术资格考试办公室编，清华大学出版社2022年12月出版。系统架构设计师暂未改版，仍以第2版为准。覆盖：计算机系统、OS、数据库、网络、软件工程、面向对象、信息安全、系统架构设计、质量属性与架构评估等"
+    }
+  ],
+  "policy": {
+    "preferred_order": [
+      "主管部门或考试机构官方信息",
+      "官方教材或标准",
+      "可核验的历年真题",
+      "高质量培训与技术资料",
+      "论坛或个人文章"
+    ],
+    "copyright": "保存摘要、必要短引文、来源链接和访问日期；不批量复制受版权保护内容"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "candidate": {
+    "experience": "近十年开发经验，资深开发者",
+    "prior_ruankao_experience": false,
+    "communication_style": "直截了当的资深同行",
+    "usage_mode": "按需唤起，不主动督促"
+  },
+  "exam": {
+    "name": "系统架构设计师",
+    "level": "软考高级",
+    "target": "2026年下半年",
+    "exact_date": "2026-10-24",
+    "exam_date_range": "2026-10-24至2026-10-27",
+    "date_verification_status": "verified",
+    "date_source": "计考办(2026)1号，多省报名通知交叉印证，检索日期2026-08-17",
+    "province": "广东",
+    "registration_deadline": "2026-08-25T17:00+08:00",
+    "registration_start": "2026-08-17T09:00+08:00",
+    "admit_card_available": "2026-10-19",
+    "registration_url": "https://www.ruankao.org.cn",
+    "registration_status": "已报名成功",
+    "registration_confirmed_date": "2026-08-17"
+  },
+  "availability": {
+    "weekday_evening_hours": {
+      "min": 1,
+      "max": 2
+    },
+    "weekend_daily_hours": {
+      "min": 3,
+      "max": 4
+    }
+  },
+  "preferences": {
+    "practice_source": "优先可核验真题；仅在用户要求时生成模拟题",
+    "answer_reveal": "提交答案后",
+    "grading": "默认严格按真实考试标准；用户可临时要求其他方式",
+    "storage": "本地 Markdown 和 JSON",
+    "web_research": true
+  },
+  "deferred_questions": [
+    "论文阶段再采集代表性项目经历"
+  ]
+}
+

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "phase": "setup",
+  "official_start_date": "2026-10-24",
+  "official_exam_date_range": "2026-10-24至2026-10-27",
+  "registration_deadline_guangdong": "2026-08-25",
+  "last_study_date": null,
+  "total_study_minutes": 0,
+  "completed_sessions": 0,
+  "attempted_questions": 0,
+  "scores": {
+    "comprehensive": [],
+    "case_analysis": [],
+    "essay": []
+  },
+  "knowledge_topics": {},
+  "weak_topics": [],
+  "next_review": []
+}
+
