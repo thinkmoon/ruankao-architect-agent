@@ -1,17 +1,16 @@
+node_modules/
+dist/
+.playwright-cli/
+mobile-preview.png
+.env.local
+
 # 大体积原始资料（不追踪）
 materials/github-system-architect/
 materials/*.pdf
 materials/zhenti-md/
 
-# 转写工具产物（原始分批文件，已有合并版）
+# 转写工具产物（原始分批文件）
 materials/preprocessed/
-
-# Python 缓存
-__pycache__/
-*.pyc
-
-# 临时图片缓存
-/tmp/
 
 # 系统文件
 .DS_Store
