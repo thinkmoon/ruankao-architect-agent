@@ -38,7 +38,23 @@
       "subjects": [
         "综合知识"
       ],
-      "dailyFocus": "综合知识真题摸底与错题归因"
+      "dailyFocus": "综合知识真题摸底与错题归因",
+      "completionCriteria": [
+        {
+          "metric": "attemptedQuestions",
+          "target": 100,
+          "label": "累计完成 100 道摸底题"
+        }
+      ],
+      "progress": [
+        {
+          "metric": "attemptedQuestions",
+          "target": 100,
+          "label": "累计完成 100 道摸底题",
+          "actual": 29,
+          "met": false
+        }
+      ]
     },
     {
       "id": "foundation",
@@ -52,7 +68,23 @@
         "综合知识",
         "案例分析"
       ],
-      "dailyFocus": "知识模块学习 + 案例分析"
+      "dailyFocus": "知识模块学习 + 案例分析",
+      "completionCriteria": [
+        {
+          "metric": "studyMinutes",
+          "target": 1800,
+          "label": "累计学习 30 小时"
+        }
+      ],
+      "progress": [
+        {
+          "metric": "studyMinutes",
+          "target": 1800,
+          "label": "累计学习 30 小时",
+          "actual": 4,
+          "met": false
+        }
+      ]
     },
     {
       "id": "essay",
@@ -65,7 +97,23 @@
       "subjects": [
         "论文"
       ],
-      "dailyFocus": "论文结构、素材与限时写作"
+      "dailyFocus": "论文结构、素材与限时写作",
+      "completionCriteria": [
+        {
+          "metric": "completedDays",
+          "target": 5,
+          "label": "完成 5 个有效学习日"
+        }
+      ],
+      "progress": [
+        {
+          "metric": "completedDays",
+          "target": 5,
+          "label": "完成 5 个有效学习日",
+          "actual": 1,
+          "met": false
+        }
+      ]
     },
     {
       "id": "sprint",
@@ -80,7 +128,23 @@
         "案例分析",
         "论文"
       ],
-      "dailyFocus": "全科模拟、错题回炉与查漏补缺"
+      "dailyFocus": "全科模拟、错题回炉与查漏补缺",
+      "completionCriteria": [
+        {
+          "metric": "masteredMistakes",
+          "target": 20,
+          "label": "掌握 20 道错题"
+        }
+      ],
+      "progress": [
+        {
+          "metric": "masteredMistakes",
+          "target": 20,
+          "label": "掌握 20 道错题",
+          "actual": 2,
+          "met": false
+        }
+      ]
     }
   ],
   "dailyPlans": {
@@ -120,12 +184,44 @@
       "subject": "综合知识",
       "wrongCount": 1,
       "lastWrongAt": "2026-08-20",
-      "nextReviewAt": "2026-08-21",
-      "intervalDays": 1,
+      "nextReviewAt": "2026-09-03",
+      "intervalDays": 14,
       "ease": 2.5,
       "status": "mastered",
       "priority": "medium",
-      "reviewHistory": []
+      "consecutiveCorrect": 5,
+      "reviewHistory": [
+        {
+          "answeredAt": "2026-08-20T05:54:22.872Z",
+          "correct": true,
+          "intervalDays": 1,
+          "nextReviewAt": "2026-08-21"
+        },
+        {
+          "answeredAt": "2026-08-20T08:12:09.243Z",
+          "correct": true,
+          "intervalDays": 3,
+          "nextReviewAt": "2026-08-23"
+        },
+        {
+          "answeredAt": "2026-08-20T08:23:18.209Z",
+          "correct": true,
+          "intervalDays": 7,
+          "nextReviewAt": "2026-08-27"
+        },
+        {
+          "answeredAt": "2026-08-20T08:29:51.060Z",
+          "correct": true,
+          "intervalDays": 14,
+          "nextReviewAt": "2026-09-03"
+        },
+        {
+          "answeredAt": "2026-08-20T09:08:35.485Z",
+          "correct": true,
+          "intervalDays": 14,
+          "nextReviewAt": "2026-09-03"
+        }
+      ]
     },
     {
       "mistakeId": "2024下-002",
@@ -134,12 +230,38 @@
       "subject": "综合知识",
       "wrongCount": 1,
       "lastWrongAt": "2026-08-20",
-      "nextReviewAt": "2026-08-21",
-      "intervalDays": 1,
+      "nextReviewAt": "2026-09-03",
+      "intervalDays": 14,
       "ease": 2.5,
       "status": "mastered",
       "priority": "medium",
-      "reviewHistory": []
+      "consecutiveCorrect": 4,
+      "reviewHistory": [
+        {
+          "answeredAt": "2026-08-20T08:21:28.139Z",
+          "correct": true,
+          "intervalDays": 1,
+          "nextReviewAt": "2026-08-21"
+        },
+        {
+          "answeredAt": "2026-08-20T08:28:22.092Z",
+          "correct": true,
+          "intervalDays": 3,
+          "nextReviewAt": "2026-08-23"
+        },
+        {
+          "answeredAt": "2026-08-20T08:39:11.753Z",
+          "correct": true,
+          "intervalDays": 7,
+          "nextReviewAt": "2026-08-27"
+        },
+        {
+          "answeredAt": "2026-08-20T09:25:00.822Z",
+          "correct": true,
+          "intervalDays": 14,
+          "nextReviewAt": "2026-09-03"
+        }
+      ]
     },
     {
       "mistakeId": "2024下-004",
@@ -153,6 +275,7 @@
       "ease": 2.5,
       "status": "scheduled",
       "priority": "medium",
+      "consecutiveCorrect": 0,
       "reviewHistory": []
     },
     {
@@ -167,7 +290,15 @@
       "ease": 2.5,
       "status": "scheduled",
       "priority": "medium",
-      "reviewHistory": []
+      "consecutiveCorrect": 1,
+      "reviewHistory": [
+        {
+          "answeredAt": "2026-08-20T09:31:39.957Z",
+          "correct": true,
+          "intervalDays": 1,
+          "nextReviewAt": "2026-08-21"
+        }
+      ]
     },
     {
       "mistakeId": "2024下-007",
@@ -181,7 +312,15 @@
       "ease": 2.5,
       "status": "scheduled",
       "priority": "medium",
-      "reviewHistory": []
+      "consecutiveCorrect": 1,
+      "reviewHistory": [
+        {
+          "answeredAt": "2026-08-20T09:34:30.190Z",
+          "correct": true,
+          "intervalDays": 1,
+          "nextReviewAt": "2026-08-21"
+        }
+      ]
     },
     {
       "mistakeId": "2024下-008",
@@ -195,6 +334,7 @@
       "ease": 2.5,
       "status": "scheduled",
       "priority": "medium",
+      "consecutiveCorrect": 0,
       "reviewHistory": []
     },
     {
@@ -209,20 +349,92 @@
       "ease": 2.5,
       "status": "scheduled",
       "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-012",
+      "sourceRef": "2024下-012",
+      "topic": "综合知识",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": [
+        {
+          "answeredAt": "2026-08-20T10:06:49.145Z",
+          "correct": true,
+          "intervalDays": 1,
+          "nextReviewAt": "2026-08-21"
+        }
+      ]
+    },
+    {
+      "mistakeId": "2024下-015",
+      "sourceRef": "2024下-015",
+      "topic": "综合知识",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-016",
+      "sourceRef": "2024下-016",
+      "topic": "计算机网络",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-017",
+      "sourceRef": "2024下-017",
+      "topic": "综合知识",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
       "reviewHistory": []
     }
   ],
   "stats": {
     "asOf": "2026-08-20",
-    "attemptedQuestions": 23,
-    "last20Accuracy": 70,
+    "attemptedQuestions": 29,
+    "studyMinutes": 4,
+    "completedDays": 1,
+    "masteredMistakes": 2,
+    "last20Accuracy": 55,
     "today": {
       "date": "2026-08-20",
-      "attemptedQuestions": 23,
-      "correctQuestions": 16,
+      "attemptedQuestions": 29,
+      "correctQuestions": 18,
       "dueReviews": 0,
+      "studyMinutes": 4,
       "plannedMinutes": 90
     }
   },
-  "updatedAt": "2026-08-20T10:27:49.580Z"
+  "updatedAt": "2026-08-20T12:17:31.172Z"
 }

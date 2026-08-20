@@ -8,6 +8,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import './styles.css';
+import './plan-overrides.css';
 import './acp.css';
 
 const EMPTY_STATS = { totalDone: 0, mistakeCount: 0, recentAccuracy: 0, studyDays: 0, trend: [], masteryByTopic: [], studyMinutes: 0, today: {}, reviewPlan: null };
@@ -71,16 +72,49 @@ function HomePage({ go, stats }) {
   </div>;
 }
 
-function ReviewPlanPage({ go, stats, plan, onTaskStatus }) {
+function PracticeCalendar({ stats }) {
+  const [cursor, setCursor] = useState(() => new Date());
+  const year = cursor.getFullYear(), month = cursor.getMonth();
+  const first = new Date(year, month, 1).getDay();
+  const days = new Date(year, month + 1, 0).getDate();
+  const activity = new Map((stats.calendar || []).map(item => [item.date, item]));
+  const cells = [...Array(first).fill(null), ...Array.from({length: days}, (_, i) => i + 1)];
+  const key = day => `${year}-${String(month + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+  return <section className="practice-calendar"><div className="calendar-head"><div><span className="plan-kicker">CHECK-IN CALENDAR</span><h3>刷题打卡</h3></div><div className="calendar-nav"><button onClick={() => setCursor(new Date(year, month - 1, 1))}><ArrowLeft size={15}/></button><b>{year}年{month + 1}月</b><button onClick={() => setCursor(new Date(year, month + 1, 1))}><ArrowRight size={15}/></button></div></div><div className="calendar-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div><div className="calendar-grid">{cells.map((day, i) => { const item=day?activity.get(key(day)):null; return <div className={`calendar-day ${day&&item?.questions?'has-practice':''}`} key={i}>{day&&<><b>{day}</b>{item?.questions>0&&<small>{item.questions}题</small>}</>}</div>})}</div><div className="calendar-summary"><span><i className="dot-practice"/>刷题日</span><span>{[...activity.values()].filter(item=>item.date.startsWith(`${year}-${String(month+1).padStart(2,'0')}`)&&item.questions>0).length} 天有答题</span></div></section>;
+}
+
+function ReviewPlanPage({ go, stats, plan }) {
   const today = plan?.stats?.today || stats.today || {};
   const todayPlan = plan?.dailyPlans?.[today.date] || stats.reviewPlan?.todayPlan;
   const phase = plan?.phases?.find(item => item.id === todayPlan?.phaseId) || stats.reviewPlan?.phase;
   const due = (plan?.mistakeQueue || []).filter(item => item.status !== 'mastered' && item.nextReviewAt <= today.date);
-  return <div className="page plan-page"><Header title="复习计划" back onBack={() => go('home')}/>
-    <section className="plan-summary"><span className="eyebrow"><Target size={14}/> 当前阶段</span><h2>{phase?.name || '备考准备'}</h2><p>{phase?.goal || '完成今天的学习任务，保持稳定节奏。'}</p><div className="plan-date">{today.date || '今天'} · 今日已完成 {today.attemptedQuestions || 0} 题 · 到期复习 {due.length} 项</div></section>
-    <section className="plan-section"><div className="section-title"><div><h3>今日任务</h3><p>按完成状态实时保存到 JSON 计划</p></div></div><div className="task-list">{todayPlan?.tasks?.map(task => <button key={task.id} className={`task-item ${task.status}`} onClick={() => onTaskStatus(task.id, task.status === 'completed' ? 'pending' : 'completed')}><span className="task-check">{task.status === 'completed' ? <Check size={16}/> : <span/>}</span><span className="task-copy"><b>{task.title}</b><small>{task.estimatedMinutes} 分钟 · {task.status === 'completed' ? '已完成' : '待完成'}</small></span><ChevronRight size={16}/></button>) || <div className="plan-empty">暂无今日任务</div>}</div></section>
-    <section className="plan-section"><div className="section-title"><div><h3>阶段路线</h3><p>按考试日期自动进入下一阶段</p></div></div><div className="phase-timeline">{plan?.phases?.map(item => <div className={`phase-item ${item.id === phase?.id ? 'active' : ''} ${item.status === 'completed' ? 'completed' : ''}`} key={item.id}><i/><div><b>{item.name}</b><small>{item.startDate} — {item.endDate}</small><p>{item.goal}</p></div></div>)}</div></section>
-    <section className="plan-section"><div className="section-title"><div><h3>到期错题</h3><p>复习后点击题目进入真题练习</p></div></div>{due.length ? <div className="due-list">{due.map(item => <button key={item.mistakeId} onClick={() => go('mistakes')}><span className="due-priority">{item.priority === 'high' ? '重点' : '复习'}</span><span><b>{item.sourceRef}</b><small>{item.topic || '综合知识'} · 错 {item.wrongCount} 次</small></span><ChevronRight size={16}/></button>)}</div> : <div className="plan-empty">当前没有到期错题，继续保持。</div>}</section>
+  const tasks = todayPlan?.tasks || [];
+  const done = tasks.filter(item => item.status === 'completed').length;
+  const dayProgress = tasks.length ? Math.round(done / tasks.length * 100) : 0;
+  const phaseGoal = phase?.progress?.[0];
+  const phaseProgress = phaseGoal ? Math.min(100, Math.round(phaseGoal.actual / Math.max(1, phaseGoal.target) * 100)) : 0;
+  const taskIcon = type => type === 'review' ? <RotateCcw size={19}/> : type === 'questions' ? <BookOpen size={19}/> : <Sparkles size={19}/>;
+  return <div className="page plan-page">
+    <header className="plan-head"><button className="plan-back" onClick={() => go('home')}><ArrowLeft size={21}/></button><div><span>STUDY ROADMAP</span><h1>复习计划</h1></div><button className="plan-calendar"><Calendar size={20}/></button></header>
+    <section className="plan-hero">
+      <div className="plan-hero-top"><span className="phase-tag"><Flame size={13}/> 当前阶段 · 第 {phase?.order || 1} 阶段</span><span className="phase-percent">{phaseProgress}%</span></div>
+      <h2>{phase?.name || '备考准备'}</h2><p>{phase?.dailyFocus || phase?.goal || '完成今天的学习任务，保持稳定节奏。'}</p>
+      <div className="phase-progress"><i style={{width:`${phaseProgress}%`}}/></div>
+      <div className="plan-hero-stats"><div><strong>{today.attemptedQuestions || 0}</strong><small>今日刷题</small></div><div><strong>{today.studyMinutes || 0}<em>m</em></strong><small>今日学习</small></div><div><strong>{due.length}</strong><small>到期复习</small></div></div>
+    </section>
+    <section className="plan-today">
+      <div className="plan-title-row"><div><span className="plan-kicker">TODAY</span><h3>今日任务</h3></div><div className="today-ring" style={{'--progress':`${dayProgress * 3.6}deg`}}><b>{done}/{tasks.length}</b></div></div>
+      <div className="task-list">{tasks.map((task,index) => <div key={task.id} className={`task-card ${task.status}`}><span className={`task-icon task-icon-${task.type}`}>{taskIcon(task.type)}</span><span className="task-copy"><small>任务 {String(index+1).padStart(2,'0')}</small><b>{task.title}</b><em><Clock3 size={12}/>{task.estimatedMinutes} 分钟 · {task.status === 'completed' ? '学习记录已达标' : '完成后自动结算'}</em></span><span className="task-state">{task.status === 'completed' ? <Check size={17}/> : <ChevronRight size={17}/>}</span></div>)}</div>
+      {!tasks.length && <div className="plan-empty">今天还没有生成学习任务</div>}
+    </section>
+    <section className="plan-review-card">
+      <div className="plan-title-row"><div><span className="plan-kicker orange-text">REVIEW</span><h3>到期错题</h3></div><button onClick={() => go('mistakes')}>查看全部 <ChevronRight size={14}/></button></div>
+      {due.length ? <div className="due-list">{due.slice(0,3).map(item => <button key={item.mistakeId} onClick={() => go('mistakes')}><span className="due-priority">{item.priority === 'high' ? '重点' : '复习'}</span><span><b>{item.topic || item.sourceRef}</b><small>{item.sourceRef} · 累计错 {item.wrongCount} 次</small></span><ChevronRight size={16}/></button>)}</div> : <div className="review-clear"><span><Check size={20}/></span><div><b>今日错题已清空</b><small>保持节奏，新的复习会按周期自动出现</small></div></div>}
+    </section>
+    <section className="roadmap-section"><div className="plan-title-row"><div><span className="plan-kicker">ROADMAP</span><h3>备考路线</h3></div><small>距考试 {plan?.meta?.examDate || '2026-10-24'}</small></div>
+      <div className="roadmap-list">{plan?.phases?.map((item,index) => { const active=item.id===phase?.id; const goal=item.progress?.[0]; const pct=goal?Math.min(100,Math.round(goal.actual/Math.max(1,goal.target)*100)):0; return <article className={`${active?'active ':''}${item.status==='completed'?'completed':''}`} key={item.id}><span className="roadmap-index">{item.status==='completed'?<Check size={15}/>:String(index+1).padStart(2,'0')}</span><div><div className="roadmap-name"><b>{item.name}</b><span>{active?'进行中':item.status==='completed'?'已完成':'待解锁'}</span></div><small>{item.startDate.slice(5).replace('-','/')} — {item.endDate.slice(5).replace('-','/')}</small><p>{item.goal}</p>{goal&&<div className="roadmap-progress"><i style={{width:`${pct}%`}}/><em>{goal.actual}/{goal.target}</em></div>}</div></article>})}</div>
+    </section>
+    <PracticeCalendar stats={stats}/>
   </div>;
 }
 
@@ -136,7 +170,6 @@ function PracticePage({ go, questions, loading, years, year, startNum, onConsume
     if (selected === null) return;
     const isCorrect = selected === q.answer;
     setRevealed(true);
-    if (!isCorrect) onToggleMistake(q.id, true);
     const attemptId = await onAnswered({ questionId: q.id, year: q.year, source: q.source, selected, correct: isCorrect, topic: q.topic, answeredAt: new Date().toISOString() });
     await askAi(q, { attemptId });
   };
@@ -325,6 +358,7 @@ function MainApp(){
   const [stats,setStats]=useState(EMPTY_STATS);
   const [plan,setPlan]=useState(null);
   const [wrongIds,setWrongIds]=useState([]);
+  const activeSecondsRef=useRef(0), activitySeqRef=useRef(0), lastInteractionRef=useRef(Date.now()), flushRef=useRef(()=>{});
 
   const refreshStats=useCallback(async()=>{
     try{
@@ -362,12 +396,27 @@ function MainApp(){
     refreshStats();
   },[refreshStats]);
 
-  const onTaskStatus=useCallback((taskId,status)=>{
-    api(`/api/review-plan/tasks/${encodeURIComponent(taskId)}`,{method:'PATCH',body:JSON.stringify({status})})
-      .then(r=>r.json())
-      .then(d=>{if(!d.plan)throw new Error(d.error||'更新任务失败');setPlan(d.plan);refreshStats();})
-      .catch(e=>console.error('更新计划任务失败',e));
-  },[refreshStats]);
+  // 只在刷题页、标签可见且用户近期有交互时累计；每 30 秒节流写入一次。
+  useEffect(()=>{
+    const touch=()=>{lastInteractionRef.current=Date.now()};
+    const events=['pointerdown','keydown','scroll','touchstart'];
+    events.forEach(name=>window.addEventListener(name,touch,{passive:true}));
+    const flush=()=>{
+      const seconds=Math.floor(activeSecondsRef.current);
+      if(seconds<1)return;
+      activeSecondsRef.current-=seconds;
+      const clientId=`${Date.now()}-${activitySeqRef.current++}-${Math.random().toString(36).slice(2)}`;
+      api('/api/study-activity',{method:'POST',body:JSON.stringify({clientId,seconds,occurredAt:new Date().toISOString()})}).then(()=>refreshStats()).catch(e=>{activeSecondsRef.current+=seconds;console.error('学习活跃时间写入失败',e)});
+    };
+    const tick=setInterval(()=>{
+      if(page==='practice'&&document.visibilityState==='visible')activeSecondsRef.current++;
+    },1000);
+    flushRef.current=flush;
+    const writer=setInterval(flush,30000);
+    const visibility=()=>{if(document.visibilityState==='hidden')flush()};
+    document.addEventListener('visibilitychange',visibility);
+    return()=>{events.forEach(name=>window.removeEventListener(name,touch));clearInterval(tick);clearInterval(writer);document.removeEventListener('visibilitychange',visibility);flushRef.current()};
+  },[page,refreshStats]);
 
   const onSelectYear=useCallback(y=>setYear(y),[]);
 
@@ -398,7 +447,7 @@ function MainApp(){
   },[refreshStats]);
 
   const root=['home','practice','chat','profile','plan'].includes(page);
-  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan} onTaskStatus={onTaskStatus}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
+  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
 }
 
 function App(){

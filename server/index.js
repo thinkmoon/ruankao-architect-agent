@@ -43,16 +43,28 @@ const stateDir = path.join(root, 'state');
 const progressFile = path.join(stateDir, 'progress.json');
 const attemptsFile = path.join(stateDir, 'attempts.json');
 const mistakesFile = path.join(stateDir, 'mistakes.json');
+const studySessionsFile = path.join(stateDir, 'study-sessions.json');
 const reviewPlanFile = path.join(stateDir, 'review-plan.json');
 
+function sessionMinutes(item) {
+  if (Number.isFinite(Number(item.activeSeconds))) return Math.floor(Number(item.activeSeconds) / 60);
+  return Number(item.minutes || 0);
+}
+
 async function syncReviewPlan() {
-  const [plan, attempts, mistakes] = await Promise.all([
+  const [plan, attempts, mistakes, sessions] = await Promise.all([
     readPlan(reviewPlanFile),
     readJson(attemptsFile, { items: [] }),
     readJson(mistakesFile, { items: [] }),
+    readJson(studySessionsFile, { items: [] }),
   ]);
   if (!plan) return null;
-  const snapshot = rebuildPlanSnapshot(plan, attempts.items || [], mistakes.items || [], planToday());
+  const completedSessions = (sessions.items || []).filter(item => item.status === 'completed');
+  const studyMinutes = completedSessions.reduce((sum, item) => sum + sessionMinutes(item), 0);
+  const studyMinutesToday = completedSessions
+    .filter(item => toShanghaiDate(new Date(item.stoppedAt || item.startedAt)) === planToday())
+    .reduce((sum, item) => sum + sessionMinutes(item), 0);
+  const snapshot = rebuildPlanSnapshot(plan, attempts.items || [], mistakes.items || [], planToday(), { studyMinutes, studyMinutesToday });
   await writePlan(reviewPlanFile, snapshot);
   return snapshot;
 }
@@ -113,29 +125,89 @@ app.get('/api/review-plan', apiAuth, async (_req, res) => {
   }
 });
 
-app.patch('/api/review-plan/tasks/:taskId', apiAuth, async (req, res) => {
-  const status = req.body?.status;
-  if (!['pending', 'in_progress', 'completed'].includes(status)) return res.status(400).json({ error: '无效的任务状态' });
-  try {
-    const plan = await syncReviewPlan();
-    if (!plan) return res.status(404).json({ error: '复习计划不存在' });
-    let found = false;
-    for (const day of Object.values(plan.dailyPlans || {})) {
-      const task = day.tasks?.find(item => item.id === req.params.taskId);
-      if (!task) continue;
-      task.status = status;
-      if (status === 'completed') task.completedAt = planToday();
-      else delete task.completedAt;
-      day.status = day.tasks.every(item => item.status === 'completed') ? 'completed' : 'in_progress';
-      found = true;
-      break;
+app.patch('/api/review-plan/tasks/:taskId', apiAuth, async (_req, res) => {
+  // 完成状态是答题、复习和计时证据的派生结果，禁止客户端直接改写。
+  const plan = await syncReviewPlan();
+  if (!plan) return res.status(404).json({ error: '复习计划不存在' });
+  const exists = Object.values(plan.dailyPlans || {}).some(day => day.tasks?.some(item => item.id === _req.params.taskId));
+  if (!exists) return res.status(404).json({ error: '任务不存在' });
+  return res.status(409).json({ error: '任务完成状态由学习记录自动判定，不能手动修改', plan });
+});
+
+// 刷题活跃计时：前端只上报活跃增量，服务端幂等累计；前端每 30 秒节流写入。
+app.post('/api/study-activity', apiAuth, async (req, res) => {
+  const { clientId, seconds, occurredAt } = req.body || {};
+  const delta = Math.floor(Number(seconds));
+  if (!clientId || !Number.isFinite(delta) || delta < 1 || delta > 120) return res.status(400).json({ error: 'clientId 与 1-120 秒活跃增量为必填项' });
+  const at = typeof occurredAt === 'string' && Number.isFinite(new Date(occurredAt).getTime()) ? new Date(occurredAt) : new Date();
+  const date = toShanghaiDate(at);
+  const sessionId = `practice-${date}`;
+  const item = await enqueue(studySessionsFile, async () => {
+    const data = await readJson(studySessionsFile, { schema_version: 1, items: [] });
+    let entry = data.items.find(row => row.id === sessionId);
+    if (!entry) {
+      entry = { id: sessionId, type: 'practice-activity', startedAt: at.toISOString(), stoppedAt: at.toISOString(), status: 'completed', activeSeconds: 0, clientFlushes: [] };
+      data.items.push(entry);
     }
-    if (!found) return res.status(404).json({ error: '任务不存在' });
-    await writePlan(reviewPlanFile, plan);
-    res.json({ ok: true, plan });
-  } catch (error) {
-    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
-  }
+    entry.clientFlushes ||= [];
+    if (!entry.clientFlushes.includes(clientId)) {
+      entry.activeSeconds = Number(entry.activeSeconds || 0) + delta;
+      entry.minutes = Math.floor(entry.activeSeconds / 60);
+      entry.stoppedAt = at.toISOString();
+      entry.clientFlushes.push(clientId);
+      if (entry.clientFlushes.length > 500) entry.clientFlushes = entry.clientFlushes.slice(-500);
+      await writeFile(studySessionsFile, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+    }
+    return entry;
+  });
+  await syncReviewPlan();
+  res.json({ ok: true, activeSeconds: item.activeSeconds, minutes: sessionMinutes(item) });
+});
+
+// 兼容旧版手动计时接口；新前端不再展示手动按钮。
+app.get('/api/study-sessions/active', apiAuth, async (_req, res) => {
+  const data = await readJson(studySessionsFile, { items: [] });
+  res.json({ session: [...(data.items || [])].reverse().find(item => item.status === 'active') || null });
+});
+
+app.post('/api/study-sessions/start', apiAuth, async (_req, res) => {
+  const existing = await readJson(studySessionsFile, { items: [] });
+  const active = [...(existing.items || [])].reverse().find(item => item.status === 'active');
+  if (active) return res.json({ session: active });
+  const item = { id: randomUUID(), startedAt: new Date().toISOString(), status: 'active' };
+  await enqueue(studySessionsFile, async () => {
+    const data = await readJson(studySessionsFile, { schema_version: 1, items: [] });
+    data.items.push(item);
+    await writeFile(studySessionsFile, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+  });
+  res.status(201).json({ session: item });
+});
+
+app.post('/api/study-sessions/:id/stop', apiAuth, async (req, res) => {
+  const result = await enqueue(studySessionsFile, async () => {
+    const data = await readJson(studySessionsFile, { schema_version: 1, items: [] });
+    const item = data.items.find(entry => entry.id === req.params.id);
+    if (!item || item.status !== 'active') return null;
+    const stoppedAt = new Date();
+    item.stoppedAt = stoppedAt.toISOString();
+    item.minutes = Math.max(1, Math.floor((stoppedAt - new Date(item.startedAt)) / 60000));
+    item.status = 'completed';
+    await writeFile(studySessionsFile, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+    return item;
+  });
+  if (!result) return res.status(404).json({ error: '没有可结束的学习会话' });
+  await enqueue(progressFile, async () => {
+    const progress = await readJson(progressFile, null);
+    if (!progress) return;
+    const sessions = await readJson(studySessionsFile, { items: [] });
+    const completed = sessions.items.filter(item => item.status === 'completed');
+    progress.total_study_minutes = completed.reduce((sum, item) => sum + sessionMinutes(item), 0);
+    progress.completed_sessions = completed.length;
+    progress.last_study_date = todayShanghai();
+    await writeFile(progressFile, JSON.stringify(progress, null, 2) + '\n', 'utf-8');
+  });
+  await syncReviewPlan();
+  res.json({ session: result });
 });
 
 // 3. 后端状态汇总
@@ -169,6 +241,14 @@ app.post('/api/attempts', apiAuth, async (req, res) => {
       attempts.items.push(item);
       await writeFile(attemptsFile, JSON.stringify(attempts, null, 2) + '\n', 'utf-8');
     });
+
+    if (!item.correct) {
+      await enqueue(mistakesFile, async () => {
+        const data = await readJson(mistakesFile, { schema_version: 1, items: [] });
+        if (!data.items.some(entry => entry.questionId === item.questionId)) data.items.push({ questionId: item.questionId, addedAt: todayShanghai() });
+        await writeFile(mistakesFile, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+      });
+    }
 
     await enqueue(progressFile, async () => {
       const progress = await readJson(progressFile, null);
@@ -323,10 +403,10 @@ app.post('/api/chat/stream', apiAuth, async (req, res) => {
 
 // 6. 首页统计（全部由后端 JSON 计算）
 app.get('/api/stats', apiAuth, async (_req, res) => {
-  const [progress, mistakes, attempts, plan] = await Promise.all([
-    readJson(progressFile, {}),
+  const [mistakes, attempts, sessions, plan] = await Promise.all([
     readJson(mistakesFile, { items: [] }),
     readJson(attemptsFile, { items: [] }),
+    readJson(studySessionsFile, { items: [] }),
     syncReviewPlan(),
   ]);
   const items = attempts.items || [];
@@ -368,6 +448,20 @@ app.get('/api/stats', apiAuth, async (_req, res) => {
     .map(([subject, e]) => ({ subject, value: Math.round(e.correct / e.total * 100) }))
     .sort((a, b) => b.value - a.value);
 
+  const dailyActivity = new Map();
+  for (const attempt of items) {
+    const d = toShanghaiDate(new Date(attempt.answeredAt));
+    const row = dailyActivity.get(d) || { date: d, questions: 0, minutes: 0 };
+    row.questions++;
+    dailyActivity.set(d, row);
+  }
+  for (const session of sessions.items || []) {
+    const d = toShanghaiDate(new Date(session.stoppedAt || session.startedAt));
+    const row = dailyActivity.get(d) || { date: d, questions: 0, minutes: 0 };
+    row.minutes += sessionMinutes(session);
+    dailyActivity.set(d, row);
+  }
+
   res.json({
     totalDone: items.length,
     mistakeCount: (mistakes.items || []).length,
@@ -375,9 +469,10 @@ app.get('/api/stats', apiAuth, async (_req, res) => {
     studyDays,
     trend,
     masteryByTopic,
-    studyMinutes: progress.total_study_minutes || 0,
+    calendar: [...dailyActivity.values()].sort((a, b) => a.date.localeCompare(b.date)),
+    studyMinutes: (sessions.items || []).reduce((sum, item) => sum + sessionMinutes(item), 0),
     attempts: items, // 供前端判断错题「待复习/已掌握」
-    today: plan?.stats?.today || { date: today, attemptedQuestions: 0, correctQuestions: 0, dueReviews: 0, plannedMinutes: 0 },
+    today: plan?.stats?.today || { date: today, attemptedQuestions: 0, correctQuestions: 0, dueReviews: 0, studyMinutes: 0, plannedMinutes: 0 },
     reviewPlan: plan ? {
       phase: plan.phases.find(item => today >= item.startDate && today <= item.endDate) || null,
       todayPlan: plan.dailyPlans?.[today] || null,

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "practice-2026-08-20",
+      "type": "practice-activity",
+      "startedAt": "2026-08-20T12:03:53.047Z",
+      "stoppedAt": "2026-08-20T12:17:24.724Z",
+      "status": "completed",
+      "activeSeconds": 260,
+      "clientFlushes": [
+        "1787227433047-0-42pr3upimgs",
+        "1787227463045-1-edryurtzfr",
+        "1787227493046-2-kww89fxbfq",
+        "1787227523045-3-j80i1yq7qlm",
+        "1787227551599-4-9otx8g5xl5n",
+        "1787227581151-0-i333q4ivpch",
+        "1787228163643-0-bn1faxq06g",
+        "1787228193643-1-raaif4dvuwf",
+        "1787228223643-2-kqavd1x80v",
+        "1787228244724-3-sv1ezumbkj"
+      ],
+      "minutes": 4
+    }
+  ]
+}
