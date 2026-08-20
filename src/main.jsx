@@ -10,7 +10,7 @@ import 'katex/dist/katex.min.css';
 import './styles.css';
 import './acp.css';
 
-const EMPTY_STATS = { totalDone: 0, mistakeCount: 0, recentAccuracy: 0, studyDays: 0, trend: [], masteryByTopic: [], studyMinutes: 0 };
+const EMPTY_STATS = { totalDone: 0, mistakeCount: 0, recentAccuracy: 0, studyDays: 0, trend: [], masteryByTopic: [], studyMinutes: 0, today: {}, reviewPlan: null };
 const DAILY_GOAL = 20;
 const ACCESS_TOKEN_KEY = 'rk_acp_token';
 
@@ -40,11 +40,15 @@ function Header({ title, back, onBack, action }) {
 function HomePage({ go, stats }) {
   const acc = Math.round(stats.recentAccuracy * 100);
   const weak = [...stats.masteryByTopic].sort((a,b)=>a.value-b.value).slice(0,2);
+  const phase = stats.reviewPlan?.phase;
+  const today = stats.today || {};
+  const todayGoal = stats.reviewPlan?.todayPlan?.tasks?.find(t => t.type === 'questions') ? (stats.reviewPlan.todayPlan.tasks.find(t => t.type === 'questions').target || DAILY_GOAL) : DAILY_GOAL;
+  const todayProgress = Math.min(100, Math.round((today.attemptedQuestions || 0) / todayGoal * 100));
   return <div className="page home-page">
     <div className="home-head"><div><p>晚上好，架构师 👋</p><h1>今天也离上岸更近一步</h1></div><button className="avatar"><CircleUserRound size={26}/></button></div>
     <section className="hero-card">
-      <div className="hero-copy"><span className="eyebrow"><Flame size={14}/> 连续学习 {stats.studyDays} 天</span><h2>今日学习计划</h2><p>综合知识 · 历年真题</p><div className="progress-track"><i style={{width:`${Math.min(100, Math.round(stats.totalDone/DAILY_GOAL*100))}%`}}/></div><small>已累计完成 {stats.totalDone} 题 · 每日目标 {DAILY_GOAL} 题</small></div>
-      <div className="hero-ring"><strong>{stats.totalDone ? acc : 0}</strong><span>%</span></div>
+      <div className="hero-copy"><span className="eyebrow"><Flame size={14}/> 连续学习 {stats.studyDays} 天</span><h2>今日学习计划</h2><p>{phase?.name || '备考准备'} · {phase?.dailyFocus || '先完成今天的学习任务'}</p><div className="progress-track"><i style={{width:`${todayProgress}%`}}/></div><small>今日已完成 {today.attemptedQuestions || 0} 题 · 目标 {todayGoal} 题 · 到期复习 {today.dueReviews || 0} 项</small></div>
+      <div className="hero-ring"><strong>{todayProgress}</strong><span>%</span></div>
       <button onClick={() => go('practice')} className="hero-action">继续学习 <ArrowRight size={17}/></button>
     </section>
     <div className="quick-grid">

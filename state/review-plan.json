@@ -1,0 +1,228 @@
+{
+  "schema_version": 2,
+  "meta": {
+    "planId": "sys-architect-2026-h2",
+    "title": "2026 下半年系统架构设计师复习计划",
+    "timezone": "Asia/Shanghai",
+    "examDate": "2026-10-24",
+    "examDateRange": "2026-10-24至2026-10-27",
+    "province": "广东",
+    "createdAt": "2026-08-17",
+    "updatedAt": "2026-08-20"
+  },
+  "dailyTargets": {
+    "questions": 20,
+    "reviewItems": 5,
+    "studyMinutesWeekday": 90,
+    "studyMinutesWeekend": 210
+  },
+  "reviewPolicy": {
+    "intervalDays": [
+      1,
+      3,
+      7,
+      14
+    ],
+    "masteredAfterConsecutiveCorrect": 3,
+    "maxDueItemsPerDay": 10
+  },
+  "phases": [
+    {
+      "id": "baseline",
+      "name": "摸底 + 知识地图",
+      "startDate": "2026-08-17",
+      "endDate": "2026-08-31",
+      "order": 1,
+      "status": "active",
+      "goal": "完成近年综合知识真题摸底，整理知识盲区",
+      "subjects": [
+        "综合知识"
+      ],
+      "dailyFocus": "综合知识真题摸底与错题归因"
+    },
+    {
+      "id": "foundation",
+      "name": "系统补知识 + 案例入门",
+      "startDate": "2026-09-01",
+      "endDate": "2026-09-21",
+      "order": 2,
+      "status": "planned",
+      "goal": "按模块补齐知识并训练案例结构化作答",
+      "subjects": [
+        "综合知识",
+        "案例分析"
+      ],
+      "dailyFocus": "知识模块学习 + 案例分析"
+    },
+    {
+      "id": "essay",
+      "name": "论文专项",
+      "startDate": "2026-09-22",
+      "endDate": "2026-10-05",
+      "order": 3,
+      "status": "planned",
+      "goal": "完成论文方向、项目素材和限时写作训练",
+      "subjects": [
+        "论文"
+      ],
+      "dailyFocus": "论文结构、素材与限时写作"
+    },
+    {
+      "id": "sprint",
+      "name": "冲刺 + 模拟",
+      "startDate": "2026-10-06",
+      "endDate": "2026-10-23",
+      "order": 4,
+      "status": "planned",
+      "goal": "全科模拟、集中修复薄弱项",
+      "subjects": [
+        "综合知识",
+        "案例分析",
+        "论文"
+      ],
+      "dailyFocus": "全科模拟、错题回炉与查漏补缺"
+    }
+  ],
+  "dailyPlans": {
+    "2026-08-20": {
+      "date": "2026-08-20",
+      "phaseId": "baseline",
+      "status": "completed",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-08-20-questions",
+          "type": "questions",
+          "title": "完成综合知识真题摸底",
+          "estimatedMinutes": 60,
+          "priority": "high",
+          "status": "completed",
+          "completedAt": "2026-08-20"
+        },
+        {
+          "id": "2026-08-20-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "completed",
+          "completedAt": "2026-08-20"
+        }
+      ],
+      "notes": ""
+    }
+  },
+  "mistakeQueue": [
+    {
+      "mistakeId": "2024下-001",
+      "sourceRef": "2024下-001",
+      "topic": "知识产权",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "mastered",
+      "priority": "medium",
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-002",
+      "sourceRef": "2024下-002",
+      "topic": "综合知识",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "mastered",
+      "priority": "medium",
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-004",
+      "sourceRef": "2024下-004",
+      "topic": "操作系统",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-005",
+      "sourceRef": "2024下-005",
+      "topic": "软件架构设计",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-007",
+      "sourceRef": "2024下-007",
+      "topic": "综合知识",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-008",
+      "sourceRef": "2024下-008",
+      "topic": "综合知识",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-010",
+      "sourceRef": "2024下-010",
+      "topic": "综合知识",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "scheduled",
+      "priority": "medium",
+      "reviewHistory": []
+    }
+  ],
+  "stats": {
+    "asOf": "2026-08-20",
+    "attemptedQuestions": 23,
+    "last20Accuracy": 70,
+    "today": {
+      "date": "2026-08-20",
+      "attemptedQuestions": 23,
+      "correctQuestions": 16,
+      "dueReviews": 0,
+      "plannedMinutes": 90
+    }
+  },
+  "updatedAt": "2026-08-20T10:25:49.267Z"
+}

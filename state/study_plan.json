@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "plan_id": "sys-architect-2026-h2",
+  "title": "2026 下半年系统架构设计师复习计划",
+  "timezone": "Asia/Shanghai",
+  "exam": {
+    "date": "2026-10-24",
+    "date_range": "2026-10-24至2026-10-27",
+    "province": "广东"
+  },
+  "availability": {
+    "weekday_minutes": { "min": 60, "max": 120 },
+    "weekend_minutes": { "min": 180, "max": 240 }
+  },
+  "daily_targets": {
+    "questions": 20,
+    "review_items": 5,
+    "study_minutes_weekday": 90,
+    "study_minutes_weekend": 210
+  },
+  "review_policy": {
+    "interval_days": [1, 3, 7, 14],
+    "mastered_after_consecutive_correct": 3,
+    "max_due_items_per_day": 10
+  },
+  "phases": [
+    {
+      "id": "baseline",
+      "title": "摸底 + 知识地图",
+      "start": "2026-08-17",
+      "end": "2026-08-31",
+      "subjects": ["综合知识"],
+      "goals": ["完成 1–2 套近年综合知识真题", "按考纲整理知识盲区", "区分工程经验与考试术语差距"],
+      "daily_focus": "综合知识真题摸底与错题归因"
+    },
+    {
+      "id": "foundation",
+      "title": "系统补知识 + 案例入门",
+      "start": "2026-09-01",
+      "end": "2026-09-21",
+      "subjects": ["综合知识", "案例分析"],
+      "goals": ["按模块完成考纲复习", "每个模块完成对应案例真题", "训练结构化答题和关键词覆盖"],
+      "daily_focus": "知识模块学习 + 案例分析"
+    },
+    {
+      "id": "essay",
+      "title": "论文专项",
+      "start": "2026-09-22",
+      "end": "2026-10-05",
+      "subjects": ["论文"],
+      "goals": ["确定 2–3 个论文方向", "建立项目素材库", "完成限时 2500 字训练"],
+      "daily_focus": "论文结构、素材与限时写作"
+    },
+    {
+      "id": "sprint",
+      "title": "冲刺 + 模拟",
+      "start": "2026-10-06",
+      "end": "2026-10-23",
+      "subjects": ["综合知识", "案例分析", "论文"],
+      "goals": ["完成 2–3 套全真模拟", "集中修复薄弱项", "完成论文精修和考前复盘"],
+      "daily_focus": "全科模拟、错题回炉与查漏补缺"
+    }
+  ]
+}

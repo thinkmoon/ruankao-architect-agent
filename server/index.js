@@ -9,6 +9,7 @@ import { AcpSession } from './acp-session.js';
 import { loadAllQuestions, listYears } from './zhenti-parser.js';
 import { CHAT_MODEL, MAX_OUTPUT_TOKENS, getLlmConfig } from './llm.js';
 import { createAgent } from './agent.js';
+import { rebuildPlanSnapshot, readPlan, writePlan, todayShanghai as planToday } from './review-plan.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const app = express();
@@ -42,6 +43,19 @@ const stateDir = path.join(root, 'state');
 const progressFile = path.join(stateDir, 'progress.json');
 const attemptsFile = path.join(stateDir, 'attempts.json');
 const mistakesFile = path.join(stateDir, 'mistakes.json');
+const reviewPlanFile = path.join(stateDir, 'review-plan.json');
+
+async function syncReviewPlan() {
+  const [plan, attempts, mistakes] = await Promise.all([
+    readPlan(reviewPlanFile),
+    readJson(attemptsFile, { items: [] }),
+    readJson(mistakesFile, { items: [] }),
+  ]);
+  if (!plan) return null;
+  const snapshot = rebuildPlanSnapshot(plan, attempts.items || [], mistakes.items || [], planToday());
+  await writePlan(reviewPlanFile, snapshot);
+  return snapshot;
+}
 
 // 同一文件串行写，避免并发交错（简单 promise 队列）
 const writeQueues = new Map();
@@ -88,7 +102,18 @@ app.get('/api/questions', apiAuth, (req, res) => {
   res.json({ year, total: all.length, page, pageSize, questions: all.slice(start, start + pageSize) });
 });
 
-// 2. 后端状态汇总
+// 2. 复习计划（JSON 为唯一权威，运行时重算今日快照）
+app.get('/api/review-plan', apiAuth, async (_req, res) => {
+  try {
+    const plan = await syncReviewPlan();
+    if (!plan) return res.status(404).json({ error: '复习计划不存在' });
+    res.json({ plan });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
+// 3. 后端状态汇总
 app.get('/api/state', apiAuth, async (_req, res) => {
   const [progress, mistakes, attempts] = await Promise.all([
     readJson(progressFile, null),
@@ -133,6 +158,7 @@ app.post('/api/attempts', apiAuth, async (req, res) => {
       progress.scores.comprehensive.push(Math.round(acc * 10000) / 10000);
       await writeFile(progressFile, JSON.stringify(progress, null, 2) + '\n', 'utf-8');
     });
+    await syncReviewPlan();
     res.status(201).json({ ok: true, id: item.id });
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
@@ -179,6 +205,7 @@ app.post('/api/mistakes', apiAuth, async (req, res) => {
       await writeFile(mistakesFile, JSON.stringify(data, null, 2) + '\n', 'utf-8');
       return data;
     });
+    await syncReviewPlan();
     res.json({ ok: true, count: mistakes.items.length });
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
@@ -271,10 +298,11 @@ app.post('/api/chat/stream', apiAuth, async (req, res) => {
 
 // 6. 首页统计（全部由后端 JSON 计算）
 app.get('/api/stats', apiAuth, async (_req, res) => {
-  const [progress, mistakes, attempts] = await Promise.all([
+  const [progress, mistakes, attempts, plan] = await Promise.all([
     readJson(progressFile, {}),
     readJson(mistakesFile, { items: [] }),
     readJson(attemptsFile, { items: [] }),
+    syncReviewPlan(),
   ]);
   const items = attempts.items || [];
   const last20 = items.slice(-20);
@@ -324,6 +352,12 @@ app.get('/api/stats', apiAuth, async (_req, res) => {
     masteryByTopic,
     studyMinutes: progress.total_study_minutes || 0,
     attempts: items, // 供前端判断错题「待复习/已掌握」
+    today: plan?.stats?.today || { date: today, attemptedQuestions: 0, correctQuestions: 0, dueReviews: 0, plannedMinutes: 0 },
+    reviewPlan: plan ? {
+      phase: plan.phases.find(item => today >= item.startDate && today <= item.endDate) || null,
+      todayPlan: plan.dailyPlans?.[today] || null,
+      dueReviews: (plan.mistakeQueue || []).filter(item => item.nextReviewAt <= today && item.status !== 'mastered').slice(0, plan.reviewPolicy?.maxDueItemsPerDay || 10),
+    } : null,
   });
 });
 

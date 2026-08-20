@@ -12,6 +12,7 @@ required_files=(
   "state/current.md"
   "state/mistakes.json"
   "state/attempts.json"
+  "state/review-plan.json"
   "materials/sources.json"
 )
 
@@ -28,12 +29,13 @@ for json_file in \
   "$project_dir/state/progress.json" \
   "$project_dir/state/mistakes.json" \
   "$project_dir/state/attempts.json" \
+  "$project_dir/state/review-plan.json" \
   "$project_dir/materials/sources.json"; do
   jq empty "$json_file"
 done
 
-test "$(jq -r '.phase' "$project_dir/state/progress.json")" = "setup"
+test "$(jq -r '.phase' "$project_dir/state/progress.json")" != "setup"
+test "$(jq -r '.schema_version' "$project_dir/state/review-plan.json")" = "2"
 test "$(jq -r '.preferences.practice_source' "$project_dir/state/profile.json")" = "优先可核验真题；仅在用户要求时生成模拟题"
 
 echo "validation passed"
-

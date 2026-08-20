@@ -2,6 +2,7 @@ import { appendFile, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { CHAT_MODEL, CONTEXT_CHAR_BUDGET, MAX_OUTPUT_TOKENS, getLlmConfig } from './llm.js';
 import { loadAllQuestions } from './zhenti-parser.js';
+import { rebuildPlanSnapshot, readPlan, todayShanghai as planToday } from './review-plan.js';
 
 const TOOLS = [
   {
@@ -183,20 +184,28 @@ export function createAgent({ root }) {
   }
 
   async function get_study_state() {
-    const [progress, current, mistakes, attempts] = await Promise.all([
+    const [progress, current, mistakes, attempts, plan] = await Promise.all([
       readJson(path.join(stateDir, 'progress.json'), {}),
       readFile(path.join(stateDir, 'current.md'), 'utf-8').catch(() => ''),
       readJson(path.join(stateDir, 'mistakes.json'), { items: [] }),
       readJson(path.join(stateDir, 'attempts.json'), { items: [] }),
+      readPlan(path.join(stateDir, 'review-plan.json')),
     ]);
     const items = attempts.items || [];
     const last20 = items.slice(-20);
     const recentAccuracy = last20.length ? last20.filter(a => a.correct).length / last20.length : 0;
+    const currentPlan = plan ? rebuildPlanSnapshot(plan, items, mistakes.items || [], planToday()) : null;
+    const today = currentPlan?.stats?.today;
+    const phase = currentPlan?.phases?.find(item => today?.date >= item.startDate && today?.date <= item.endDate);
     return {
-      phase: progress.phase,
+      phase: phase?.id || progress.phase,
+      phase_title: phase?.name || null,
       last_study: progress.last_study_date,
-      attempted: progress.attempted_questions || items.length,
-      recent_acc: Math.round(recentAccuracy * 1000) / 10,
+      attempted: currentPlan?.stats?.attemptedQuestions ?? progress.attempted_questions ?? items.length,
+      recent_acc: currentPlan?.stats?.last20Accuracy ?? Math.round(recentAccuracy * 1000) / 10,
+      today: today || null,
+      today_plan: currentPlan?.dailyPlans?.[planToday()] || null,
+      due_reviews: (currentPlan?.mistakeQueue || []).filter(item => item.nextReviewAt <= planToday() && item.status !== 'mastered').slice(0, 10),
       mistakes: (mistakes.items || []).length,
       weak: (progress.weak_topics || []).slice(0, 5),
       next: clip(current, 360),
@@ -321,6 +330,7 @@ export function createAgent({ root }) {
 - 讲知识点先 search_materials，用本地资料表述，不编出处。
 - 出真题用 search_questions 且 include_answer=false；只给题干和选项，不给答案、解析或暗示。
 - 进度、今晚学什么、错题复盘先 get_study_state 或 list_mistakes。
+- get_study_state 返回的 today_plan、today、due_reviews 是结构化复习计划的权威状态，优先据此安排今天任务。
 - 用户明确要求记录才 save_note。
 - 用户可能发题目截图；看图识题，看不清就直说，不要编题干。
 - 不确定就说不确定。中文简洁，适合手机。工作日晚 1–2 小时，周末 3–4 小时。`;
