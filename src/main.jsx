@@ -136,50 +136,104 @@ function PracticePage({ go, questions, loading, years, year, startNum, onConsume
   </div>;
 }
 
-function useAcp() {
-  const [messages, setMessages] = useState([{role:'ai', text:'你好，我是运行在当前软考项目中的 Claude Code。你可以直接问知识点，或上传题目截图；我会结合仓库资料分析，并按需更新学习记录。'}]);
-  const [status,setStatus]=useState('connecting'), [loading,setLoading]=useState(false), [permission,setPermission]=useState(null), [sessionId,setSessionId]=useState(null);
-  const socketRef=useRef(null);
-  useEffect(()=>{
-    const protocol=location.protocol==='https:'?'wss':'ws'; const queryToken=new URLSearchParams(location.search).get('token'); if(queryToken)localStorage.setItem('rk_acp_token',queryToken); const token=queryToken||localStorage.getItem('rk_acp_token')||''; const socket=new WebSocket(`${protocol}://${location.host}/ws/acp?token=${encodeURIComponent(token)}`); socketRef.current=socket;
-    socket.onmessage=event=>{const data=JSON.parse(event.data);
-      if(data.type==='ready'){setStatus('online');setSessionId(data.sessionId)}
-      if(data.type==='status')setStatus(data.status);
-      if(data.type==='permission')setPermission(data);
-      if(data.type==='error'){setMessages(v=>[...v,{role:'system',text:`连接错误：${data.message}`}]);setLoading(false)}
-      if(data.type==='turn'){setLoading(data.status==='running')}
-      if(data.type==='update')setMessages(v=>applyAcpUpdate(v,data.update));
+function compactChatPayload(messages) {
+  const list = messages.filter(m => m.role === 'me' || m.role === 'ai').slice(-6);
+  return list.map((m, i) => {
+    const row = { role: m.role, text: String(m.text || '').slice(0, m.role === 'ai' ? 500 : 1000) };
+    if (i === list.length - 1 && m.image) row.image = m.image;
+    return row;
+  });
+}
+
+function resizeImageDataUrl(dataUrl, maxSide = 1280, quality = 0.72) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
     };
-    socket.onerror=()=>setStatus('offline'); socket.onclose=event=>{setStatus('offline');if(event.code===1006)setMessages(v=>[...v,{role:'system',text:'ACP 连接被拒绝，请使用服务启动时输出的带 token 链接访问。'}])};
-    return()=>socket.close();
-  },[]);
-  const send=(text,image)=>{if(socketRef.current?.readyState!==WebSocket.OPEN)return false; const prompt=text.trim()||'请分析截图里的题目，给出答案、考点、易错原因，并更新我的知识点掌握情况。'; setMessages(v=>[...v,{role:'me',text:prompt,image},{role:'ai',text:'',tools:[]}]);socketRef.current.send(JSON.stringify({type:'prompt',text:prompt,image}));return true};
-  const answerPermission=optionId=>{socketRef.current?.send(JSON.stringify({type:'permission_response',requestId:permission.requestId,optionId}));setPermission(null)};
-  const cancel=()=>socketRef.current?.send(JSON.stringify({type:'cancel'}));
-  return {messages,status,loading,permission,sessionId,send,answerPermission,cancel};
+    img.onerror = () => reject(new Error('图片读取失败'));
+    img.src = dataUrl;
+  });
 }
 
-function applyAcpUpdate(messages, update) {
-  const next=[...messages]; let index=next.length-1;
-  while(index>=0&&next[index].role!=='ai')index--;
-  if(index<0){next.push({role:'ai',text:'',tools:[]});index=next.length-1}
-  const current={...next[index],tools:[...(next[index].tools||[])]};
-  if(update.sessionUpdate==='agent_message_chunk'&&update.content?.type==='text')current.text=(current.text||'')+update.content.text;
-  if(update.sessionUpdate==='agent_thought_chunk'&&update.content?.type==='text')current.thought=(current.thought||'')+update.content.text;
-  if(update.sessionUpdate==='tool_call')current.tools.push({id:update.toolCallId,title:update.title||'调用工具',status:update.status||'pending',kind:update.kind});
-  if(update.sessionUpdate==='tool_call_update'){const tool=current.tools.find(x=>x.id===update.toolCallId);if(tool)Object.assign(tool,{status:update.status||tool.status,title:update.title||tool.title});}
-  next[index]=current; return next;
-}
-
-function ChatPage({ acp }) {
-  const [input,setInput]=useState(''), [image,setImage]=useState(null); const fileRef=useRef(), endRef=useRef();
-  useEffect(()=>{ endRef.current?.scrollIntoView({behavior:'smooth'}); },[acp.messages,acp.loading]);
-  const pick=e=>{const f=e.target.files?.[0]; if(f){if(f.size>8*1024*1024){alert('图片不能超过 8 MB');return}const r=new FileReader();r.onload=()=>setImage(r.result);r.readAsDataURL(f)}};
-  const send=()=>{if((input.trim()||image)&&acp.send(input,image)){setInput('');setImage(null)}};
-  const labels={connecting:'正在连接 Claude Code…',online:'Claude Code · ACP 已连接',offline:'ACP 连接已断开'};
-  return <div className="page chat-page"><Header title="Claude Code 助手"/><div className={`assistant-state ${acp.status}`}><span></span> {labels[acp.status]||acp.status}{acp.sessionId&&<small> · {acp.sessionId.slice(0,8)}</small>}</div><div className="chat-scroll">{acp.messages.map((m,i)=><div key={i} className={`bubble-row ${m.role}`} >{m.role==='ai'&&<div className="bot-avatar"><Bot size={18}/></div>}<div className="bubble">{m.image&&<img src={m.image}/>} {m.text&&<p>{m.text}</p>}{m.tools?.map(t=><div className={`tool-card ${t.status}`} key={t.id}><span>{t.status==='completed'?<Check size={14}/>:<Sparkles size={14}/>}</span><div><b>{t.title}</b><small>{t.status==='completed'?'执行完成':t.status==='failed'?'执行失败':'正在执行…'}</small></div></div>)}</div></div>)}{acp.loading&&<div className="generating"><i/><i/><i/><span>Claude 正在处理</span><button onClick={acp.cancel}>停止</button></div>}<div ref={endRef}/></div>
-    {acp.permission&&<div className="permission-sheet"><div><span className="permission-icon"><Bot/></span><h3>Claude 请求执行工具</h3><p>{acp.permission.request.toolCall?.title||'需要你的授权才能继续'}</p><div className="permission-actions">{acp.permission.request.options.map(o=><button key={o.optionId} className={o.kind?.includes('allow')?'allow':''} onClick={()=>acp.answerPermission(o.optionId)}>{o.name}</button>)}</div></div></div>}
-    <div className="composer">{image&&<div className="image-preview"><img src={image}/><button onClick={()=>setImage(null)}><X size={14}/></button></div>}<div className="composer-box"><button onClick={()=>fileRef.current.click()}><ImagePlus size={22}/></button><input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={pick} hidden/><textarea rows="1" value={input} onChange={e=>setInput(e.target.value)} placeholder={acp.status==='online'?'输入问题，或拍照上传题目…':'正在等待 ACP 连接…'} disabled={acp.status!=='online'||acp.loading} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}}/><button className="send-btn" onClick={send} disabled={acp.status!=='online'||acp.loading}><Send size={18}/></button></div><small><Camera size={13}/> 图片将通过 ACP 发送给当前项目中的 Claude Code</small></div>
+function ChatPage() {
+  const [messages, setMessages] = useState([{ role: 'ai', text: '你好，我是软考高级系统架构设计师备考助手。可以问考点、错题、今晚学什么；也可以上传题目截图。' }]);
+  const [input, setInput] = useState('');
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const fileRef = useRef();
+  const endRef = useRef();
+  const abortRef = useRef(null);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
+  const pick = e => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (f.size > 8 * 1024 * 1024) { alert('图片不能超过 8 MB'); return; }
+    const r = new FileReader();
+    r.onload = () => resizeImageDataUrl(r.result).then(setImage).catch(() => setImage(r.result));
+    r.readAsDataURL(f);
+  };
+  const cancel = () => { abortRef.current?.abort(); setLoading(false); };
+  const send = async () => {
+    const prompt = input.trim() || (image ? '请识别截图里的题目，给出考点分析。' : '');
+    if (!prompt && !image || loading) return;
+    const history = [...messages, { role: 'me', text: prompt, image }];
+    setInput(''); setImage(null); setLoading(true);
+    setMessages([...history, { role: 'ai', text: '', tools: [] }]);
+    const ac = new AbortController();
+    abortRef.current = ac;
+    try {
+      const response = await api('/api/chat/stream', { method: 'POST', body: JSON.stringify({ messages: compactChatPayload(history) }), signal: ac.signal });
+      if (!response.ok) { const d = await response.json().catch(() => ({})); throw new Error(d.error || '对话请求失败'); }
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '', content = '';
+      const apply = raw => {
+        for (const block of raw.split(/\n\n/)) {
+          const event = (block.match(/^event:\s*(.+)$/m) || [])[1];
+          const data = (block.match(/^data:\s*(.+)$/m) || [])[1];
+          if (!data) continue;
+          const payload = JSON.parse(data);
+          if (event === 'token') {
+            content += payload.text || '';
+            setMessages(v => { const next = [...v]; next[next.length - 1] = { ...next[next.length - 1], text: content }; return next; });
+          }
+          if (event === 'tool') {
+            setMessages(v => {
+              const next = [...v];
+              const last = { ...next[next.length - 1], tools: [...(next[next.length - 1].tools || [])] };
+              const i = last.tools.findIndex(t => t.id === payload.id);
+              if (i >= 0) last.tools[i] = { ...last.tools[i], ...payload };
+              else last.tools.push(payload);
+              next[next.length - 1] = last;
+              return next;
+            });
+          }
+          if (event === 'error') throw new Error(payload.error);
+        }
+      };
+      while (true) {
+        const { value, done } = await reader.read();
+        buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+        const chunks = buffer.split(/\r?\n\r?\n/);
+        buffer = chunks.pop() || '';
+        if (chunks.length) apply(chunks.join('\n\n'));
+        if (done) break;
+      }
+      if (buffer.trim()) apply(buffer);
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      setMessages(v => { const next = [...v]; next[next.length - 1] = { ...next[next.length - 1], text: next[next.length - 1].text || `对话失败：${e.message}` }; return next; });
+    } finally { setLoading(false); abortRef.current = null; }
+  };
+  return <div className="page chat-page"><Header title="软考助手"/><div className={`assistant-state ${loading ? 'connecting' : 'online'}`}><span></span> {loading ? '正在思考…' : '轻量助手 · qwen3.6-27b'}</div>
+    <div className="chat-scroll">{messages.map((m, i) => <div key={i} className={`bubble-row ${m.role}`}>{m.role === 'ai' && <div className="bot-avatar"><Bot size={18}/></div>}<div className="bubble">{m.image && <img src={m.image}/>}{m.role === 'ai' && m.text ? <Markdown content={m.text} className="bubble-md"/> : m.text ? <p>{m.text}</p> : null}{m.tools?.map(t => <div className={`tool-card ${t.status}`} key={t.id}><span>{t.status === 'completed' ? <Check size={14}/> : <Sparkles size={14}/>}</span><div><b>{t.title}</b><small>{t.status === 'completed' ? '执行完成' : t.status === 'failed' ? '执行失败' : '正在执行…'}</small></div></div>)}</div></div>)}{loading && <div className="generating"><i/><i/><i/><span>助手正在处理</span><button onClick={cancel}>停止</button></div>}<div ref={endRef}/></div>
+    <div className="composer">{image && <div className="image-preview"><img src={image}/><button onClick={() => setImage(null)}><X size={14}/></button></div>}<div className="composer-box"><button onClick={() => fileRef.current.click()}><ImagePlus size={22}/></button><input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={pick} hidden/><textarea rows="1" value={input} onChange={e => setInput(e.target.value)} placeholder="问考点、错题，或拍照上传题目…" disabled={loading} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}/><button className="send-btn" onClick={send} disabled={loading || (!input.trim() && !image)}><Send size={18}/></button></div><small><Camera size={13}/> 本地 27B 多模态 · 截图只送当前这一轮</small></div>
   </div>;
 }
 
@@ -236,7 +290,6 @@ function MainApp(){
   const [page,setPage]=useState('home');
   const [explainAi,setExplainAi]=useState('');
   const [startPractice,setStartPractice]=useState(null); // {year, num} 从错题本「再做一次」进入
-  const acp=useAcp();
   // token 落库后从地址栏清除，避免留在历史记录/分享截图
   useEffect(()=>{
     const qp=new URLSearchParams(location.search);
@@ -317,7 +370,7 @@ function MainApp(){
   },[refreshStats]);
 
   const root=['home','practice','chat','profile'].includes(page);
-  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi}/>} {page==='chat'&&<ChatPage acp={acp}/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
+  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
 }
 
 function App(){

@@ -36,6 +36,7 @@
 .markdown-body th{background:#f7ead0}
 .markdown-body .katex{font-size:1.05em}
 .markdown-body .katex-display{margin:8px 0;overflow-x:auto;overflow-y:hidden}
+.bubble-md{font-size:13px;line-height:1.7}.bubble-md p{margin:0 0 8px;white-space:normal}.bubble-md p:last-child{margin-bottom:0}.bubble-md ul,.bubble-md ol{margin:0 0 8px;padding-left:1.2em}.bubble-md h2,.bubble-md h3,.bubble-md h4{margin:10px 0 6px;font-size:14px}.bubble-md code{padding:1px 4px;border-radius:4px;background:#e8eeea;font-size:12px}.me .bubble-md code{background:#1f5c49}
 .access-gate{min-height:100dvh;display:grid;place-items:center;padding:24px;background:linear-gradient(160deg,#edf7f1,#f5f7f5)}
 .access-gate form{width:min(100%,360px);padding:32px 26px;border:1px solid #dce9e0;border-radius:24px;background:#fff;box-shadow:0 18px 50px #315d481c;text-align:center}
 .access-gate .brand-mark{margin:0 auto 14px}.access-gate h1{margin:0 0 8px;font-size:24px}.access-gate p{margin:0 0 22px;color:var(--muted);font-size:13px;line-height:1.6}.access-gate input{width:100%;height:46px;border:1px solid #d7e3db;border-radius:12px;padding:0 14px;outline:none}.access-gate input:focus{border-color:var(--green)}.access-gate button{width:100%;height:46px;margin-top:12px;border:0;border-radius:12px;background:var(--green);color:#fff;font-weight:650}.access-gate button:disabled{opacity:.5}.access-gate small{display:block;margin-top:14px;color:#b05f52;font-size:12px}

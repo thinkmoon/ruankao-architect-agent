@@ -7,20 +7,14 @@ import express from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { AcpSession } from './acp-session.js';
 import { loadAllQuestions, listYears } from './zhenti-parser.js';
+import { CHAT_MODEL, MAX_OUTPUT_TOKENS, getLlmConfig } from './llm.js';
+import { createAgent } from './agent.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const app = express();
 const server = createServer(app);
 const accessToken = 'thinkmoon';
-const llmConfigPath = '/home/liqinsi/storage/config/opencode/opencode.json';
-let llmConfigPromise;
-async function getLlmConfig() {
-  if (!llmConfigPromise) llmConfigPromise = readFile(llmConfigPath, 'utf-8').then(JSON.parse);
-  const config = await llmConfigPromise;
-  const provider = config.provider?.sribd;
-  if (!provider?.options?.baseURL || !provider?.options?.apiKey) throw new Error('未找到 ooencode 的 sribd LLM 配置');
-  return { baseURL: provider.options.baseURL.replace(/\/$/, ''), apiKey: provider.options.apiKey };
-}
+const agent = createAgent({ root });
 const tokenMatches = candidate => {
   if (!candidate) return false;
   const actual = Buffer.from(candidate); const expected = Buffer.from(accessToken);
@@ -74,7 +68,7 @@ function addDays(dateStr, delta) {
   return new Date(Date.UTC(y, m - 1, d + delta)).toISOString().slice(0, 10);
 }
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // 0. 可用年份列表
 app.get('/api/years', apiAuth, (_req, res) => res.json({ years: listYears() }));
@@ -191,8 +185,14 @@ app.post('/api/mistakes', apiAuth, async (req, res) => {
   }
 });
 
+function clipText(text, max) {
+  const s = String(text || '').replace(/\s+/g, ' ').trim();
+  return s.length <= max ? s : `${s.slice(0, max - 1)}…`;
+}
+
 function buildExplainPrompt({ question, options, answer, source, topic }) {
-  return `你是软考高级系统架构设计师辅导老师。请解析下面这道综合知识真题，直接给出适合移动端阅读的中文 Markdown：\n\n来源：${source || '历年真题'}\n知识点：${topic || '未分类'}\n题目：${question}\n选项：\n${options.map((o, i) => `${String.fromCharCode(65 + i)}. ${o}`).join('\n')}\n正确答案：${String.fromCharCode(65 + answer)}\n\n要求：先说明答案，再解释核心考点；逐项说明其他选项为什么不对；最后给出一句记忆要点。标题、段落、列表之间必须换行。不要重复题目，不要编造标准或出处。`;
+  const opts = (options || []).map((o, i) => `${String.fromCharCode(65 + i)}. ${clipText(o, 80)}`).join('\n');
+  return `你是软考高级系统架构设计师辅导老师。请解析下面这道综合知识真题，直接给出适合移动端阅读的中文 Markdown：\n\n来源：${source || '历年真题'}\n知识点：${topic || '未分类'}\n题目：${clipText(question, 1600)}\n选项：\n${opts}\n正确答案：${String.fromCharCode(65 + answer)}\n\n要求：先说明答案，再解释核心考点；逐项说明其他选项为什么不对；最后给出一句记忆要点。标题、段落、列表之间必须换行。不要重复题目，不要编造标准或出处。`;
 }
 
 // 流式生成解析，前端按 token 增量渲染
@@ -201,7 +201,7 @@ app.post('/api/explain/stream', apiAuth, async (req, res) => {
   if (!question || !Array.isArray(options) || typeof answer !== 'number') return res.status(400).json({ error: '题目、选项和答案为必填项' });
   try {
     const { baseURL, apiKey } = await getLlmConfig();
-    const upstream = await fetch(`${baseURL}/chat/completions`, { method:'POST', headers:{ Authorization:`Bearer ${apiKey}`, 'Content-Type':'application/json' }, body:JSON.stringify({ model:'qwen3.6-27b', messages:[{role:'user',content:buildExplainPrompt(req.body)}], temperature:0.2, max_tokens:1200, stream:true }) });
+    const upstream = await fetch(`${baseURL}/chat/completions`, { method:'POST', headers:{ Authorization:`Bearer ${apiKey}`, 'Content-Type':'application/json' }, body:JSON.stringify({ model:CHAT_MODEL, messages:[{role:'user',content:buildExplainPrompt(req.body)}], temperature:0.2, max_tokens:MAX_OUTPUT_TOKENS, stream:true }) });
     if (!upstream.ok) throw new Error((await upstream.text()) || `LLM 请求失败（${upstream.status}）`);
     res.status(200).set({ 'Content-Type':'text/event-stream; charset=utf-8', 'Cache-Control':'no-cache, no-transform', Connection:'keep-alive', 'X-Accel-Buffering':'no' });
     const reader=upstream.body.getReader(); const decoder=new TextDecoder(); let buffer='';
@@ -211,7 +211,7 @@ app.post('/api/explain/stream', apiAuth, async (req, res) => {
       const lines=buffer.split(/\r?\n/); buffer=lines.pop() || '';
       for(const line of lines){ if(!line.startsWith('data:')) continue; const raw=line.slice(5).trim(); if(raw==='[DONE]') continue; try { const data=JSON.parse(raw); const text=data.choices?.[0]?.delta?.content || ''; if(text) send('token',{text}); } catch {} }
     }
-    send('done',{model:'qwen3.6-27b'}); res.end();
+    send('done',{model:CHAT_MODEL}); res.end();
   } catch(error) { console.error('[explain/stream]',error); if(!res.headersSent) res.status(502).json({error:error instanceof Error?error.message:String(error)}); else { res.write(`event: error\ndata: ${JSON.stringify({error:error.message})}\n\n`); res.end(); } }
 });
 
@@ -223,20 +223,46 @@ app.post('/api/explain', apiAuth, async (req, res) => {
   }
   try {
     const { baseURL, apiKey } = await getLlmConfig();
-    const prompt = `你是软考高级系统架构设计师辅导老师。请解析下面这道综合知识真题，直接给出适合移动端阅读的中文 Markdown：\n\n来源：${source || '历年真题'}\n知识点：${topic || '未分类'}\n题目：${question}\n选项：\n${options.map((o, i) => `${String.fromCharCode(65 + i)}. ${o}`).join('\n')}\n正确答案：${String.fromCharCode(65 + answer)}\n\n要求：先说明答案，再解释核心考点；逐项说明其他选项为什么不对；最后给出一句记忆要点。不要重复题目，不要编造标准或出处。`;
     const response = await fetch(`${baseURL}/chat/completions`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'qwen3.6-27b', messages: [{ role: 'user', content: prompt }], temperature: 0.2, max_tokens: 1200 }),
+      body: JSON.stringify({ model: CHAT_MODEL, messages: [{ role: 'user', content: buildExplainPrompt(req.body) }], temperature: 0.2, max_tokens: MAX_OUTPUT_TOKENS }),
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error?.message || `LLM 请求失败（${response.status}）`);
     const content = data.choices?.[0]?.message?.content;
     if (!content) throw new Error('LLM 未返回解析内容');
-    res.json({ content, model: 'qwen3.6-27b' });
+    res.json({ content, model: CHAT_MODEL });
   } catch (error) {
     console.error('[explain]', error);
     res.status(502).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
+app.post('/api/chat/stream', apiAuth, async (req, res) => {
+  const raw = Array.isArray(req.body?.messages) ? req.body.messages.slice(-8) : [];
+  const history = raw.map((m, i) => {
+    const item = { role: m.role, text: String(m.text || '').slice(0, 1200) };
+    if (i === raw.length - 1 && typeof m.image === 'string' && m.image.startsWith('data:image/') && m.image.length < 6_000_000) {
+      item.image = m.image;
+    }
+    return item;
+  });
+  if (!history.length) return res.status(400).json({ error: 'messages 不能为空' });
+  try {
+    res.status(200).set({ 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-cache, no-transform', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' });
+    const send = (event, payload) => { if (!res.writableEnded) res.write(`event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`); };
+    const ac = new AbortController();
+    req.on('close', () => ac.abort());
+    await agent.run({ history, signal: ac.signal, onEvent: send });
+    send('done', { model: CHAT_MODEL });
+    res.end();
+  } catch (error) {
+    if (error?.name === 'AbortError') { if (!res.writableEnded) res.end(); return; }
+    console.error('[chat/stream]', error);
+    const message = error instanceof Error ? error.message : String(error);
+    if (!res.headersSent) res.status(502).json({ error: message });
+    else { res.write(`event: error\ndata: ${JSON.stringify({ error: message })}\n\n`); res.end(); }
   }
 });
 
