@@ -253,7 +253,10 @@ app.post('/api/chat/stream', apiAuth, async (req, res) => {
     res.status(200).set({ 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-cache, no-transform', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' });
     const send = (event, payload) => { if (!res.writableEnded) res.write(`event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`); };
     const ac = new AbortController();
-    req.on('close', () => ac.abort());
+    // IncomingMessage.close 在请求体接收完毕后也可能触发，不能把它当成客户端取消；
+    // 否则图片请求刚到服务端就会被 Abort，SSE 只返回空响应。
+    req.on('aborted', () => ac.abort());
+    res.on('close', () => { if (!res.writableEnded) ac.abort(); });
     await agent.run({ history, signal: ac.signal, onEvent: send });
     send('done', { model: CHAT_MODEL });
     res.end();
