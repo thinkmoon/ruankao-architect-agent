@@ -113,6 +113,31 @@ app.get('/api/review-plan', apiAuth, async (_req, res) => {
   }
 });
 
+app.patch('/api/review-plan/tasks/:taskId', apiAuth, async (req, res) => {
+  const status = req.body?.status;
+  if (!['pending', 'in_progress', 'completed'].includes(status)) return res.status(400).json({ error: '无效的任务状态' });
+  try {
+    const plan = await syncReviewPlan();
+    if (!plan) return res.status(404).json({ error: '复习计划不存在' });
+    let found = false;
+    for (const day of Object.values(plan.dailyPlans || {})) {
+      const task = day.tasks?.find(item => item.id === req.params.taskId);
+      if (!task) continue;
+      task.status = status;
+      if (status === 'completed') task.completedAt = planToday();
+      else delete task.completedAt;
+      day.status = day.tasks.every(item => item.status === 'completed') ? 'completed' : 'in_progress';
+      found = true;
+      break;
+    }
+    if (!found) return res.status(404).json({ error: '任务不存在' });
+    await writePlan(reviewPlanFile, plan);
+    res.json({ ok: true, plan });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
+  }
+});
+
 // 3. 后端状态汇总
 app.get('/api/state', apiAuth, async (_req, res) => {
   const [progress, mistakes, attempts] = await Promise.all([

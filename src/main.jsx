@@ -55,7 +55,8 @@ function HomePage({ go, stats }) {
       <button onClick={() => go('practice')}><span className="quick-icon green"><BookOpen/></span><b>真题练习</b><small>历年真题随时刷</small></button>
       <button onClick={() => go('mistakes')}><span className="quick-icon orange"><BookmarkCheck/></span><b>我的错题</b><small>{stats.mistakeCount} 道待巩固</small></button>
       <button onClick={() => go('chat')}><span className="quick-icon purple"><Sparkles/></span><b>AI 答疑</b><small>截图秒懂难题</small></button>
-      <button onClick={() => go('insights')}><span className="quick-icon blue"><BarChart3/></span><b>知识画像</b><small>查看薄弱知识点</small></button>
+      <button onClick={() => go('plan')}><span className="quick-icon blue"><Target/></span><b>复习计划</b><small>阶段任务与到期复习</small></button>
+      <button onClick={() => go('insights')}><span className="quick-icon purple"><BarChart3/></span><b>知识画像</b><small>查看薄弱知识点</small></button>
     </div>
     <div className="section-title"><div><h3>本周学情</h3><p>保持节奏，稳步提升</p></div><button onClick={() => go('insights')}>详情 <ChevronRight size={15}/></button></div>
     <section className="weekly-card">
@@ -67,6 +68,19 @@ function HomePage({ go, stats }) {
     <div className="section-title"><div><h3>薄弱知识点</h3><p>根据近期答题动态生成</p></div></div>
     {weak.length ? <section className="weak-list">{weak.map(w=><div key={w.subject}><span className="weak-num">{w.subject.slice(0,2)}</span><p><b>{w.subject}</b><small>掌握度 {w.value}% · 建议优先复习</small></p><i><em style={{width:`${w.value}%`}}/></i></div>)}</section>
       : <section className="weak-list"><div><span className="weak-num">--</span><p><b>暂无数据</b><small>完成几道题后自动生成</small></p><i><em style={{width:'0%'}}/></i></div></section>}
+  </div>;
+}
+
+function ReviewPlanPage({ go, stats, plan, onTaskStatus }) {
+  const today = plan?.stats?.today || stats.today || {};
+  const todayPlan = plan?.dailyPlans?.[today.date] || stats.reviewPlan?.todayPlan;
+  const phase = plan?.phases?.find(item => item.id === todayPlan?.phaseId) || stats.reviewPlan?.phase;
+  const due = (plan?.mistakeQueue || []).filter(item => item.status !== 'mastered' && item.nextReviewAt <= today.date);
+  return <div className="page plan-page"><Header title="复习计划" back onBack={() => go('home')}/>
+    <section className="plan-summary"><span className="eyebrow"><Target size={14}/> 当前阶段</span><h2>{phase?.name || '备考准备'}</h2><p>{phase?.goal || '完成今天的学习任务，保持稳定节奏。'}</p><div className="plan-date">{today.date || '今天'} · 今日已完成 {today.attemptedQuestions || 0} 题 · 到期复习 {due.length} 项</div></section>
+    <section className="plan-section"><div className="section-title"><div><h3>今日任务</h3><p>按完成状态实时保存到 JSON 计划</p></div></div><div className="task-list">{todayPlan?.tasks?.map(task => <button key={task.id} className={`task-item ${task.status}`} onClick={() => onTaskStatus(task.id, task.status === 'completed' ? 'pending' : 'completed')}><span className="task-check">{task.status === 'completed' ? <Check size={16}/> : <span/>}</span><span className="task-copy"><b>{task.title}</b><small>{task.estimatedMinutes} 分钟 · {task.status === 'completed' ? '已完成' : '待完成'}</small></span><ChevronRight size={16}/></button>) || <div className="plan-empty">暂无今日任务</div>}</div></section>
+    <section className="plan-section"><div className="section-title"><div><h3>阶段路线</h3><p>按考试日期自动进入下一阶段</p></div></div><div className="phase-timeline">{plan?.phases?.map(item => <div className={`phase-item ${item.id === phase?.id ? 'active' : ''} ${item.status === 'completed' ? 'completed' : ''}`} key={item.id}><i/><div><b>{item.name}</b><small>{item.startDate} — {item.endDate}</small><p>{item.goal}</p></div></div>)}</div></section>
+    <section className="plan-section"><div className="section-title"><div><h3>到期错题</h3><p>复习后点击题目进入真题练习</p></div></div>{due.length ? <div className="due-list">{due.map(item => <button key={item.mistakeId} onClick={() => go('mistakes')}><span className="due-priority">{item.priority === 'high' ? '重点' : '复习'}</span><span><b>{item.sourceRef}</b><small>{item.topic || '综合知识'} · 错 {item.wrongCount} 次</small></span><ChevronRight size={16}/></button>)}</div> : <div className="plan-empty">当前没有到期错题，继续保持。</div>}</section>
   </div>;
 }
 
@@ -271,9 +285,9 @@ function MistakesPage({ go, questions, wrongIds, onToggleMistake, stats, redo })
   const shown=filter==='wrong'?wrong:filter==='mastered'?mastered:items;
   return <div className="page simple-page"><Header title="我的错题" back onBack={()=>go('home')}/><div className="filter-row"><button className={filter==='all'?'active':''} onClick={()=>setFilter('all')}>全部 {items.length}</button><button className={filter==='wrong'?'active':''} onClick={()=>setFilter('wrong')}>待复习 {wrong.length}</button><button className={filter==='mastered'?'active':''} onClick={()=>setFilter('mastered')}>已掌握 {mastered.length}</button></div>{shown.length?<div className="mistake-list">{shown.map(q=><article key={q.id}><div><span>{q.source}</span><button onClick={()=>onToggleMistake(q.id,false)} title="移出错题本"><BookmarkCheck size={19}/></button></div><h3>{q.title}</h3><footer><span>{q.topic}</span><button onClick={()=>redo(q)}>再做一次 <ChevronRight size={15}/></button></footer></article>)}</div>:<div className="empty"><div><BookmarkCheck size={34}/></div><h3>{filter==='all'?'还没有错题':'该分类下暂无题目'}</h3><p>答错的题会自动收录在这里</p><button onClick={()=>go('practice')}>去刷真题</button></div>}</div> }
 
-function ProfilePage({ go, stats }) { return <div className="page profile-page"><Header title="我的学习"/><section className="profile-card"><div className="profile-avatar">L</div><div><h2>准架构师</h2><p>目标：2026 年下半年系统架构设计师</p></div><span>备考中</span></section><div className="profile-stats"><div><b>{stats.studyDays}</b><small>连续学习/天</small></div><div><b>{stats.totalDone?Math.round(stats.recentAccuracy*100)+'%':'—'}</b><small>近20题正确率</small></div><div><b>{stats.mistakeCount}</b><small>待复习错题</small></div></div><h3 className="group-title">学习分析</h3><div className="menu-list"><button onClick={()=>go('insights')}><span className="green"><BarChart3/></span><p><b>知识画像</b><small>掌握度与薄弱项分析</small></p><ChevronRight/></button><button onClick={()=>go('mistakes')}><span className="orange"><BookmarkCheck/></span><p><b>错题本</b><small>针对性复习与重做</small></p><ChevronRight/></button></div><h3 className="group-title">备考设置</h3><div className="menu-list"><div className="menu-static"><span className="purple"><Target/></span><p><b>考试目标</b><small>2026-10-24 至 10-27 · 广东</small></p></div><div className="menu-static"><span className="gray"><RotateCcw/></span><p><b>复习偏好</b><small>严格评分 · 优先可核验真题</small></p></div></div></div> }
+function ProfilePage({ go, stats }) { return <div className="page profile-page"><Header title="我的学习"/><section className="profile-card"><div className="profile-avatar">L</div><div><h2>准架构师</h2><p>目标：2026 年下半年系统架构设计师</p></div><span>备考中</span></section><div className="profile-stats"><div><b>{stats.studyDays}</b><small>连续学习/天</small></div><div><b>{stats.totalDone?Math.round(stats.recentAccuracy*100)+'%':'—'}</b><small>近20题正确率</small></div><div><b>{stats.mistakeCount}</b><small>待复习错题</small></div></div><h3 className="group-title">学习分析</h3><div className="menu-list"><button onClick={()=>go('plan')}><span className="green"><Target/></span><p><b>复习计划</b><small>阶段任务与到期复习</small></p><ChevronRight/></button><button onClick={()=>go('insights')}><span className="green"><BarChart3/></span><p><b>知识画像</b><small>掌握度与薄弱项分析</small></p><ChevronRight/></button><button onClick={()=>go('mistakes')}><span className="orange"><BookmarkCheck/></span><p><b>错题本</b><small>针对性复习与重做</small></p><ChevronRight/></button></div><h3 className="group-title">备考设置</h3><div className="menu-list"><div className="menu-static"><span className="purple"><Target/></span><p><b>考试目标</b><small>2026-10-24 至 10-27 · 广东</small></p></div><div className="menu-static"><span className="gray"><RotateCcw/></span><p><b>复习偏好</b><small>严格评分 · 优先可核验真题</small></p></div></div></div> }
 
-function Nav({ current, go }) { const items=[['home',Home,'首页'],['practice',BookOpen,'刷题'],['chat',MessageCircle,'AI 助手'],['profile',CircleUserRound,'我的']]; return <nav className="bottom-nav">{items.map(([id,Icon,label])=><button key={id} className={current===id?'active':''} onClick={()=>go(id)}><Icon size={22}/><span>{label}</span></button>)}</nav> }
+function Nav({ current, go }) { const items=[['home',Home,'首页'],['practice',BookOpen,'刷题'],['plan',Target,'计划'],['profile',CircleUserRound,'我的']]; return <nav className="bottom-nav">{items.map(([id,Icon,label])=><button key={id} className={current===id?'active':''} onClick={()=>go(id)}><Icon size={22}/><span>{label}</span></button>)}</nav> }
 
 function AccessGate({ onAuthorized }) {
   const [input, setInput] = useState('');
@@ -309,15 +323,18 @@ function MainApp(){
   const [years,setYears]=useState([]);
   const [year,setYear]=useState('2024下');
   const [stats,setStats]=useState(EMPTY_STATS);
+  const [plan,setPlan]=useState(null);
   const [wrongIds,setWrongIds]=useState([]);
 
   const refreshStats=useCallback(async()=>{
     try{
-      const [s, st] = await Promise.all([
+      const [s, st, p] = await Promise.all([
         api('/api/stats').then(r=>r.json()),
         api('/api/state').then(r=>r.json()),
+        api('/api/review-plan').then(r=>r.json()),
       ]);
       setStats({...EMPTY_STATS, ...s});
+      setPlan(p.plan || null);
       setWrongIds(((st.mistakes&&st.mistakes.items)||[]).map(m=>m.questionId));
     }catch(e){ console.error('刷新统计失败', e); }
   },[]);
@@ -343,6 +360,13 @@ function MainApp(){
       .then(d=>{ setYears(d.years||[]); })
       .catch(e=>console.error('加载年份列表失败', e));
     refreshStats();
+  },[refreshStats]);
+
+  const onTaskStatus=useCallback((taskId,status)=>{
+    api(`/api/review-plan/tasks/${encodeURIComponent(taskId)}`,{method:'PATCH',body:JSON.stringify({status})})
+      .then(r=>r.json())
+      .then(d=>{if(!d.plan)throw new Error(d.error||'更新任务失败');setPlan(d.plan);refreshStats();})
+      .catch(e=>console.error('更新计划任务失败',e));
   },[refreshStats]);
 
   const onSelectYear=useCallback(y=>setYear(y),[]);
@@ -373,8 +397,8 @@ function MainApp(){
       .catch(e=>console.error('更新错题失败', e));
   },[refreshStats]);
 
-  const root=['home','practice','chat','profile'].includes(page);
-  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
+  const root=['home','practice','chat','profile','plan'].includes(page);
+  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan} onTaskStatus={onTaskStatus}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
 }
 
 function App(){
