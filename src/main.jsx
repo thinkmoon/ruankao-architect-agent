@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Area, AreaChart, PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { ArrowLeft, ArrowRight, BarChart3, BookOpen, Bookmark, BookmarkCheck, Bot, Calendar, Camera, Check, ChevronRight, CircleUserRound, Clock3, Flame, Home, ImagePlus, Lightbulb, MessageCircle, MoreHorizontal, RotateCcw, Send, Sparkles, Target, Trophy, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BarChart3, BookOpen, Bookmark, BookmarkCheck, Bot, Calendar, Camera, Check, ChevronDown, ChevronRight, CircleUserRound, Clock3, Flame, Home, ImagePlus, Lightbulb, MessageCircle, MoreHorizontal, Network, RotateCcw, Send, Sparkles, Target, Trophy, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import './styles.css';
+import './knowledge.css';
 import './plan-overrides.css';
 import './acp.css';
 
@@ -354,7 +355,35 @@ function MistakesPage({ go, questions, wrongIds, onToggleMistake, stats, redo })
 
 function ProfilePage({ go, stats }) { return <div className="page profile-page"><Header title="我的学习"/><section className="profile-card"><div className="profile-avatar">L</div><div><h2>准架构师</h2><p>目标：2026 年下半年系统架构设计师</p></div><span>备考中</span></section><div className="profile-stats"><div><b>{stats.studyDays}</b><small>连续学习/天</small></div><div><b>{stats.totalDone?Math.round(stats.recentAccuracy*100)+'%':'—'}</b><small>近20题正确率</small></div><div><b>{stats.mistakeCount}</b><small>待复习错题</small></div></div><h3 className="group-title">学习分析</h3><div className="menu-list"><button onClick={()=>go('plan')}><span className="green"><Target/></span><p><b>复习计划</b><small>阶段任务与到期复习</small></p><ChevronRight/></button><button onClick={()=>go('insights')}><span className="green"><BarChart3/></span><p><b>知识画像</b><small>掌握度与薄弱项分析</small></p><ChevronRight/></button><button onClick={()=>go('mistakes')}><span className="orange"><BookmarkCheck/></span><p><b>错题本</b><small>针对性复习与重做</small></p><ChevronRight/></button></div><h3 className="group-title">备考设置</h3><div className="menu-list"><div className="menu-static"><span className="purple"><Target/></span><p><b>考试目标</b><small>2026-10-24 至 10-27 · 广东</small></p></div><div className="menu-static"><span className="gray"><RotateCcw/></span><p><b>复习偏好</b><small>严格评分 · 优先可核验真题</small></p></div></div></div> }
 
-function Nav({ current, go }) { const items=[['home',Home,'首页'],['practice',BookOpen,'刷题'],['plan',Target,'计划'],['profile',CircleUserRound,'我的']]; return <nav className="bottom-nav">{items.map(([id,Icon,label])=><button key={id} className={current===id?'active':''} onClick={()=>go(id)}><Icon size={22}/><span>{label}</span></button>)}</nav> }
+function MindMapNode({ node, childrenById, depth, expanded, onToggle, onSelect, selected }) {
+  const children = childrenById.get(node.id) || [];
+  const isOpen = expanded.has(node.id);
+  return <div className={`mind-node depth-${Math.min(depth, 3)}`}>
+    <div className={`mind-node-card ${selected?.id===node.id?'selected':''} type-${node.type}`}>
+      <button className="mind-node-main" onClick={() => onSelect(node)}><span className="mind-node-dot"/><div><b>{node.name}</b><small>{node.attemptCount ? `${node.mastery}% 掌握 · ${node.attemptCount} 次答题` : node.description || '刷题后持续完善'}</small></div></button>
+      {children.length > 0 && <button className="mind-node-toggle" aria-label={isOpen?'收起子节点':'展开子节点'} onClick={() => onToggle(node.id)}>{isOpen?<ChevronDown size={15}/>:<ChevronRight size={15}/>}<em>{children.length}</em></button>}
+    </div>
+    {isOpen && children.length > 0 && <div className="mind-children">{children.map(child => <MindMapNode key={child.id} node={child} childrenById={childrenById} depth={depth+1} expanded={expanded} onToggle={onToggle} onSelect={onSelect} selected={selected}/>)}</div>}
+  </div>;
+}
+
+function KnowledgePage({ go }) {
+  const [graph, setGraph] = useState(null); const [selected, setSelected] = useState(null); const [expanded, setExpanded] = useState(() => new Set(['knowledge-root'])); const [error, setError] = useState('');
+  const load = useCallback(async () => { try { const response=await api('/api/knowledge-graph'); if(!response.ok) throw new Error('知识图谱加载失败'); setGraph(await response.json()); setError(''); } catch(e) { setError(e.message); } },[]);
+  useEffect(() => { load(); }, [load]);
+  const nodes = graph?.nodes || []; const childrenById = new Map(nodes.map(node => [node.id, []]));
+  (graph?.edges || []).filter(edge => edge.type === 'contains').forEach(edge => { if(childrenById.has(edge.from) && childrenById.has(edge.to)) childrenById.get(edge.from).push(nodes.find(node => node.id === edge.to)); });
+  const root = nodes.find(node => node.id === 'knowledge-root') || nodes[0]; const concepts = nodes.filter(node => node.type === 'concept').length; const practiced = nodes.filter(node => node.attemptCount > 0).length;
+  return <div className="page knowledge-page"><Header title="知识地图" back onBack={()=>go('home')} action={<button className="icon-btn" onClick={load} aria-label="刷新知识地图"><RotateCcw size={18}/></button>}/>
+    <div className="knowledge-hero"><div><span>KNOWLEDGE MAP</span><h1>把每一道题，连成一张地图</h1><p>{graph?.updatedAt ? `最近更新 ${new Date(graph.updatedAt).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}` : '完成解析后，知识体系会自动生长'}</p></div><Network size={34}/></div>
+    <div className="knowledge-stats"><div><b>{nodes.length}</b><small>知识节点</small></div><div><b>{concepts}</b><small>具体概念</small></div><div><b>{practiced}</b><small>已刷节点</small></div></div>
+    {error && <div className="knowledge-error">{error}<button onClick={load}>重试</button></div>}
+    {!error && root && <div className="mind-map"><MindMapNode node={root} childrenById={childrenById} depth={0} expanded={expanded} onToggle={id=>setExpanded(prev=>{const next=new Set(prev);next.has(id)?next.delete(id):next.add(id);return next})} onSelect={setSelected} selected={selected}/></div>}
+    {selected && <section className="knowledge-detail"><div className="knowledge-detail-head"><div><span>{selected.type==='concept'?'具体概念':selected.type==='category'?'知识分类':'知识领域'}</span><h2>{selected.name}</h2></div><button onClick={()=>setSelected(null)} aria-label="关闭详情"><X size={17}/></button></div><p>{selected.description || '这个知识点会根据后续刷题继续完善。'}</p><div className="knowledge-detail-meta"><span>{selected.mastery == null ? '尚未答题' : `掌握度 ${selected.mastery}%`}</span><span>来源 {selected.sourceQuestions?.length || 0} 道题</span></div><button className="knowledge-practice" onClick={()=>go('practice')}><BookOpen size={14}/> 去刷相关真题 <ChevronRight size={14}/></button>{selected.sourceQuestions?.length > 0 && <div className="knowledge-sources"><b>关联真题</b>{selected.sourceQuestions.slice(0,4).map(question=><div key={question.id}><span>{question.source}</span><p>{question.title}</p></div>)}</div>}</section>}
+  </div>;
+}
+
+function Nav({ current, go }) { const items=[['home',Home,'首页'],['practice',BookOpen,'刷题'],['knowledge',Network,'知识图'],['plan',Target,'计划'],['profile',CircleUserRound,'我的']]; return <nav className="bottom-nav">{items.map(([id,Icon,label])=><button key={id} className={current===id?'active':''} onClick={()=>go(id)}><Icon size={21}/><span>{label}</span></button>)}</nav> }
 
 function AccessGate({ onAuthorized }) {
   const [input, setInput] = useState('');
@@ -470,7 +499,7 @@ function MainApp(){
       const reader=response.body.getReader(), decoder=new TextDecoder(); let buffer='', content='';
       const consume=raw=>{ for(const block of raw.split(/\n\n/)){ const event=(block.match(/^event:\s*(.+)$/m)||[])[1]; const data=(block.match(/^data:\s*(.+)$/m)||[])[1]; if(!data)continue; try{const payload=JSON.parse(data);if(event==='token'){content+=payload.text;setExplainAi(content)}if(event==='error')throw new Error(payload.error)}catch(e){if(event==='error')throw e;} } };
       while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value||new Uint8Array(),{stream:!done});const chunks=buffer.split(/\r?\n\r?\n/);buffer=chunks.pop()||'';consume(chunks.join('\n\n'));if(done)break;}
-      if(options.attemptId) await api(`/api/attempts/${encodeURIComponent(options.attemptId)}/explanation`,{method:'PATCH',body:JSON.stringify({explanation:content})});
+      if(options.attemptId) await api(`/api/attempts/${encodeURIComponent(options.attemptId)}/explanation`,{method:'PATCH',body:JSON.stringify({explanation:content,questionId:q.id,question:q.title,options:q.options,answer:q.answer,source:q.source,topic:q.topic})});
     } catch (e) { setExplainAi(`解析失败：${e.message}`); }
   },[]);
 
@@ -499,8 +528,8 @@ function MainApp(){
       .catch(e=>console.error('更新错题失败', e));
   },[refreshStats]);
 
-  const root=['home','practice','chat','profile','plan'].includes(page);
-  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
+  const root=['home','practice','knowledge','chat','profile','plan'].includes(page);
+  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>} {page==='knowledge'&&<KnowledgePage go={setPage}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
 }
 
 function App(){

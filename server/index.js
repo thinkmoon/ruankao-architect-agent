@@ -9,6 +9,7 @@ import { AcpSession } from './acp-session.js';
 import { loadAllQuestions, listYears } from './zhenti-parser.js';
 import { getLlmConfig } from './llm.js';
 import { createAgent } from './agent.js';
+import { enrichKnowledgeGraph, readKnowledgeGraph } from './knowledge-graph.js';
 import { rebuildPlanSnapshot, readPlan, writePlan, todayShanghai as planToday } from './review-plan.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -220,6 +221,19 @@ app.get('/api/state', apiAuth, async (_req, res) => {
   res.json({ progress, mistakes, attempts });
 });
 
+// 知识图谱视图：掌握度由真实答题记录实时计算，图谱节点由刷题后的结构化提取累积。
+app.get('/api/knowledge-graph', apiAuth, async (_req, res) => {
+  const [graph, attempts] = await Promise.all([readKnowledgeGraph(), readJson(attemptsFile, { items: [] })]);
+  const questions = new Map(loadAllQuestions().map(question => [question.id, question]));
+  const nodes = graph.nodes.map(node => {
+    const relatedAttempts = (node.sourceQuestionIds || []).flatMap(id => attempts.items.filter(attempt => attempt.questionId === id));
+    const total = relatedAttempts.length; const correct = relatedAttempts.filter(attempt => attempt.correct).length;
+    const sourceQuestions = [...new Set(node.sourceQuestionIds || [])].map(id => questions.get(id)).filter(Boolean).slice(0, 12).map(question => ({ id: question.id, title: question.title, source: question.source }));
+    return { ...node, attemptCount: total, correctCount: correct, mastery: total ? Math.round(correct / total * 100) : null, sourceQuestions };
+  });
+  res.json({ ...graph, nodes });
+});
+
 // 3. 记录一次答题
 app.post('/api/attempts', apiAuth, async (req, res) => {
   const body = req.body || {};
@@ -285,6 +299,12 @@ app.patch('/api/attempts/:id/explanation', apiAuth, async (req, res) => {
       return true;
     });
     if (!updated) return res.status(404).json({ error: '答题记录不存在' });
+    const source = req.body.source || '';
+    const topic = req.body.topic || '';
+    if (req.body.question && Array.isArray(req.body.options) && typeof req.body.answer === 'number') {
+      void enrichKnowledgeGraph({ questionId: req.body.questionId || '', question: req.body.question, options: req.body.options, answer: req.body.answer, source, topic, explanation })
+        .catch(error => console.error('[knowledge-graph]', error));
+    }
     res.json({ ok: true });
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : String(error) });

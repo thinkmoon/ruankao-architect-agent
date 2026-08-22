@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "updatedAt": "2026-08-22T08:26:25.788Z",
+  "nodes": [
+    {
+      "id": "knowledge-root",
+      "name": "软考知识体系",
+      "type": "root",
+      "aliases": [],
+      "description": "软考高级系统架构设计师知识地图",
+      "sourceQuestionIds": [],
+      "createdAt": "2026-08-22T00:00:00.000Z"
+    },
+    {
+      "id": "knowledge-软件架构设计",
+      "name": "软件架构设计",
+      "type": "domain",
+      "aliases": [],
+      "description": "软考系统架构设计师考试的核心领域，涵盖架构风格、架构评估、设计模式等。",
+      "sourceQuestionIds": [
+        "2024下-030"
+      ],
+      "createdAt": "2026-08-22T08:25:06.039Z"
+    },
+    {
+      "id": "knowledge-架构风格",
+      "name": "架构风格",
+      "type": "category",
+      "aliases": [
+        "Architecture Styles"
+      ],
+      "description": "软件架构的通用模板或分类，定义了系统的结构约束和组件交互方式。",
+      "sourceQuestionIds": [
+        "2024下-030"
+      ],
+      "createdAt": "2026-08-22T08:25:06.039Z"
+    },
+    {
+      "id": "knowledge-批处理顺序风格",
+      "name": "批处理顺序风格",
+      "type": "concept",
+      "aliases": [
+        "Batch Sequential",
+        "批处理风格"
+      ],
+      "description": "一种架构风格，由一系列独立的程序组成，每个程序处理一批数据并传递给下一个，核心特征是强调步骤的顺序执行（串行）。",
+      "sourceQuestionIds": [
+        "2024下-030"
+      ],
+      "createdAt": "2026-08-22T08:25:06.039Z"
+    },
+    {
+      "id": "knowledge-管道-过滤器风格",
+      "name": "管道-过滤器风格",
+      "type": "concept",
+      "aliases": [
+        "Pipe and Filter"
+      ],
+      "description": "一种数据流架构风格，数据通过管道在独立的过滤器之间流动，过滤器可独立运行，天然支持并行处理和高吞吐量。",
+      "sourceQuestionIds": [
+        "2024下-030"
+      ],
+      "createdAt": "2026-08-22T08:25:06.039Z"
+    },
+    {
+      "id": "knowledge-黑板风格",
+      "name": "黑板风格",
+      "type": "concept",
+      "aliases": [
+        "Blackboard"
+      ],
+      "description": "一种知识密集型架构风格，通过共享数据空间（黑板）协调多个知识源，常用于语音识别、编译器等领域，是独立的架构风格而非其他风格的子类型。",
+      "sourceQuestionIds": [
+        "2024下-030"
+      ],
+      "createdAt": "2026-08-22T08:25:06.039Z"
+    },
+    {
+      "id": "knowledge-计算机网络",
+      "name": "计算机网络",
+      "type": "domain",
+      "aliases": [],
+      "description": "软考中涉及网络协议、通信机制及Web服务相关技术的领域。",
+      "sourceQuestionIds": [
+        "2024下-031"
+      ],
+      "createdAt": "2026-08-22T08:26:25.788Z"
+    },
+    {
+      "id": "knowledge-web服务技术",
+      "name": "Web服务技术",
+      "type": "category",
+      "aliases": [
+        "Web Services"
+      ],
+      "description": "基于XML和HTTP的分布式系统互操作技术，包括SOAP、WSDL、UDDI等。",
+      "sourceQuestionIds": [
+        "2024下-031"
+      ],
+      "createdAt": "2026-08-22T08:26:25.788Z"
+    },
+    {
+      "id": "knowledge-soap",
+      "name": "SOAP",
+      "type": "concept",
+      "aliases": [
+        "Simple Object Access Protocol",
+        "简单对象访问协议"
+      ],
+      "description": "简单对象访问协议，基于XML的轻量级协议，用于在分布式环境中交换结构化信息。主要包含信封、编码规则和RPC表示。",
+      "sourceQuestionIds": [
+        "2024下-031"
+      ],
+      "createdAt": "2026-08-22T08:26:25.788Z"
+    },
+    {
+      "id": "knowledge-wsdl",
+      "name": "WSDL",
+      "type": "concept",
+      "aliases": [
+        "Web Services Description Language",
+        "Web服务描述语言"
+      ],
+      "description": "Web服务描述语言，用于描述Web服务的接口、操作、消息格式以及访问地址。负责定义“提供什么服务，如何使用，谁可以使用”。",
+      "sourceQuestionIds": [
+        "2024下-031"
+      ],
+      "createdAt": "2026-08-22T08:26:25.788Z"
+    },
+    {
+      "id": "knowledge-soap信封",
+      "name": "SOAP信封",
+      "type": "concept",
+      "aliases": [
+        "Envelope"
+      ],
+      "description": "SOAP消息的根元素，定义消息的框架，包括发送者、接收者、处理指令及消息边界。",
+      "sourceQuestionIds": [
+        "2024下-031"
+      ],
+      "createdAt": "2026-08-22T08:26:25.788Z"
+    },
+    {
+      "id": "knowledge-soap编码规则",
+      "name": "SOAP编码规则",
+      "type": "concept",
+      "aliases": [
+        "Encoding Rules"
+      ],
+      "description": "定义数据类型的序列化方式，与信封使用不同的XML命名空间。",
+      "sourceQuestionIds": [
+        "2024下-031"
+      ],
+      "createdAt": "2026-08-22T08:26:25.788Z"
+    },
+    {
+      "id": "knowledge-soap-rpc表示",
+      "name": "SOAP RPC表示",
+      "type": "concept",
+      "aliases": [
+        "RPC Representation"
+      ],
+      "description": "定义远程过程调用和应答的协定，支持客户端像调用本地函数一样调用远程服务。",
+      "sourceQuestionIds": [
+        "2024下-031"
+      ],
+      "createdAt": "2026-08-22T08:26:25.788Z"
+    }
+  ],
+  "edges": [
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-软件架构设计",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-架构风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-批处理顺序风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-管道-过滤器风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-黑板风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-批处理顺序风格",
+      "to": "knowledge-管道-过滤器风格",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-黑板风格",
+      "to": "knowledge-管道-过滤器风格",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-计算机网络",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-计算机网络",
+      "to": "knowledge-web服务技术",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-web服务技术",
+      "to": "knowledge-soap",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-web服务技术",
+      "to": "knowledge-wsdl",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-soap",
+      "to": "knowledge-soap信封",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-soap",
+      "to": "knowledge-soap编码规则",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-soap",
+      "to": "knowledge-soap-rpc表示",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-soap",
+      "to": "knowledge-wsdl",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-soap",
+      "to": "knowledge-soap信封",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-soap",
+      "to": "knowledge-soap编码规则",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-soap",
+      "to": "knowledge-soap-rpc表示",
+      "type": "related"
+    }
+  ],
+  "questionLinks": {
+    "2024下-030": [
+      "批",
+      "管道",
+      "黑板风"
+    ],
+    "2024下-031": [
+      "W",
+      "We"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+.bottom-nav {
+  grid-template-columns: repeat(5, 1fr);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.knowledge-practice {
+  margin-top: 12px;
+  border: 0;
+  border-radius: 11px;
+  background: #e8f3ed;
+  color: #31745b;
+  padding: 8px 10px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
