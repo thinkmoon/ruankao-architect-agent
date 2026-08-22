@@ -143,7 +143,39 @@ function Markdown({ content, className = 'markdown-body' }) {
   );
 }
 
-function PracticePage({ go, questions, loading, years, year, startNum, onConsumedStart, onSelectYear, wrongIds, onAnswered, onToggleMistake, askAi, explainAi }) {
+function FollowUpPanel({ question, session, onAsk }) {
+  const [draft, setDraft] = useState('');
+  const turns = session?.items || [];
+  const busy = Boolean(session?.loading);
+  const submit = text => {
+    const message = String(text ?? draft).trim();
+    if (!message || busy) return;
+    setDraft('');
+    onAsk(question, message, turns);
+  };
+  return <section className="follow-up">
+    <div className="follow-up-head">
+      <div className="follow-up-title"><span><MessageCircle size={16}/></span><div><b>继续追问</b><small>不懂的地方，问到明白为止</small></div></div>
+      {turns.length > 0 && <span className="follow-up-count">{Math.ceil(turns.length / 2)} 次追问</span>}
+    </div>
+    {turns.length === 0 && <div className="follow-up-suggestions">
+      {['为什么其他选项不对？', '换一种更容易理解的方式', '结合实际项目举个例子'].map(text => <button key={text} onClick={() => submit(text)} disabled={busy}>{text}<ArrowRight size={13}/></button>)}
+    </div>}
+    {turns.length > 0 && <div className="follow-up-thread">
+      {turns.map((turn, i) => turn.role === 'user'
+        ? <div className="follow-up-user" key={i}>{turn.content}</div>
+        : <div className="follow-up-answer" key={i}><span><Sparkles size={13}/></span>{turn.content ? <Markdown content={turn.content} className="follow-up-markdown"/> : <div className="follow-up-dots"><i/><i/><i/></div>}</div>)}
+    </div>}
+    {session?.error && <p className="follow-up-error">{session.error}</p>}
+    <div className="follow-up-composer">
+      <textarea value={draft} maxLength={2000} rows={1} placeholder="例如：这个知识点在项目中怎么用？" disabled={busy} onChange={e => setDraft(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } }}/>
+      <button className="follow-up-send" aria-label="发送追问" disabled={!draft.trim() || busy} onClick={() => submit()}>{busy ? <span className="follow-up-spinner"/> : <Send size={15}/>}</button>
+    </div>
+    <small className="follow-up-hint">Enter 发送 · Shift + Enter 换行</small>
+  </section>;
+}
+
+function PracticePage({ go, questions, loading, years, year, startNum, onConsumedStart, onSelectYear, wrongIds, onAnswered, onToggleMistake, askAi, explainAi, explainFollowUps, askFollowUp }) {
   // 各年份进度记忆：index 按年份持久化
   const [index, setIndex] = useState(() => {
     if (startNum != null) return -1; // 等 questions 加载后定位 startNum
@@ -182,7 +214,7 @@ function PracticePage({ go, questions, loading, years, year, startNum, onConsume
     <div className="question-count"><b>{String(index+1).padStart(2,'0')}</b><span>/ {String(questions.length).padStart(2,'0')}</span></div>
     <div className="question-title"><Markdown content={q.title} className="question-stem"/></div>
     <div className="options">{q.options.map((o,i) => { let cls=selected===i?'selected':''; if(revealed && i===q.answer) cls='correct'; if(revealed && selected===i && i!==q.answer) cls='wrong'; return <button key={o} className={cls} disabled={revealed} onClick={()=>setSelected(i)}><span>{String.fromCharCode(65+i)}</span><p>{o}</p>{revealed&&i===q.answer&&<Check size={18}/>} {revealed&&selected===i&&i!==q.answer&&<X size={18}/>}</button>})}</div>
-    {revealed && <section className="explain"><div className="explain-head"><Lightbulb size={18}/><b>{selected===q.answer?'回答正确':'这题需要再巩固'}</b><span className="topic-pill">{q.topic}</span></div><p>正确答案：{String.fromCharCode(65+q.answer)}。{selected===q.answer?'继续保持。':'已自动加入错题本。'}</p>{explainAi ? <Markdown content={explainAi}/> : <button className="explain-ai" onClick={()=>askAi(q)}><Sparkles size={14}/> AI 解析本题（考点、易错点、记忆口诀）</button>}</section>}
+    {revealed && <section className="explain"><div className="explain-head"><Lightbulb size={18}/><b>{selected===q.answer?'回答正确':'这题需要再巩固'}</b><span className="topic-pill">{q.topic}</span></div><p>正确答案：{String.fromCharCode(65+q.answer)}。{selected===q.answer?'继续保持。':'已自动加入错题本。'}</p>{explainAi ? <Markdown content={explainAi}/> : <button className="explain-ai" onClick={()=>askAi(q)}><Sparkles size={14}/> AI 解析本题（考点、易错点、记忆口诀）</button>}{explainAi && <FollowUpPanel question={q} session={explainFollowUps[q.id]} onAsk={askFollowUp}/>}</section>}
     <div className="practice-bottom"><button className={selected===null?'disabled':'primary'} onClick={revealed?next:submit}>{revealed?(index===questions.length-1?'完成练习':'下一题'):'提交答案'} {selected!==null&&<ArrowRight size={18}/>}</button></div>
   </div>;
 }
@@ -342,6 +374,7 @@ function AccessGate({ onAuthorized }) {
 function MainApp(){
   const [page,setPage]=useState('home');
   const [explainAi,setExplainAi]=useState('');
+  const [explainFollowUps,setExplainFollowUps]=useState({});
   const [startPractice,setStartPractice]=useState(null); // {year, num} 从错题本「再做一次」进入
   // token 落库后从地址栏清除，避免留在历史记录/分享截图
   useEffect(()=>{
@@ -441,6 +474,24 @@ function MainApp(){
     } catch (e) { setExplainAi(`解析失败：${e.message}`); }
   },[]);
 
+  const askFollowUp=useCallback(async(q, message, previousTurns)=>{
+    const key=q.id;
+    const history=Array.isArray(previousTurns)?previousTurns:[];
+    const userTurn={role:'user',content:message};
+    setExplainFollowUps(prev=>({...prev,[key]:{items:[...history,userTurn,{role:'assistant',content:''}],loading:true,error:''}}));
+    try {
+      const response=await api('/api/explain/follow-up/stream',{method:'POST',body:JSON.stringify({question:q.title,options:q.options,answer:q.answer,source:q.source,topic:q.topic,explanation:explainAi,history,message})});
+      if(!response.ok){const d=await response.json().catch(()=>({}));throw new Error(d.error||'追问请求失败');}
+      const reader=response.body.getReader(), decoder=new TextDecoder(); let buffer='',content='';
+      const update=text=>setExplainFollowUps(prev=>{const current=prev[key];if(!current)return prev;const items=current.items.slice();items[items.length-1]={role:'assistant',content:text};return {...prev,[key]:{...current,items}}});
+      const consume=raw=>{for(const block of raw.split(/\n\n/)){const event=(block.match(/^event:\s*(.+)$/m)||[])[1];const data=(block.match(/^data:\s*(.+)$/m)||[])[1];if(!data)continue;try{const payload=JSON.parse(data);if(event==='token'){content+=payload.text;update(content)}if(event==='error')throw new Error(payload.error)}catch(e){if(event==='error')throw e;}}};
+      while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value||new Uint8Array(),{stream:!done});const chunks=buffer.split(/\r?\n\r?\n/);buffer=chunks.pop()||'';consume(chunks.join('\n\n'));if(done)break;}
+      setExplainFollowUps(prev=>({...prev,[key]:{...prev[key],loading:false}}));
+    } catch(e) {
+      setExplainFollowUps(prev=>({...prev,[key]:{...prev[key],loading:false,error:`追问失败：${e.message}`}}));
+    }
+  },[explainAi]);
+
   const onToggleMistake=useCallback((qid,add)=>{
     setWrongIds(prev=>add?(prev.includes(qid)?prev:[...prev,qid]):prev.filter(x=>x!==qid));
     api('/api/mistakes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({questionId:qid,action:add?'add':'remove'})})
@@ -449,7 +500,7 @@ function MainApp(){
   },[refreshStats]);
 
   const root=['home','practice','chat','profile','plan'].includes(page);
-  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
+  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
 }
 
 function App(){

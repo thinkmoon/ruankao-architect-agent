@@ -327,6 +327,41 @@ function buildExplainPrompt({ question, options, answer, source, topic }) {
   return `你是软考高级系统架构设计师辅导老师。请解析下面这道综合知识真题，直接给出适合移动端阅读的中文 Markdown：\n\n来源：${source || '历年真题'}\n知识点：${topic || '未分类'}\n题目：${clipText(question, 1600)}\n选项：\n${opts}\n正确答案：${String.fromCharCode(65 + answer)}\n\n要求：先说明答案，再解释核心考点；逐项说明其他选项为什么不对；最后给出一句记忆要点。标题、段落、列表之间必须换行。不要重复题目，不要编造标准或出处。`;
 }
 
+function buildFollowUpPrompt({ question, options, answer, source, topic, explanation, history, message }) {
+  const opts = (options || []).map((o, i) => `${String.fromCharCode(65 + i)}. ${clipText(o, 80)}`).join('\n');
+  const turns = (Array.isArray(history) ? history : []).slice(-6).map(item => {
+    const role = item?.role === 'assistant' ? 'AI' : '用户';
+    return `${role}：${clipText(item?.content, item?.role === 'assistant' ? 1800 : 1000)}`;
+  }).join('\n');
+  return `你正在继续辅导一道软考高级系统架构设计师真题。请基于原题、正确答案和已有解析回答用户的追问。
+
+来源：${source || '历年真题'}
+知识点：${topic || '未分类'}
+题目：${clipText(question, 1600)}
+选项：
+${opts}
+正确答案：${String.fromCharCode(65 + answer)}
+已有解析：
+${clipText(explanation, 7000)}
+
+历史追问：
+${turns || '（暂无）'}
+
+本次追问：${clipText(message, 2000)}
+
+要求：直接回答本次追问，优先解释用户困惑；可以举例、类比或给出判断步骤。不要无必要地重复完整解析，不要改变题目的正确答案，不要编造标准或出处。使用适合移动端阅读的中文 Markdown。`;
+}
+
+function validateFollowUpBody(body) {
+  const { question, options, answer, message } = body || {};
+  if (!question || !Array.isArray(options) || typeof answer !== 'number' || !String(message || '').trim()) {
+    return '题目、选项、答案和追问内容为必填项';
+  }
+  if (String(message).trim().length > 2000) return '追问内容不能超过 2000 字';
+  if (Array.isArray(body.history) && body.history.length > 12) return '追问历史过长，请重新开始本题追问';
+  return null;
+}
+
 // 流式生成解析，前端按 token 增量渲染
 app.post('/api/explain/stream', apiAuth, async (req, res) => {
   const { question, options, answer, source, topic } = req.body || {};
@@ -347,7 +382,51 @@ app.post('/api/explain/stream', apiAuth, async (req, res) => {
   } catch(error) { console.error('[explain/stream]',error); if(!res.headersSent) res.status(502).json({error:error instanceof Error?error.message:String(error)}); else { res.write(`event: error\ndata: ${JSON.stringify({error:error.message})}\n\n`); res.end(); } }
 });
 
-// 5. 使用 ooencode 配置的 qwen3.6-27b 生成题目解析
+// 在已有题目解析上下文中继续追问，追问本身不写入答题账本。
+app.post('/api/explain/follow-up/stream', apiAuth, async (req, res) => {
+  const validationError = validateFollowUpBody(req.body);
+  if (validationError) return res.status(400).json({ error: validationError });
+  try {
+    const { baseURL, apiKey, model, maxOutputTokens } = await getLlmConfig();
+    const upstream = await fetch(`${baseURL}/chat/completions`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: buildFollowUpPrompt(req.body) }],
+        temperature: 0.25,
+        max_tokens: maxOutputTokens,
+        stream: true,
+      }),
+    });
+    if (!upstream.ok) throw new Error((await upstream.text()) || `LLM 请求失败（${upstream.status}）`);
+    res.status(200).set({ 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-cache, no-transform', Connection: 'keep-alive', 'X-Accel-Buffering': 'no', 'Content-Encoding': 'identity' });
+    res.flushHeaders();
+    const reader = upstream.body.getReader(); const decoder = new TextDecoder(); let buffer = '';
+    const send = (event, payload) => { if (!res.writableEnded) res.write(`event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`); };
+    const abort = new AbortController();
+    req.on('aborted', () => abort.abort());
+    res.on('close', () => { if (!res.writableEnded) abort.abort(); });
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split(/\r?\n/); buffer = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue;
+        const raw = line.slice(5).trim(); if (raw === '[DONE]') continue;
+        try { const data = JSON.parse(raw); const text = data.choices?.[0]?.delta?.content || ''; if (text) send('token', { text }); } catch {}
+      }
+    }
+    send('done', { model }); res.end();
+  } catch (error) {
+    console.error('[explain/follow-up/stream]', error);
+    if (!res.headersSent) res.status(502).json({ error: error instanceof Error ? error.message : String(error) });
+    else { res.write(`event: error\ndata: ${JSON.stringify({ error: error.message })}\n\n`); res.end(); }
+  }
+});
+
+// 5. 使用项目独立 LLM 配置生成题目解析
 app.post('/api/explain', apiAuth, async (req, res) => {
   const { question, options, answer, source, topic } = req.body || {};
   if (!question || !Array.isArray(options) || typeof answer !== 'number') {
