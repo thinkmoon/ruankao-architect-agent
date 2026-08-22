@@ -7,7 +7,7 @@ import express from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { AcpSession } from './acp-session.js';
 import { loadAllQuestions, listYears } from './zhenti-parser.js';
-import { CHAT_MODEL, MAX_OUTPUT_TOKENS, getLlmConfig } from './llm.js';
+import { getLlmConfig } from './llm.js';
 import { createAgent } from './agent.js';
 import { rebuildPlanSnapshot, readPlan, writePlan, todayShanghai as planToday } from './review-plan.js';
 
@@ -332,8 +332,8 @@ app.post('/api/explain/stream', apiAuth, async (req, res) => {
   const { question, options, answer, source, topic } = req.body || {};
   if (!question || !Array.isArray(options) || typeof answer !== 'number') return res.status(400).json({ error: '题目、选项和答案为必填项' });
   try {
-    const { baseURL, apiKey } = await getLlmConfig();
-    const upstream = await fetch(`${baseURL}/chat/completions`, { method:'POST', headers:{ Authorization:`Bearer ${apiKey}`, 'Content-Type':'application/json' }, body:JSON.stringify({ model:CHAT_MODEL, messages:[{role:'user',content:buildExplainPrompt(req.body)}], temperature:0.2, max_tokens:MAX_OUTPUT_TOKENS, stream:true }) });
+    const { baseURL, apiKey, model, maxOutputTokens } = await getLlmConfig();
+    const upstream = await fetch(`${baseURL}/chat/completions`, { method:'POST', headers:{ Authorization:`Bearer ${apiKey}`, 'Content-Type':'application/json' }, body:JSON.stringify({ model, messages:[{role:'user',content:buildExplainPrompt(req.body)}], temperature:0.2, max_tokens:maxOutputTokens, stream:true }) });
     if (!upstream.ok) throw new Error((await upstream.text()) || `LLM 请求失败（${upstream.status}）`);
     res.status(200).set({ 'Content-Type':'text/event-stream; charset=utf-8', 'Cache-Control':'no-cache, no-transform', Connection:'keep-alive', 'X-Accel-Buffering':'no' });
     const reader=upstream.body.getReader(); const decoder=new TextDecoder(); let buffer='';
@@ -343,7 +343,7 @@ app.post('/api/explain/stream', apiAuth, async (req, res) => {
       const lines=buffer.split(/\r?\n/); buffer=lines.pop() || '';
       for(const line of lines){ if(!line.startsWith('data:')) continue; const raw=line.slice(5).trim(); if(raw==='[DONE]') continue; try { const data=JSON.parse(raw); const text=data.choices?.[0]?.delta?.content || ''; if(text) send('token',{text}); } catch {} }
     }
-    send('done',{model:CHAT_MODEL}); res.end();
+    send('done',{model}); res.end();
   } catch(error) { console.error('[explain/stream]',error); if(!res.headersSent) res.status(502).json({error:error instanceof Error?error.message:String(error)}); else { res.write(`event: error\ndata: ${JSON.stringify({error:error.message})}\n\n`); res.end(); } }
 });
 
@@ -354,17 +354,17 @@ app.post('/api/explain', apiAuth, async (req, res) => {
     return res.status(400).json({ error: '题目、选项和答案为必填项' });
   }
   try {
-    const { baseURL, apiKey } = await getLlmConfig();
+    const { baseURL, apiKey, model, maxOutputTokens } = await getLlmConfig();
     const response = await fetch(`${baseURL}/chat/completions`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: CHAT_MODEL, messages: [{ role: 'user', content: buildExplainPrompt(req.body) }], temperature: 0.2, max_tokens: MAX_OUTPUT_TOKENS }),
+      body: JSON.stringify({ model, messages: [{ role: 'user', content: buildExplainPrompt(req.body) }], temperature: 0.2, max_tokens: maxOutputTokens }),
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error?.message || `LLM 请求失败（${response.status}）`);
     const content = data.choices?.[0]?.message?.content;
     if (!content) throw new Error('LLM 未返回解析内容');
-    res.json({ content, model: CHAT_MODEL });
+    res.json({ content, model });
   } catch (error) {
     console.error('[explain]', error);
     res.status(502).json({ error: error instanceof Error ? error.message : String(error) });
@@ -382,7 +382,10 @@ app.post('/api/chat/stream', apiAuth, async (req, res) => {
   });
   if (!history.length) return res.status(400).json({ error: 'messages 不能为空' });
   try {
-    res.status(200).set({ 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-cache, no-transform', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' });
+    res.status(200).set({ 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-cache, no-transform', Connection: 'keep-alive', 'X-Accel-Buffering': 'no', 'Content-Encoding': 'identity' });
+    res.flushHeaders();
+    // 先发 ready 事件，立即打通浏览器、反代与服务端之间的流式链路。
+    res.write(`event: ready\ndata: {}\n\n`);
     const send = (event, payload) => { if (!res.writableEnded) res.write(`event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`); };
     const ac = new AbortController();
     // IncomingMessage.close 在请求体接收完毕后也可能触发，不能把它当成客户端取消；
@@ -390,7 +393,7 @@ app.post('/api/chat/stream', apiAuth, async (req, res) => {
     req.on('aborted', () => ac.abort());
     res.on('close', () => { if (!res.writableEnded) ac.abort(); });
     await agent.run({ history, signal: ac.signal, onEvent: send });
-    send('done', { model: CHAT_MODEL });
+    send('done', { model: (await getLlmConfig()).model });
     res.end();
   } catch (error) {
     if (error?.name === 'AbortError') { if (!res.writableEnded) res.end(); return; }

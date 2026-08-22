@@ -51,7 +51,7 @@
           "metric": "attemptedQuestions",
           "target": 100,
           "label": "累计完成 100 道摸底题",
-          "actual": 29,
+          "actual": 33,
           "met": false
         }
       ]
@@ -81,7 +81,7 @@
           "metric": "studyMinutes",
           "target": 1800,
           "label": "累计学习 30 小时",
-          "actual": 4,
+          "actual": 6,
           "met": false
         }
       ]
@@ -171,6 +171,31 @@
           "priority": "medium",
           "status": "completed",
           "completedAt": "2026-08-20"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-08-22": {
+      "date": "2026-08-22",
+      "phaseId": "baseline",
+      "status": "in_progress",
+      "plannedMinutes": 210,
+      "tasks": [
+        {
+          "id": "2026-08-22-questions",
+          "type": "questions",
+          "title": "完成综合知识真题摸底",
+          "estimatedMinutes": 60,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-08-22-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
         }
       ],
       "notes": ""
@@ -273,7 +298,7 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 0,
       "reviewHistory": []
@@ -288,7 +313,7 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 1,
       "reviewHistory": [
@@ -310,7 +335,7 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 1,
       "reviewHistory": [
@@ -332,7 +357,7 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 0,
       "reviewHistory": []
@@ -347,7 +372,7 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 0,
       "reviewHistory": []
@@ -362,7 +387,7 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 0,
       "reviewHistory": [
@@ -384,7 +409,7 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 0,
       "reviewHistory": []
@@ -399,7 +424,7 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 0,
       "reviewHistory": []
@@ -414,27 +439,42 @@
       "nextReviewAt": "2026-08-21",
       "intervalDays": 1,
       "ease": 2.5,
-      "status": "scheduled",
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024下-018",
+      "sourceRef": "2024下-018",
+      "topic": "网络安全",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-08-20",
+      "nextReviewAt": "2026-08-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
       "priority": "medium",
       "consecutiveCorrect": 0,
       "reviewHistory": []
     }
   ],
   "stats": {
-    "asOf": "2026-08-20",
-    "attemptedQuestions": 29,
-    "studyMinutes": 4,
+    "asOf": "2026-08-22",
+    "attemptedQuestions": 33,
+    "studyMinutes": 6,
     "completedDays": 1,
     "masteredMistakes": 2,
     "last20Accuracy": 55,
     "today": {
-      "date": "2026-08-20",
-      "attemptedQuestions": 29,
-      "correctQuestions": 18,
-      "dueReviews": 0,
-      "studyMinutes": 4,
-      "plannedMinutes": 90
+      "date": "2026-08-22",
+      "attemptedQuestions": 1,
+      "correctQuestions": 1,
+      "dueReviews": 10,
+      "studyMinutes": 0,
+      "plannedMinutes": 210
     }
   },
-  "updatedAt": "2026-08-20T12:17:31.172Z"
+  "updatedAt": "2026-08-22T07:29:41.688Z"
 }

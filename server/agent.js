@@ -1,6 +1,6 @@
 import { appendFile, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { CHAT_MODEL, CONTEXT_CHAR_BUDGET, MAX_OUTPUT_TOKENS, getLlmConfig } from './llm.js';
+import { CONTEXT_CHAR_BUDGET, getLlmConfig } from './llm.js';
 import { loadAllQuestions } from './zhenti-parser.js';
 import { rebuildPlanSnapshot, readPlan, todayShanghai as planToday } from './review-plan.js';
 
@@ -283,43 +283,70 @@ export function createAgent({ root }) {
     return fn(args || {});
   }
 
-  async function complete({ messages, signal }) {
+  async function complete({ messages, signal, onDelta }) {
     const packed = packMessages(messages);
-    const { baseURL, apiKey } = await getLlmConfig();
-    const response = await fetch(`${baseURL}/chat/completions`, {
+    const { baseURL, apiKey, model, maxOutputTokens } = await getLlmConfig();
+    const request = async includeTools => fetch(`${baseURL}/chat/completions`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: CHAT_MODEL,
-        messages: packed,
-        tools: TOOLS,
+        model,
+        messages: includeTools ? packed : packMessages(packed.filter(m => m.role !== 'tool' && !m.tool_calls)),
+        ...(includeTools ? { tools: TOOLS } : {}),
         temperature: 0.3,
-        max_tokens: MAX_OUTPUT_TOKENS,
+        max_tokens: maxOutputTokens,
+        stream: true,
       }),
       signal,
     });
-    const data = await response.json().catch(() => ({}));
+    let response = await request(true);
     if (!response.ok) {
-      const err = data.error?.message || `LLM 请求失败（${response.status}）`;
-      if (/tool/i.test(err) && packed.some(m => m.role === 'system')) {
-        const retry = await fetch(`${baseURL}/chat/completions`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: CHAT_MODEL,
-            messages: packMessages(packed.filter(m => m.role !== 'tool' && !m.tool_calls)),
-            temperature: 0.3,
-            max_tokens: MAX_OUTPUT_TOKENS,
-          }),
-          signal,
-        });
-        const retryData = await retry.json().catch(() => ({}));
-        if (retry.ok && retryData.choices?.[0]?.message) return retryData.choices[0].message;
-      }
-      throw new Error(err);
+      const err = (await response.text()) || `LLM 请求失败（${response.status}）`;
+      if (/tool/i.test(err) && packed.some(m => m.role === 'system')) response = await request(false);
+      if (!response.ok) throw new Error((await response.text()) || err);
     }
-    const message = data.choices?.[0]?.message;
-    if (!message) throw new Error('LLM 未返回内容');
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    const message = { role: 'assistant', content: '', tool_calls: [] };
+    let buffer = '';
+    const consume = line => {
+      if (!line.startsWith('data:')) return;
+      const raw = line.slice(5).trim();
+      if (!raw || raw === '[DONE]') return;
+      let data;
+      try { data = JSON.parse(raw); } catch { return; }
+      if (data.error) throw new Error(data.error.message || String(data.error));
+      const delta = data.choices?.[0]?.delta || {};
+      if (delta.content) {
+        message.content += delta.content;
+        onDelta?.(delta.content);
+      }
+      if (delta.function_call) {
+        message.function_call ||= { name: '', arguments: '' };
+        if (delta.function_call.name) message.function_call.name += delta.function_call.name;
+        if (delta.function_call.arguments) message.function_call.arguments += delta.function_call.arguments;
+      }
+      for (const call of delta.tool_calls || []) {
+        const index = call.index || 0;
+        message.tool_calls[index] ||= { id: '', type: 'function', function: { name: '', arguments: '' } };
+        const target = message.tool_calls[index];
+        if (call.id) target.id += call.id;
+        if (call.function?.name) target.function.name += call.function.name;
+        if (call.function?.arguments) target.function.arguments += call.function.arguments;
+      }
+    };
+    while (true) {
+      const { value, done } = await reader.read();
+      buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+      const lines = buffer.split(/\r?\n/);
+      buffer = lines.pop() || '';
+      for (const line of lines) consume(line);
+      if (done) break;
+    }
+    if (buffer.trim()) consume(buffer);
+    if (!message.content && !message.tool_calls.length && !message.function_call) throw new Error('LLM 未返回内容');
+    if (!message.tool_calls.length) delete message.tool_calls;
     return message;
   }
 
@@ -361,13 +388,13 @@ export function createAgent({ root }) {
       { role: 'system', content: buildSystemPrompt() },
       ...toApiMessages(history),
     ];
-    for (let round = 0; round < 3; round++) {
-      const message = await complete({ messages, signal });
+    for (let round = 0; round < 10; round++) {
+      let emitted = false;
+      const message = await complete({ messages, signal, onDelta: text => { emitted = true; onEvent('token', { text }); } });
       const calls = message.tool_calls || (message.function_call ? [{ id: 'call_1', function: message.function_call }] : []);
       if (!calls.length) {
         const text = String(message.content || '').trim() || '我这边没有生成出内容，请换一种问法再试。';
-        const step = 48;
-        for (let i = 0; i < text.length; i += step) onEvent('token', { text: text.slice(i, i + step) });
+        if (!emitted) onEvent('token', { text });
         return text;
       }
       messages.push({ role: 'assistant', content: message.content || '', tool_calls: calls });
@@ -386,8 +413,8 @@ export function createAgent({ root }) {
         messages.push({ role: 'tool', tool_call_id: id, content: clip(JSON.stringify(result), 900) });
       }
     }
-    throw new Error('工具调用轮次过多，请把问题拆得更具体一点');
+    throw new Error('工具调用轮次超过 10 轮，请把问题拆得更具体一点');
   }
 
-  return { run, model: CHAT_MODEL };
+  return { run };
 }

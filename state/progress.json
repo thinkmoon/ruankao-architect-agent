@@ -4,10 +4,10 @@
   "official_start_date": "2026-10-24",
   "official_exam_date_range": "2026-10-24至2026-10-27",
   "registration_deadline_guangdong": "2026-08-25",
-  "last_study_date": "2026-08-20",
+  "last_study_date": "2026-08-22",
   "total_study_minutes": 0,
   "completed_sessions": 0,
-  "attempted_questions": 30,
+  "attempted_questions": 34,
   "scores": {
     "comprehensive": [
       0,
@@ -39,6 +39,10 @@
       0.7,
       0.65,
       0.6,
+      0.55,
+      0.5,
+      0.5,
+      0.5,
       0.55
     ],
     "case_analysis": [],

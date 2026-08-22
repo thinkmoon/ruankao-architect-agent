@@ -1,16 +1,28 @@
 import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const llmConfigPath = '/home/liqinsi/storage/config/opencode/opencode.json';
-export const CHAT_MODEL = 'qwen3.6-27b';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const llmConfigPath = path.join(ROOT, 'config', 'llm.json');
+let llmConfig;
 /** 本地 27B 上下文 32K：输入侧按字符保守封顶，给输出和工具定义留余量。 */
 export const CONTEXT_CHAR_BUDGET = 10000;
-export const MAX_OUTPUT_TOKENS = 900;
+// 32K 是输入、输出、工具定义和多轮历史共享的总上下文窗口。
+// 4096 给完整解析留出空间，同时避免输出预算吞掉上下文余量。
+export const MAX_OUTPUT_TOKENS = 4096;
 
-let llmConfigPromise;
 export async function getLlmConfig() {
-  if (!llmConfigPromise) llmConfigPromise = readFile(llmConfigPath, 'utf-8').then(JSON.parse);
-  const config = await llmConfigPromise;
-  const provider = config.provider?.sribd;
-  if (!provider?.options?.baseURL || !provider?.options?.apiKey) throw new Error('未找到 opencode 的 sribd LLM 配置');
-  return { baseURL: provider.options.baseURL.replace(/\/$/, ''), apiKey: provider.options.apiKey };
+  if (!llmConfig) llmConfig = JSON.parse(await readFile(llmConfigPath, 'utf-8'));
+  const { baseURL, apiKey, model, maxOutputTokens } = llmConfig;
+  if (!baseURL || !apiKey || !model) throw new Error('LLM 配置不完整，请填写 config/llm.json');
+  return {
+    baseURL: baseURL.replace(/\/$/, ''),
+    apiKey,
+    model,
+    maxOutputTokens: Number.isFinite(maxOutputTokens) ? maxOutputTokens : MAX_OUTPUT_TOKENS,
+  };
+}
+
+export async function getLlmModel() {
+  return (await getLlmConfig()).model;
 }

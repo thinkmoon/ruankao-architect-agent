@@ -3,6 +3,7 @@ dist/
 .playwright-cli/
 mobile-preview.png
 .env.local
+config/llm.json
 
 # 大体积原始资料（不追踪）
 materials/github-system-architect/

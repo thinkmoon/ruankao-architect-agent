@@ -1,0 +1,24 @@
+[Unit]
+Description=Ruankao Architect Agent Web Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=liqinsi
+Group=liqinsi
+WorkingDirectory=/home/liqinsi/Documents/project/ruankao-architect-agent
+Environment=NODE_ENV=production
+Environment=HOST=0.0.0.0
+Environment=PORT=5174
+Environment=PATH=/home/liqinsi/.config/nvm/versions/node/v24.13.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/home/liqinsi/.config/nvm/versions/node/v24.13.0/bin/npm start
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+TimeoutStopSec=20
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

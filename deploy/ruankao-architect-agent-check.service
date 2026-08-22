@@ -1,0 +1,6 @@
+[Unit]
+Description=Check Ruankao Architect Agent Web Service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c '/usr/bin/systemctl is-active --quiet ruankao-architect-agent.service || /usr/bin/systemctl start ruankao-architect-agent.service'

@@ -217,6 +217,7 @@ function ChatPage() {
   const [input, setInput] = useState('');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const fileRef = useRef();
   const endRef = useRef();
   const abortRef = useRef(null);
@@ -229,13 +230,14 @@ function ChatPage() {
     r.onload = () => resizeImageDataUrl(r.result).then(setImage).catch(() => setImage(r.result));
     r.readAsDataURL(f);
   };
-  const cancel = () => { abortRef.current?.abort(); setLoading(false); };
+  const cancel = () => { abortRef.current?.abort(); setLoading(false); setStreaming(false); };
   const send = async () => {
     const prompt = input.trim() || (image ? '请识别截图里的题目，给出考点分析。' : '');
     if (!prompt && !image || loading) return;
     const history = [...messages, { role: 'me', text: prompt, image }];
     setInput(''); setImage(null); setLoading(true);
     setMessages([...history, { role: 'ai', text: '', tools: [] }]);
+    setStreaming(true);
     const ac = new AbortController();
     abortRef.current = ac;
     try {
@@ -280,11 +282,11 @@ function ChatPage() {
     } catch (e) {
       if (e.name === 'AbortError') return;
       setMessages(v => { const next = [...v]; next[next.length - 1] = { ...next[next.length - 1], text: next[next.length - 1].text || `对话失败：${e.message}` }; return next; });
-    } finally { setLoading(false); abortRef.current = null; }
+    } finally { setLoading(false); setStreaming(false); abortRef.current = null; }
   };
-  return <div className="page chat-page"><Header title="软考助手"/><div className={`assistant-state ${loading ? 'connecting' : 'online'}`}><span></span> {loading ? '正在思考…' : '轻量助手 · qwen3.6-27b'}</div>
+  return <div className="page chat-page"><Header title="软考助手"/><div className={`assistant-state ${loading ? 'connecting' : 'online'}`}><span></span> {streaming ? '正在实时生成…' : loading ? '正在思考…' : '轻量助手 · qwen3.8-27b'}</div>
     <div className="chat-scroll">{messages.map((m, i) => <div key={i} className={`bubble-row ${m.role}`}>{m.role === 'ai' && <div className="bot-avatar"><Bot size={18}/></div>}<div className="bubble">{m.image && <img src={m.image}/>}{m.role === 'ai' && m.text ? <Markdown content={m.text} className="bubble-md"/> : m.text ? <p>{m.text}</p> : null}{m.tools?.map(t => <div className={`tool-card ${t.status}`} key={t.id}><span>{t.status === 'completed' ? <Check size={14}/> : <Sparkles size={14}/>}</span><div><b>{t.title}</b><small>{t.status === 'completed' ? '执行完成' : t.status === 'failed' ? '执行失败' : '正在执行…'}</small></div></div>)}</div></div>)}{loading && <div className="generating"><i/><i/><i/><span>助手正在处理</span><button onClick={cancel}>停止</button></div>}<div ref={endRef}/></div>
-    <div className="composer">{image && <div className="image-preview"><img src={image}/><button onClick={() => setImage(null)}><X size={14}/></button></div>}<div className="composer-box"><button onClick={() => fileRef.current.click()}><ImagePlus size={22}/></button><input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={pick} hidden/><textarea rows="1" value={input} onChange={e => setInput(e.target.value)} placeholder="问考点、错题，或拍照上传题目…" disabled={loading} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}/><button className="send-btn" onClick={send} disabled={loading || (!input.trim() && !image)}><Send size={18}/></button></div><small><Camera size={13}/> 本地 27B 多模态 · 截图只送当前这一轮</small></div>
+    <div className="composer">{image && <div className="image-preview"><img src={image}/><button onClick={() => setImage(null)}><X size={14}/></button></div>}<div className="composer-box"><button onClick={() => fileRef.current.click()}><ImagePlus size={22}/></button><input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={pick} hidden/><textarea rows="1" value={input} onChange={e => setInput(e.target.value)} placeholder="问考点、错题，或拍照上传题目…" disabled={loading} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}/><button className="send-btn" onClick={send} disabled={loading || (!input.trim() && !image)}><Send size={18}/></button></div><small><Camera size={13}/> qwen3.8-27b 多模态 · 截图只送当前这一轮</small></div>
   </div>;
 }
 

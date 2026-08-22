@@ -5,9 +5,9 @@
       "id": "practice-2026-08-20",
       "type": "practice-activity",
       "startedAt": "2026-08-20T12:03:53.047Z",
-      "stoppedAt": "2026-08-20T12:17:24.724Z",
+      "stoppedAt": "2026-08-20T12:48:27.497Z",
       "status": "completed",
-      "activeSeconds": 260,
+      "activeSeconds": 418,
       "clientFlushes": [
         "1787227433047-0-42pr3upimgs",
         "1787227463045-1-edryurtzfr",
@@ -18,9 +18,31 @@
         "1787228163643-0-bn1faxq06g",
         "1787228193643-1-raaif4dvuwf",
         "1787228223643-2-kqavd1x80v",
-        "1787228244724-3-sv1ezumbkj"
+        "1787228244724-3-sv1ezumbkj",
+        "1787229509420-0-grsybzdeyk8",
+        "1787229740591-1-28h02ta3032",
+        "1787229760537-2-9fbkutiv3x4",
+        "1787229790525-3-jyy0bqi1p7",
+        "1787229804067-4-owhew0evp5",
+        "1787229820525-5-yk3y9c88utc",
+        "1787229844497-6-3akqqn3i3gk",
+        "1787230051675-7-ms9jpeajid",
+        "1787230107497-8-xc5go6zwz6c"
       ],
-      "minutes": 4
+      "minutes": 6
+    },
+    {
+      "id": "practice-2026-08-22",
+      "type": "practice-activity",
+      "startedAt": "2026-08-22T07:29:10.421Z",
+      "stoppedAt": "2026-08-22T07:29:39.500Z",
+      "status": "completed",
+      "activeSeconds": 12,
+      "clientFlushes": [
+        "1787383750421-0-m2omsab9ucp",
+        "1787383779500-1-29fgnyw8vw8"
+      ],
+      "minutes": 0
     }
   ]
 }
