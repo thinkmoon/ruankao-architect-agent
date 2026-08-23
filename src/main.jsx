@@ -178,6 +178,9 @@ function FollowUpPanel({ question, session, onAsk }) {
 
 function PracticePage({ go, questions, loading, years, year, startNum, onConsumedStart, onSelectYear, wrongIds, onAnswered, onToggleMistake, askAi, explainAi, explainFollowUps, askFollowUp }) {
   // 各年份进度记忆：index 按年份持久化
+  // 从错题本「再做一次」进入时，整个页面生命周期都属于临时重做模式；
+  // 即使父组件随后清除 startNum，也不能把临时题号写回正常刷题进度。
+  const redoModeRef = useRef(startNum != null);
   const [index, setIndex] = useState(() => {
     if (startNum != null) return -1; // 等 questions 加载后定位 startNum
     try { return Math.max(0, JSON.parse(localStorage.getItem('rk_progress_'+year)) || 0); } catch { return 0; }
@@ -191,10 +194,10 @@ function PracticePage({ go, questions, loading, years, year, startNum, onConsume
   }, [startNum, questions]);
   // 持久化当前题号（直接跳入模式不覆盖）
   useEffect(() => {
-    if (index >= 0 && questions.length && startNum == null) {
+    if (index >= 0 && questions.length && !redoModeRef.current) {
       try { localStorage.setItem('rk_progress_'+year, JSON.stringify(index)); } catch {}
     }
-  }, [index, year, questions.length, startNum]);
+  }, [index, year, questions.length]);
   const yearBar = years.length > 0 && <div className="year-bar"><YearPicker years={years} year={year} onChange={onSelectYear}/></div>;
   if (loading) return <div className="page practice-page"><Header title="真题练习"/>{yearBar}<div className="empty" style={{marginTop:'24%'}}><div><BookOpen size={34}/></div><h3>正在加载真题…</h3><p>从本地 Markdown 解析中</p></div></div>;
   if (!questions.length) return <div className="page practice-page"><Header title="真题练习" back onBack={()=>go('home')}/>{yearBar}<div className="empty" style={{marginTop:'24%'}}><div><BookOpen size={34}/></div><h3>该年份暂无题目</h3><p>请检查 zhenti/ 目录下是否有对应年份真题</p></div></div>;
