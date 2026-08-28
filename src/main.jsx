@@ -119,17 +119,38 @@ function ReviewPlanPage({ go, stats, plan }) {
   </div>;
 }
 
-function YearPicker({ years, year, onChange }) {
+function YearPicker({ years, year, questions, currentIndex, attempts, onChange, onSelectQuestion }) {
   const selRef = useRef();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const progress = new Map();
+  for (const attempt of attempts || []) {
+    if (!attempt.year || !attempt.questionId) continue;
+    const ids = progress.get(attempt.year) || new Set();
+    ids.add(attempt.questionId);
+    progress.set(attempt.year, ids);
+  }
   const current = years.find(y => y.year === year);
+  const currentProgress = progress.get(year) || new Set();
+  const visibleQuestions = (questions || []).filter(question => question.year === year);
   return <div className="year-picker">
     <button className="year-trigger" onClick={() => selRef.current?.focus?.()}>
       <Calendar size={15}/>{current ? current.label : year} · {current ? current.count + ' 题' : ''}
       <ChevronRight size={15} style={{transform:'rotate(90deg)'}}/>
     </button>
     <select ref={selRef} className="year-select" value={year} onChange={e => onChange(e.target.value)} aria-label="选择年份">
-      {years.map(y => <option key={y.year} value={y.year}>{y.label}（{y.count} 题）</option>)}
+      {years.map(y => {
+        const count = progress.get(y.year)?.size || 0;
+        return <option key={y.year} value={y.year}>{y.label}（{y.count} 题 · 已刷 {count}）</option>;
+      })}
     </select>
+    {visibleQuestions.length > 0 && <div className="question-sheet">
+      <button type="button" className="question-sheet-head" onClick={() => setSheetOpen(open => !open)}><span>题目进度 · 已刷 {currentProgress.size}/{visibleQuestions.length}</span><span><small>{sheetOpen ? '收起' : '展开'}</small><ChevronDown size={14} style={{transform:sheetOpen ? 'rotate(180deg)' : 'none'}}/></span></button>
+      {sheetOpen && <div className="question-sheet-body"><div className="question-sheet-legend">绿色=已刷 · 金色=当前</div><div className="question-sheet-grid">{visibleQuestions.map((question, questionIndex) => {
+        const practiced = currentProgress.has(question.id);
+        const active = questionIndex === currentIndex;
+        return <button type="button" key={question.id} title={`${question.num}题 · ${practiced ? '已刷' : '未刷'}`} className={`${practiced ? 'practiced ' : ''}${active ? 'active' : ''}`} onClick={() => onSelectQuestion(questionIndex)}>{question.num}</button>;
+      })}</div></div>}
+    </div>}
   </div>;
 }
 
@@ -176,29 +197,36 @@ function FollowUpPanel({ question, session, onAsk }) {
   </section>;
 }
 
-function PracticePage({ go, questions, loading, years, year, startNum, onConsumedStart, onSelectYear, wrongIds, onAnswered, onToggleMistake, askAi, explainAi, explainFollowUps, askFollowUp }) {
-  // 各年份进度记忆：index 按年份持久化
-  // 从错题本「再做一次」进入时，整个页面生命周期都属于临时重做模式；
-  // 即使父组件随后清除 startNum，也不能把临时题号写回正常刷题进度。
+function PracticePage({ go, questions, loading, years, year, attempts, startNum, onConsumedStart, onSelectYear, wrongIds, onAnswered, onToggleMistake, askAi, explainAi, explainFollowUps, askFollowUp }) {
+  // 错题「再做一次」是临时定位，不参与普通刷题进度计算。
   const redoModeRef = useRef(startNum != null);
+  const initializedYearRef = useRef(null);
   const [index, setIndex] = useState(() => {
     if (startNum != null) return -1; // 等 questions 加载后定位 startNum
-    try { return Math.max(0, JSON.parse(localStorage.getItem('rk_progress_'+year)) || 0); } catch { return 0; }
+    return 0;
   });
   const [selected, setSelected] = useState(null), [revealed, setRevealed] = useState(false);
+  const [localAttempts, setLocalAttempts] = useState([]);
+  const displayedAttempts = [...(attempts || []), ...localAttempts];
   // 定位「再做一次」的目标题
   useEffect(() => {
     if (startNum == null || !questions.length) return;
     const i = questions.findIndex(q => q.num === startNum);
     setIndex(i >= 0 ? i : 0); setSelected(null); setRevealed(false); onConsumedStart();
   }, [startNum, questions]);
-  // 持久化当前题号（直接跳入模式不覆盖）
+  // 普通刷题按服务端真实答题记录定位到本卷第一道未刷题，不再依赖本地游标。
   useEffect(() => {
-    if (index >= 0 && questions.length && !redoModeRef.current) {
-      try { localStorage.setItem('rk_progress_'+year, JSON.stringify(index)); } catch {}
-    }
-  }, [index, year, questions.length]);
-  const yearBar = years.length > 0 && <div className="year-bar"><YearPicker years={years} year={year} onChange={onSelectYear}/></div>;
+    const currentQuestions = questions.filter(question => question.year === year);
+    if (redoModeRef.current || !currentQuestions.length || !Array.isArray(attempts) || initializedYearRef.current === year) return;
+    const attempted = new Set(attempts.filter(item => item.year === year).map(item => item.questionId));
+    const nextIndex = currentQuestions.findIndex(question => !attempted.has(question.id));
+    initializedYearRef.current = year;
+    setIndex(nextIndex >= 0 ? nextIndex : currentQuestions.length - 1);
+    setSelected(null);
+    setRevealed(false);
+  }, [attempts, questions, year]);
+  const selectQuestion = questionIndex => { setIndex(questionIndex); setSelected(null); setRevealed(false); };
+  const yearBar = years.length > 0 && <div className="year-bar"><YearPicker years={years} year={year} questions={questions} currentIndex={index} attempts={displayedAttempts} onChange={onSelectYear} onSelectQuestion={selectQuestion}/></div>;
   if (loading) return <div className="page practice-page"><Header title="真题练习"/>{yearBar}<div className="empty" style={{marginTop:'24%'}}><div><BookOpen size={34}/></div><h3>正在加载真题…</h3><p>从本地 Markdown 解析中</p></div></div>;
   if (!questions.length) return <div className="page practice-page"><Header title="真题练习" back onBack={()=>go('home')}/>{yearBar}<div className="empty" style={{marginTop:'24%'}}><div><BookOpen size={34}/></div><h3>该年份暂无题目</h3><p>请检查 zhenti/ 目录下是否有对应年份真题</p></div></div>;
   const q = questions[Math.max(0, Math.min(index, questions.length-1))]; const saved = wrongIds.includes(q.id);
@@ -207,6 +235,7 @@ function PracticePage({ go, questions, loading, years, year, startNum, onConsume
     const isCorrect = selected === q.answer;
     setRevealed(true);
     const attemptId = await onAnswered({ questionId: q.id, year: q.year, source: q.source, selected, correct: isCorrect, topic: q.topic, answeredAt: new Date().toISOString() });
+    if (attemptId) setLocalAttempts(prev => [...prev, { questionId: q.id, year: q.year }]);
     await askAi(q, { attemptId });
   };
   const next = () => { if (index < questions.length - 1) { setIndex(index + 1); setSelected(null); setRevealed(false); } else go('home'); };
@@ -532,7 +561,7 @@ function MainApp(){
   },[refreshStats]);
 
   const root=['home','practice','knowledge','chat','profile','plan'].includes(page);
-  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>} {page==='knowledge'&&<KnowledgePage go={setPage}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
+  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} attempts={stats.attempts} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>} {page==='knowledge'&&<KnowledgePage go={setPage}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
 }
 
 function App(){

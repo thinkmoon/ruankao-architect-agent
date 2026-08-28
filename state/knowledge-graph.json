@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updatedAt": "2026-08-22T08:26:25.788Z",
+  "updatedAt": "2026-08-28T04:28:35.683Z",
   "nodes": [
     {
       "id": "knowledge-root",
@@ -16,9 +16,21 @@
       "name": "软件架构设计",
       "type": "domain",
       "aliases": [],
-      "description": "软考系统架构设计师考试的核心领域，涵盖架构风格、架构评估、设计模式等。",
+      "description": "根据刷题记录自动积累的知识领域",
       "sourceQuestionIds": [
-        "2024下-030"
+        "2024下-030",
+        "2024下-033",
+        "2024下-035",
+        "2024下-037",
+        "2024下-039",
+        "2024下-042",
+        "2024下-005",
+        "2024下-056",
+        "2024下-022",
+        "2024下-058",
+        "2024下-065",
+        "2024下-066",
+        "2024下-070"
       ],
       "createdAt": "2026-08-22T08:25:06.039Z"
     },
@@ -80,7 +92,7 @@
       "name": "计算机网络",
       "type": "domain",
       "aliases": [],
-      "description": "软考中涉及网络协议、通信机制及Web服务相关技术的领域。",
+      "description": "根据刷题记录自动积累的知识领域",
       "sourceQuestionIds": [
         "2024下-031"
       ],
@@ -107,7 +119,7 @@
         "Simple Object Access Protocol",
         "简单对象访问协议"
       ],
-      "description": "简单对象访问协议，基于XML的轻量级协议，用于在分布式环境中交换结构化信息。主要包含信封、编码规则和RPC表示。",
+      "description": "简单对象访问协议，基于XML的消息协议，用于在分布式环境中交换结构化信息。核心职责是消息的封装和传输格式，不负责描述服务接口。",
       "sourceQuestionIds": [
         "2024下-031"
       ],
@@ -121,9 +133,10 @@
         "Web Services Description Language",
         "Web服务描述语言"
       ],
-      "description": "Web服务描述语言，用于描述Web服务的接口、操作、消息格式以及访问地址。负责定义“提供什么服务，如何使用，谁可以使用”。",
+      "description": "Web服务描述语言，基于XML，用于定义Web服务的接口、协议绑定和网络地址。",
       "sourceQuestionIds": [
-        "2024下-031"
+        "2024下-031",
+        "2024下-050"
       ],
       "createdAt": "2026-08-22T08:26:25.788Z"
     },
@@ -134,7 +147,7 @@
       "aliases": [
         "Envelope"
       ],
-      "description": "SOAP消息的根元素，定义消息的框架，包括发送者、接收者、处理指令及消息边界。",
+      "description": "SOAP消息的根元素，定义消息的边界，标识该消息为SOAP消息。包含关于消息如何被处理的元数据，如发送者、接收者及处理指令。",
       "sourceQuestionIds": [
         "2024下-031"
       ],
@@ -147,7 +160,7 @@
       "aliases": [
         "Encoding Rules"
       ],
-      "description": "定义数据类型的序列化方式，与信封使用不同的XML命名空间。",
+      "description": "定义应用程序特定数据的表示方法，基于XML Schema。与SOAP信封使用不同的XML命名空间，以便区分消息结构与控制信息。",
       "sourceQuestionIds": [
         "2024下-031"
       ],
@@ -160,11 +173,3664 @@
       "aliases": [
         "RPC Representation"
       ],
-      "description": "定义远程过程调用和应答的协定，支持客户端像调用本地函数一样调用远程服务。",
+      "description": "定义远程过程调用（RPC）和应答的协定，支持以远程过程调用风格进行交互。",
       "sourceQuestionIds": [
         "2024下-031"
       ],
       "createdAt": "2026-08-22T08:26:25.788Z"
+    },
+    {
+      "id": "knowledge-综合知识",
+      "name": "综合知识",
+      "type": "domain",
+      "aliases": [],
+      "description": "根据刷题记录自动积累的知识领域",
+      "sourceQuestionIds": [
+        "2024下-032",
+        "2024下-036",
+        "2024下-038",
+        "2024下-040",
+        "2024下-041",
+        "2024下-043",
+        "2024下-044",
+        "2024下-045",
+        "2024下-046",
+        "2024下-048",
+        "2024下-050",
+        "2024下-052",
+        "2024下-054",
+        "2024下-057",
+        "2024下-060",
+        "2024下-061",
+        "2024下-062",
+        "2024下-063",
+        "2024下-064",
+        "2024下-068",
+        "2024下-074",
+        "2024下-075",
+        "2025下-001",
+        "2025下-002",
+        "2025下-003",
+        "2025下-004",
+        "2025下-005",
+        "2025下-006",
+        "2025下-007",
+        "2025下-008",
+        "2025下-012"
+      ],
+      "createdAt": "2026-08-23T00:33:13.696Z"
+    },
+    {
+      "id": "knowledge-数学与逻辑",
+      "name": "数学与逻辑",
+      "type": "domain",
+      "aliases": [],
+      "description": "软考综合知识中涉及的数学基础、逻辑推理及概率统计等考点领域。",
+      "sourceQuestionIds": [
+        "2024下-032"
+      ],
+      "createdAt": "2026-08-23T00:33:13.696Z"
+    },
+    {
+      "id": "knowledge-集合论",
+      "name": "集合论",
+      "type": "category",
+      "aliases": [
+        "Set Theory"
+      ],
+      "description": "研究集合及其运算的数学分支，是解决重叠计数问题的基础。",
+      "sourceQuestionIds": [
+        "2024下-032"
+      ],
+      "createdAt": "2026-08-23T00:33:13.696Z"
+    },
+    {
+      "id": "knowledge-容斥原理",
+      "name": "容斥原理",
+      "type": "concept",
+      "aliases": [
+        "Inclusion-Exclusion Principle",
+        "Inclusion-Exclusion"
+      ],
+      "description": "用于计算多个集合并集元素个数的原理，核心口诀为：单项相加，两两相减，三项相加。",
+      "sourceQuestionIds": [
+        "2024下-032"
+      ],
+      "createdAt": "2026-08-23T00:33:13.696Z"
+    },
+    {
+      "id": "knowledge-韦恩图",
+      "name": "韦恩图",
+      "type": "concept",
+      "aliases": [
+        "Venn Diagram"
+      ],
+      "description": "用于直观表示集合之间关系（如交集、并集）的图形工具，辅助理解容斥原理。",
+      "sourceQuestionIds": [
+        "2024下-032"
+      ],
+      "createdAt": "2026-08-23T00:33:13.696Z"
+    },
+    {
+      "id": "knowledge-质量属性",
+      "name": "质量属性",
+      "type": "domain",
+      "aliases": [
+        "Quality Attributes",
+        "非功能性需求"
+      ],
+      "description": "根据刷题记录自动积累的知识领域",
+      "sourceQuestionIds": [
+        "2024下-033",
+        "2024下-034",
+        "2024下-059",
+        "2024下-072"
+      ],
+      "createdAt": "2026-08-23T00:40:02.825Z"
+    },
+    {
+      "id": "knowledge-质量属性场景",
+      "name": "质量属性场景",
+      "type": "concept",
+      "aliases": [
+        "Quality Attribute Scenarios",
+        "QAS"
+      ],
+      "description": "描述系统对特定刺激做出响应的场景，包含刺激源、刺激、环境、响应、响应度量等要素。",
+      "sourceQuestionIds": [
+        "2024下-033",
+        "2024下-034"
+      ],
+      "createdAt": "2026-08-23T00:40:02.825Z"
+    },
+    {
+      "id": "knowledge-响应",
+      "name": "响应",
+      "type": "concept",
+      "aliases": [
+        "Response",
+        "Action"
+      ],
+      "description": "激励到达后所采取的行动，是质量属性场景的核心要素之一。",
+      "sourceQuestionIds": [
+        "2024下-033",
+        "2024下-034"
+      ],
+      "createdAt": "2026-08-23T00:40:02.825Z"
+    },
+    {
+      "id": "knowledge-刺激源",
+      "name": "刺激源",
+      "type": "concept",
+      "aliases": [
+        "Stimulus Source"
+      ],
+      "description": "质量属性场景六要素之一，指产生刺激的实体，如用户、定时器或外部系统。",
+      "sourceQuestionIds": [
+        "2024下-033"
+      ],
+      "createdAt": "2026-08-23T00:40:02.825Z"
+    },
+    {
+      "id": "knowledge-环境",
+      "name": "环境",
+      "type": "concept",
+      "aliases": [
+        "Environment"
+      ],
+      "description": "质量属性场景六要素之一，指系统所处的状态或条件，如正常负载、高负载或故障状态。",
+      "sourceQuestionIds": [
+        "2024下-033"
+      ],
+      "createdAt": "2026-08-23T00:40:02.825Z"
+    },
+    {
+      "id": "knowledge-制品",
+      "name": "制品",
+      "type": "concept",
+      "aliases": [
+        "Artifact"
+      ],
+      "description": "质量属性场景六要素之一，指受刺激影响的系统组件或数据，如数据库、Web服务器。",
+      "sourceQuestionIds": [
+        "2024下-033"
+      ],
+      "createdAt": "2026-08-23T00:40:02.825Z"
+    },
+    {
+      "id": "knowledge-响应度量",
+      "name": "响应度量",
+      "type": "concept",
+      "aliases": [
+        "Response Measure"
+      ],
+      "description": "质量属性场景六要素之一，指衡量响应是否成功的指标，如响应时间、吞吐量。",
+      "sourceQuestionIds": [
+        "2024下-033"
+      ],
+      "createdAt": "2026-08-23T00:40:02.825Z"
+    },
+    {
+      "id": "knowledge-uml图",
+      "name": "UML图",
+      "type": "category",
+      "aliases": [
+        "Unified Modeling Language Diagrams"
+      ],
+      "description": "统一建模语言图表，用于描述软件系统的结构和行为。",
+      "sourceQuestionIds": [
+        "2024下-034"
+      ],
+      "createdAt": "2026-08-23T00:40:44.942Z"
+    },
+    {
+      "id": "knowledge-用例图",
+      "name": "用例图",
+      "type": "concept",
+      "aliases": [
+        "Use Case Diagram"
+      ],
+      "description": "描述系统功能及用户与系统交互的图，常用于界定用户界面元素和角色。",
+      "sourceQuestionIds": [
+        "2024下-034"
+      ],
+      "createdAt": "2026-08-23T00:40:44.942Z"
+    },
+    {
+      "id": "knowledge-活动图",
+      "name": "活动图",
+      "type": "concept",
+      "aliases": [
+        "Activity Diagram"
+      ],
+      "description": "描述业务流程或界面跳转逻辑的动态图，展示动作节点和控制流。",
+      "sourceQuestionIds": [
+        "2024下-034"
+      ],
+      "createdAt": "2026-08-23T00:40:44.942Z"
+    },
+    {
+      "id": "knowledge-顺序图",
+      "name": "顺序图",
+      "type": "concept",
+      "aliases": [
+        "Sequence Diagram"
+      ],
+      "description": "描述对象之间消息传递时间顺序的交互图，侧重内部协作细节。",
+      "sourceQuestionIds": [
+        "2024下-034"
+      ],
+      "createdAt": "2026-08-23T00:40:44.942Z"
+    },
+    {
+      "id": "knowledge-类图",
+      "name": "类图",
+      "type": "concept",
+      "aliases": [
+        "Class Diagram"
+      ],
+      "description": "描述系统静态结构的图，包含类、属性、方法及关系。",
+      "sourceQuestionIds": [
+        "2024下-034"
+      ],
+      "createdAt": "2026-08-23T00:40:44.942Z"
+    },
+    {
+      "id": "knowledge-连接件",
+      "name": "连接件",
+      "type": "concept",
+      "aliases": [
+        "Connector"
+      ],
+      "description": "架构中负责协调组件之间交互的机制，如管道、消息传递、共享数据等。",
+      "sourceQuestionIds": [
+        "2024下-035"
+      ],
+      "createdAt": "2026-08-23T00:41:09.780Z"
+    },
+    {
+      "id": "knowledge-消息传递",
+      "name": "消息传递",
+      "type": "concept",
+      "aliases": [
+        "Message Passing"
+      ],
+      "description": "一种进程间通信风格，组件通过发送和接收消息交换数据，不直接共享内存。是进程通信风格的核心连接件。",
+      "sourceQuestionIds": [
+        "2024下-035"
+      ],
+      "createdAt": "2026-08-23T00:41:09.780Z"
+    },
+    {
+      "id": "knowledge-消息队列",
+      "name": "消息队列",
+      "type": "concept",
+      "aliases": [
+        "Message Queue"
+      ],
+      "description": "实现异步消息传递的具体技术或中间件产品（如RabbitMQ, Kafka），属于技术实现层而非抽象架构风格。",
+      "sourceQuestionIds": [
+        "2024下-035"
+      ],
+      "createdAt": "2026-08-23T00:41:09.780Z"
+    },
+    {
+      "id": "knowledge-消息中间件",
+      "name": "消息中间件",
+      "type": "concept",
+      "aliases": [
+        "Message Middleware"
+      ],
+      "description": "提供消息传递服务的软件系统或平台（如JMS, AMQP），是消息传递风格的具体载体。",
+      "sourceQuestionIds": [
+        "2024下-035"
+      ],
+      "createdAt": "2026-08-23T00:41:09.780Z"
+    },
+    {
+      "id": "knowledge-信息安全",
+      "name": "信息安全",
+      "type": "domain",
+      "aliases": [
+        "Information Security"
+      ],
+      "description": "涉及数据保护、密码学、网络安全等综合知识领域的核心板块。",
+      "sourceQuestionIds": [
+        "2024下-036"
+      ],
+      "createdAt": "2026-08-23T00:44:08.600Z"
+    },
+    {
+      "id": "knowledge-密码学基础",
+      "name": "密码学基础",
+      "type": "category",
+      "aliases": [
+        "Cryptography"
+      ],
+      "description": "研究数据加密、解密、签名、认证等算法原理及应用的技术领域。",
+      "sourceQuestionIds": [
+        "2024下-036"
+      ],
+      "createdAt": "2026-08-23T00:44:08.600Z"
+    },
+    {
+      "id": "knowledge-哈希函数",
+      "name": "哈希函数",
+      "type": "concept",
+      "aliases": [
+        "Hash Function",
+        "散列函数"
+      ],
+      "description": "将任意长度的输入映射为固定长度输出的单向函数，具有不可逆性和抗碰撞性。",
+      "sourceQuestionIds": [
+        "2024下-036"
+      ],
+      "createdAt": "2026-08-23T00:44:08.600Z"
+    },
+    {
+      "id": "knowledge-md5",
+      "name": "MD5",
+      "type": "concept",
+      "aliases": [
+        "Message-Digest Algorithm 5"
+      ],
+      "description": "一种广泛使用的128位消息摘要算法，主要用于数据完整性校验，已被证明存在碰撞漏洞。",
+      "sourceQuestionIds": [
+        "2024下-036"
+      ],
+      "createdAt": "2026-08-23T00:44:08.600Z"
+    },
+    {
+      "id": "knowledge-哈希碰撞",
+      "name": "哈希碰撞",
+      "type": "concept",
+      "aliases": [
+        "Hash Collision"
+      ],
+      "description": "两个不同的输入产生相同哈希值的现象，根据鸽巢原理必然存在，但难以构造。",
+      "sourceQuestionIds": [
+        "2024下-036"
+      ],
+      "createdAt": "2026-08-23T00:44:08.600Z"
+    },
+    {
+      "id": "knowledge-数据完整性",
+      "name": "数据完整性",
+      "type": "concept",
+      "aliases": [
+        "Data Integrity"
+      ],
+      "description": "确保数据在存储或传输过程中未被未授权篡改的特性，常通过哈希校验实现。",
+      "sourceQuestionIds": [
+        "2024下-036"
+      ],
+      "createdAt": "2026-08-23T00:44:08.600Z"
+    },
+    {
+      "id": "knowledge-事件驱动架构",
+      "name": "事件驱动架构",
+      "type": "concept",
+      "aliases": [
+        "Event-Driven Architecture",
+        "EDA"
+      ],
+      "description": "一种架构风格，组件通过事件进行异步通信，实现松耦合和高扩展性。",
+      "sourceQuestionIds": [
+        "2024下-037"
+      ],
+      "createdAt": "2026-08-23T00:44:45.000Z"
+    },
+    {
+      "id": "knowledge-松耦合",
+      "name": "松耦合",
+      "type": "concept",
+      "aliases": [
+        "Loose Coupling",
+        "非耦合"
+      ],
+      "description": "指组件之间依赖关系较弱，一方变化对另一方影响最小，是事件驱动架构的核心特征。",
+      "sourceQuestionIds": [
+        "2024下-037"
+      ],
+      "createdAt": "2026-08-23T00:44:45.001Z"
+    },
+    {
+      "id": "knowledge-异步通信",
+      "name": "异步通信",
+      "type": "concept",
+      "aliases": [
+        "Asynchronous Communication"
+      ],
+      "description": "发送方发送消息后不等待接收方立即响应，而是继续执行，常用于事件驱动架构。",
+      "sourceQuestionIds": [
+        "2024下-037"
+      ],
+      "createdAt": "2026-08-23T00:44:45.001Z"
+    },
+    {
+      "id": "knowledge-通信原理",
+      "name": "通信原理",
+      "type": "domain",
+      "aliases": [
+        "Communication Principles"
+      ],
+      "description": "研究信息传输与处理的基本原理、技术和方法的学科，是软考综合知识中计算机网络与通信部分的基础。",
+      "sourceQuestionIds": [
+        "2024下-038"
+      ],
+      "createdAt": "2026-08-23T00:45:26.936Z"
+    },
+    {
+      "id": "knowledge-信道容量",
+      "name": "信道容量",
+      "type": "concept",
+      "aliases": [
+        "Channel Capacity",
+        "最大数据传输速率"
+      ],
+      "description": "信道在单位时间内能够传输的最大信息量，通常以比特/秒（bps）为单位，是衡量通信系统性能的关键指标。",
+      "sourceQuestionIds": [
+        "2024下-038"
+      ],
+      "createdAt": "2026-08-23T00:45:26.936Z"
+    },
+    {
+      "id": "knowledge-香农公式",
+      "name": "香农公式",
+      "type": "concept",
+      "aliases": [
+        "Shannon's Theorem",
+        "Shannon-Hartley Theorem"
+      ],
+      "description": "描述信道容量与带宽、信噪比之间关系的数学公式，即 C = W * log2(1 + S/N)，是通信理论的核心定理。",
+      "sourceQuestionIds": [
+        "2024下-038"
+      ],
+      "createdAt": "2026-08-23T00:45:26.936Z"
+    },
+    {
+      "id": "knowledge-带宽",
+      "name": "带宽",
+      "type": "concept",
+      "aliases": [
+        "Bandwidth",
+        "W"
+      ],
+      "description": "信道能够传输信号的频率范围，单位为赫兹（Hz）。在香农公式中，带宽越大，信道容量上限越高。",
+      "sourceQuestionIds": [
+        "2024下-038"
+      ],
+      "createdAt": "2026-08-23T00:45:26.936Z"
+    },
+    {
+      "id": "knowledge-信噪比",
+      "name": "信噪比",
+      "type": "concept",
+      "aliases": [
+        "Signal-to-Noise Ratio",
+        "SNR",
+        "S/N"
+      ],
+      "description": "信号功率与噪声功率的比值，通常用分贝（dB）表示。信噪比越高，信号质量越好，信道容量越大。",
+      "sourceQuestionIds": [
+        "2024下-038"
+      ],
+      "createdAt": "2026-08-23T00:45:26.936Z"
+    },
+    {
+      "id": "knowledge-数据库系统",
+      "name": "数据库系统",
+      "type": "domain",
+      "aliases": [
+        "Database System"
+      ],
+      "description": "涉及数据库设计、关系模型、关系代数及SQL等核心知识。",
+      "sourceQuestionIds": [
+        "2024下-039",
+        "2024下-057",
+        "2024下-058",
+        "2025下-007"
+      ],
+      "createdAt": "2026-08-23T00:46:13.059Z"
+    },
+    {
+      "id": "knowledge-三级模式结构",
+      "name": "三级模式结构",
+      "type": "category",
+      "aliases": [
+        "Three-Level Schema",
+        "三级模式"
+      ],
+      "description": "数据库系统的内部组织方式，包括外模式、概念模式和内模式，旨在实现数据独立性。",
+      "sourceQuestionIds": [
+        "2024下-039"
+      ],
+      "createdAt": "2026-08-23T00:46:13.059Z"
+    },
+    {
+      "id": "knowledge-外模式",
+      "name": "外模式",
+      "type": "concept",
+      "aliases": [
+        "External Schema",
+        "子模式",
+        "用户模式"
+      ],
+      "description": "又称子模式或用户模式，是数据库用户能够看见和使用的局部数据的逻辑结构和特征的描述。",
+      "sourceQuestionIds": [
+        "2024下-039"
+      ],
+      "createdAt": "2026-08-23T00:46:13.059Z"
+    },
+    {
+      "id": "knowledge-概念模式",
+      "name": "概念模式",
+      "type": "concept",
+      "aliases": [
+        "Conceptual Schema",
+        "逻辑模式"
+      ],
+      "description": "又称逻辑模式，是数据库中全体数据的逻辑结构和特征的描述，是所有用户的公共数据视图。",
+      "sourceQuestionIds": [
+        "2024下-039"
+      ],
+      "createdAt": "2026-08-23T00:46:13.059Z"
+    },
+    {
+      "id": "knowledge-内模式",
+      "name": "内模式",
+      "type": "concept",
+      "aliases": [
+        "Internal Schema",
+        "存储模式"
+      ],
+      "description": "又称存储模式，是数据物理结构和存储方式的描述，是数据在数据库内部的表示方式。",
+      "sourceQuestionIds": [
+        "2024下-039"
+      ],
+      "createdAt": "2026-08-23T00:46:13.059Z"
+    },
+    {
+      "id": "knowledge-两级映像",
+      "name": "两级映像",
+      "type": "concept",
+      "aliases": [
+        "Two-Level Mapping"
+      ],
+      "description": "指外模式/概念模式映像和概念模式/内模式映像，分别保证逻辑数据独立性和物理数据独立性。",
+      "sourceQuestionIds": [
+        "2024下-039"
+      ],
+      "createdAt": "2026-08-23T00:46:13.059Z"
+    },
+    {
+      "id": "knowledge-逻辑数据独立性",
+      "name": "逻辑数据独立性",
+      "type": "concept",
+      "aliases": [
+        "Logical Data Independence"
+      ],
+      "description": "当概念模式改变时，通过修改外模式/概念模式映像，使外模式保持不变，从而保证应用程序不受影响。",
+      "sourceQuestionIds": [
+        "2024下-039"
+      ],
+      "createdAt": "2026-08-23T00:46:13.059Z"
+    },
+    {
+      "id": "knowledge-物理数据独立性",
+      "name": "物理数据独立性",
+      "type": "concept",
+      "aliases": [
+        "Physical Data Independence"
+      ],
+      "description": "当内模式改变时，通过修改概念模式/内模式映像，使概念模式保持不变，从而保证逻辑数据不受影响。",
+      "sourceQuestionIds": [
+        "2024下-039"
+      ],
+      "createdAt": "2026-08-23T00:46:13.060Z"
+    },
+    {
+      "id": "knowledge-软件可靠性",
+      "name": "软件可靠性",
+      "type": "domain",
+      "aliases": [
+        "Software Reliability"
+      ],
+      "description": "研究软件系统在规定条件下和规定时间内完成规定功能的能力，涉及可靠性设计技术。",
+      "sourceQuestionIds": [
+        "2024下-040"
+      ],
+      "createdAt": "2026-08-23T00:49:14.589Z"
+    },
+    {
+      "id": "knowledge-n版本程序设计",
+      "name": "N版本程序设计",
+      "type": "concept",
+      "aliases": [
+        "N-Version Programming",
+        "N版本设计"
+      ],
+      "description": "一种通过冗余提高可靠性的技术，由多个独立团队根据相同规范开发不同版本，通过仲裁器表决输出结果，以避免共模故障。",
+      "sourceQuestionIds": [
+        "2024下-040"
+      ],
+      "createdAt": "2026-08-23T00:49:14.589Z"
+    },
+    {
+      "id": "knowledge-相异成分规范评审",
+      "name": "相异成分规范评审",
+      "type": "concept",
+      "aliases": [],
+      "description": "N版本设计特有步骤，在需求阶段评审各版本实现方案中不同成分（如算法、数据结构），确保差异性。",
+      "sourceQuestionIds": [
+        "2024下-040"
+      ],
+      "createdAt": "2026-08-23T00:49:14.589Z"
+    },
+    {
+      "id": "knowledge-相异性确认",
+      "name": "相异性确认",
+      "type": "concept",
+      "aliases": [],
+      "description": "N版本设计特有步骤，在设计和编码过程中持续检查并确认各版本在实现细节上保持足够的差异性。",
+      "sourceQuestionIds": [
+        "2024下-040"
+      ],
+      "createdAt": "2026-08-23T00:49:14.589Z"
+    },
+    {
+      "id": "knowledge-背对背测试",
+      "name": "背对背测试",
+      "type": "concept",
+      "aliases": [
+        "Independent Testing"
+      ],
+      "description": "N版本设计特有步骤，各版本由独立测试团队进行独立测试，互不干扰，最后通过仲裁器比较结果。",
+      "sourceQuestionIds": [
+        "2024下-040"
+      ],
+      "createdAt": "2026-08-23T00:49:14.589Z"
+    },
+    {
+      "id": "knowledge-共模故障",
+      "name": "共模故障",
+      "type": "concept",
+      "aliases": [
+        "Common Mode Failure"
+      ],
+      "description": "由于设计缺陷或环境因素导致多个冗余组件同时发生相同故障的现象，N版本设计旨在避免此问题。",
+      "sourceQuestionIds": [
+        "2024下-040"
+      ],
+      "createdAt": "2026-08-23T00:49:14.589Z"
+    },
+    {
+      "id": "knowledge-信息化需求",
+      "name": "信息化需求",
+      "type": "category",
+      "aliases": [
+        "IT Requirements",
+        "信息化需求分析"
+      ],
+      "description": "指组织在信息化建设过程中，从宏观战略到微观技术实现所提出的多层次需求集合。",
+      "sourceQuestionIds": [
+        "2024下-041"
+      ],
+      "createdAt": "2026-08-23T01:17:33.295Z"
+    },
+    {
+      "id": "knowledge-战略需求",
+      "name": "战略需求",
+      "type": "concept",
+      "aliases": [
+        "Strategic Requirements"
+      ],
+      "description": "最高层次的需求，关注组织长期目标、业务发展方向及信息化对核心竞争力的支撑，回答“为什么做”和“去哪里”的问题。",
+      "sourceQuestionIds": [
+        "2024下-041"
+      ],
+      "createdAt": "2026-08-23T01:17:33.295Z"
+    },
+    {
+      "id": "knowledge-运作需求",
+      "name": "运作需求",
+      "type": "concept",
+      "aliases": [
+        "Operational Requirements",
+        "业务运作需求"
+      ],
+      "description": "中间层次的需求，关注业务流程、管理效率及日常运营痛点，强调业务层面的流程优化与自动化，回答“如何高效工作”的问题。注意区别于“运营需求”。",
+      "sourceQuestionIds": [
+        "2024下-041"
+      ],
+      "createdAt": "2026-08-23T01:17:33.295Z"
+    },
+    {
+      "id": "knowledge-技术需求",
+      "name": "技术需求",
+      "type": "concept",
+      "aliases": [
+        "Technical Requirements"
+      ],
+      "description": "最底层的需求，关注系统实现的具体技术约束、性能指标、安全标准、接口规范及基础设施要求，回答“怎么做”的问题。",
+      "sourceQuestionIds": [
+        "2024下-041"
+      ],
+      "createdAt": "2026-08-23T01:17:33.295Z"
+    },
+    {
+      "id": "knowledge-调用-返回风格",
+      "name": "调用/返回风格",
+      "type": "category",
+      "aliases": [
+        "Call/Return",
+        "调用返回风格"
+      ],
+      "description": "基于过程调用机制的架构风格，控制流由调用者决定，包含层次型、主程序/子过程、面向对象等子风格。",
+      "sourceQuestionIds": [
+        "2024下-042"
+      ],
+      "createdAt": "2026-08-23T01:20:13.134Z"
+    },
+    {
+      "id": "knowledge-层次型体系结构风格",
+      "name": "层次型体系结构风格",
+      "type": "concept",
+      "aliases": [
+        "Layered Architecture"
+      ],
+      "description": "系统被组织成层次结构，上层模块调用下层模块，严格遵循调用/返回机制。",
+      "sourceQuestionIds": [
+        "2024下-042"
+      ],
+      "createdAt": "2026-08-23T01:20:13.134Z"
+    },
+    {
+      "id": "knowledge-主程序-子过程体系结构风格",
+      "name": "主程序/子过程体系结构风格",
+      "type": "concept",
+      "aliases": [
+        "Main Program/Subprogram"
+      ],
+      "description": "最基础的调用/返回形式，主程序通过调用子过程（函数）完成任务。",
+      "sourceQuestionIds": [
+        "2024下-042"
+      ],
+      "createdAt": "2026-08-23T01:20:13.135Z"
+    },
+    {
+      "id": "knowledge-面向对象体系结构风格",
+      "name": "面向对象体系结构风格",
+      "type": "concept",
+      "aliases": [
+        "Object-Oriented Architecture"
+      ],
+      "description": "基于对象和方法调用的架构风格，对象间交互通常通过方法调用实现，属于广义的调用/返回范畴。",
+      "sourceQuestionIds": [
+        "2024下-042"
+      ],
+      "createdAt": "2026-08-23T01:20:13.135Z"
+    },
+    {
+      "id": "knowledge-数据流风格",
+      "name": "数据流风格",
+      "type": "category",
+      "aliases": [
+        "Data Flow",
+        "数据流架构"
+      ],
+      "description": "基于数据流动和转换的架构风格，包括管道-过滤器、黑板、独立组件等，组件间通过数据共享或传递协作，而非直接调用。",
+      "sourceQuestionIds": [
+        "2024下-042"
+      ],
+      "createdAt": "2026-08-23T01:20:13.135Z"
+    },
+    {
+      "id": "knowledge-软件工程",
+      "name": "软件工程",
+      "type": "domain",
+      "aliases": [],
+      "description": "根据刷题记录自动积累的知识领域",
+      "sourceQuestionIds": [
+        "2024下-043",
+        "2024下-051",
+        "2024下-055",
+        "2024下-069",
+        "2024下-071"
+      ],
+      "createdAt": "2026-08-23T01:20:43.449Z"
+    },
+    {
+      "id": "knowledge-模块内聚",
+      "name": "模块内聚",
+      "type": "category",
+      "aliases": [
+        "Cohesion"
+      ],
+      "description": "衡量模块内部各元素之间关联紧密程度的指标，内聚度越高，模块独立性越强。",
+      "sourceQuestionIds": [
+        "2024下-043"
+      ],
+      "createdAt": "2026-08-23T01:20:43.449Z"
+    },
+    {
+      "id": "knowledge-过程内聚",
+      "name": "过程内聚",
+      "type": "concept",
+      "aliases": [
+        "Procedural Cohesion"
+      ],
+      "description": "模块内的处理元素是相关的，而且必须按特定的次序执行。若交换执行顺序，程序功能会出错。",
+      "sourceQuestionIds": [
+        "2024下-043"
+      ],
+      "createdAt": "2026-08-23T01:20:43.449Z"
+    },
+    {
+      "id": "knowledge-通信内聚",
+      "name": "通信内聚",
+      "type": "concept",
+      "aliases": [
+        "Communicational Cohesion"
+      ],
+      "description": "模块内的所有处理元素都使用相同的输入数据或产生相同的输出数据。",
+      "sourceQuestionIds": [
+        "2024下-043"
+      ],
+      "createdAt": "2026-08-23T01:20:43.449Z"
+    },
+    {
+      "id": "knowledge-时间内聚",
+      "name": "时间内聚",
+      "type": "concept",
+      "aliases": [
+        "Temporal Cohesion"
+      ],
+      "description": "模块内的处理元素因为必须在同一时间段内执行而组合在一起，如初始化或清理操作。",
+      "sourceQuestionIds": [
+        "2024下-043"
+      ],
+      "createdAt": "2026-08-23T01:20:43.449Z"
+    },
+    {
+      "id": "knowledge-逻辑内聚",
+      "name": "逻辑内聚",
+      "type": "concept",
+      "aliases": [
+        "Logical Cohesion"
+      ],
+      "description": "模块内的处理元素在逻辑上是相似的，通常由一个控制参数决定执行哪一个，如所有输入设备的读取。",
+      "sourceQuestionIds": [
+        "2024下-043"
+      ],
+      "createdAt": "2026-08-23T01:20:43.449Z"
+    },
+    {
+      "id": "knowledge-信息安全审计",
+      "name": "信息安全审计",
+      "type": "concept",
+      "aliases": [
+        "Security Audit"
+      ],
+      "description": "对系统中与安全有关的活动的相关信息进行识别、记录、存储和分析的过程，旨在验证安全控制的有效性。",
+      "sourceQuestionIds": [
+        "2024下-044"
+      ],
+      "createdAt": "2026-08-23T01:22:40.662Z"
+    },
+    {
+      "id": "knowledge-控制目标",
+      "name": "控制目标",
+      "type": "concept",
+      "aliases": [
+        "Control Objectives"
+      ],
+      "description": "安全审计的起点，明确需要保护的对象及达到的安全标准（如机密性、完整性、可用性）。",
+      "sourceQuestionIds": [
+        "2024下-044"
+      ],
+      "createdAt": "2026-08-23T01:22:40.663Z"
+    },
+    {
+      "id": "knowledge-安全漏洞",
+      "name": "安全漏洞",
+      "type": "concept",
+      "aliases": [
+        "Security Vulnerabilities"
+      ],
+      "description": "审计的对象，指系统中存在的弱点、风险或缺陷，是实施控制措施的依据。",
+      "sourceQuestionIds": [
+        "2024下-044"
+      ],
+      "createdAt": "2026-08-23T01:22:40.663Z"
+    },
+    {
+      "id": "knowledge-控制措施",
+      "name": "控制措施",
+      "type": "concept",
+      "aliases": [
+        "Control Measures"
+      ],
+      "description": "针对安全漏洞所采取的具体技术或管理手段，如防火墙、加密、访问控制策略等。",
+      "sourceQuestionIds": [
+        "2024下-044"
+      ],
+      "createdAt": "2026-08-23T01:22:40.663Z"
+    },
+    {
+      "id": "knowledge-控制测试",
+      "name": "控制测试",
+      "type": "concept",
+      "aliases": [
+        "Control Testing"
+      ],
+      "description": "审计的手段，通过检查、观察、询问或重新执行等方式，验证控制措施是否有效运行。",
+      "sourceQuestionIds": [
+        "2024下-044"
+      ],
+      "createdAt": "2026-08-23T01:22:40.663Z"
+    },
+    {
+      "id": "knowledge-人工智能",
+      "name": "人工智能",
+      "type": "domain",
+      "aliases": [
+        "AI"
+      ],
+      "description": "根据刷题记录自动积累的知识领域",
+      "sourceQuestionIds": [
+        "2024下-045",
+        "2024下-049"
+      ],
+      "createdAt": "2026-08-23T01:23:13.829Z"
+    },
+    {
+      "id": "knowledge-专家系统",
+      "name": "专家系统",
+      "type": "concept",
+      "aliases": [
+        "Expert System"
+      ],
+      "description": "模拟人类专家在特定领域内解决复杂问题的人工智能系统，核心组件包括知识库、推理机和解释器。",
+      "sourceQuestionIds": [
+        "2024下-045"
+      ],
+      "createdAt": "2026-08-23T01:23:13.829Z"
+    },
+    {
+      "id": "knowledge-知识库",
+      "name": "知识库",
+      "type": "concept",
+      "aliases": [
+        "Knowledge Base"
+      ],
+      "description": "存储领域专家知识、规则和事实的数据库，是专家系统的核心组成部分，负责知识的存储与更新。",
+      "sourceQuestionIds": [
+        "2024下-045"
+      ],
+      "createdAt": "2026-08-23T01:23:13.829Z"
+    },
+    {
+      "id": "knowledge-推理机",
+      "name": "推理机",
+      "type": "concept",
+      "aliases": [
+        "Inference Engine"
+      ],
+      "description": "利用知识库中的知识，结合用户输入的事实，通过逻辑推理（如正向链、反向链）得出结论的控制机构。",
+      "sourceQuestionIds": [
+        "2024下-045"
+      ],
+      "createdAt": "2026-08-23T01:23:13.829Z"
+    },
+    {
+      "id": "knowledge-解释器",
+      "name": "解释器",
+      "type": "concept",
+      "aliases": [
+        "Explanation Facility"
+      ],
+      "description": "用于向用户解释推理过程和结论依据的组件，增加系统的透明度和可信度。",
+      "sourceQuestionIds": [
+        "2024下-045"
+      ],
+      "createdAt": "2026-08-23T01:23:13.829Z"
+    },
+    {
+      "id": "knowledge-注意力机制",
+      "name": "注意力机制",
+      "type": "concept",
+      "aliases": [
+        "Attention Mechanism"
+      ],
+      "description": "深度学习（特别是Transformer模型）中的核心技术，用于处理序列数据，不属于传统专家系统的核心组件。",
+      "sourceQuestionIds": [
+        "2024下-045"
+      ],
+      "createdAt": "2026-08-23T01:23:13.829Z"
+    },
+    {
+      "id": "knowledge-操作系统",
+      "name": "操作系统",
+      "type": "domain",
+      "aliases": [
+        "Operating System",
+        "OS"
+      ],
+      "description": "管理计算机硬件与软件资源的系统软件，本题涉及其中的进程管理与调度。",
+      "sourceQuestionIds": [
+        "2024下-046",
+        "2024下-053",
+        "2024下-004",
+        "2024下-062"
+      ],
+      "createdAt": "2026-08-23T01:23:57.491Z"
+    },
+    {
+      "id": "knowledge-中断机制",
+      "name": "中断机制",
+      "type": "category",
+      "aliases": [
+        "Interrupt Mechanism"
+      ],
+      "description": "CPU响应外部或内部事件，暂停当前程序执行，转去执行相应处理程序的机制。",
+      "sourceQuestionIds": [
+        "2024下-046"
+      ],
+      "createdAt": "2026-08-23T01:23:57.491Z"
+    },
+    {
+      "id": "knowledge-访管中断",
+      "name": "访管中断",
+      "type": "concept",
+      "aliases": [
+        "Supervisor Call Interrupt",
+        "管理中断",
+        "自愿中断",
+        "系统调用中断"
+      ],
+      "description": "又称管理中断或自愿中断。由用户程序执行访管指令（系统调用）主动触发，用于请求操作系统服务，实现从用户态到内核态的切换。",
+      "sourceQuestionIds": [
+        "2024下-046"
+      ],
+      "createdAt": "2026-08-23T01:23:57.491Z"
+    },
+    {
+      "id": "knowledge-外部中断",
+      "name": "外部中断",
+      "type": "concept",
+      "aliases": [
+        "External Interrupt",
+        "硬中断",
+        "异步中断"
+      ],
+      "description": "又称硬中断。由CPU和内存之外的硬件设备（如键盘、定时器、磁盘）异步发出的中断，与当前执行的指令无关。",
+      "sourceQuestionIds": [
+        "2024下-046"
+      ],
+      "createdAt": "2026-08-23T01:23:57.491Z"
+    },
+    {
+      "id": "knowledge-异常",
+      "name": "异常",
+      "type": "concept",
+      "aliases": [
+        "Exception",
+        "内中断",
+        "故障",
+        "溢出中断"
+      ],
+      "description": "又称内中断或故障。由CPU执行指令过程中产生的错误（如除零、溢出、缺页）同步触发的中断，属于非自愿中断。",
+      "sourceQuestionIds": [
+        "2024下-046"
+      ],
+      "createdAt": "2026-08-23T01:23:57.491Z"
+    },
+    {
+      "id": "knowledge-特权指令",
+      "name": "特权指令",
+      "type": "concept",
+      "aliases": [
+        "Privileged Instruction"
+      ],
+      "description": "只能在内核态（管态）下执行的指令，如I/O操作、修改页表、关中断等。用户态程序无权直接执行，需通过系统调用间接访问。",
+      "sourceQuestionIds": [
+        "2024下-046"
+      ],
+      "createdAt": "2026-08-23T01:23:57.491Z"
+    },
+    {
+      "id": "knowledge-系统调用",
+      "name": "系统调用",
+      "type": "concept",
+      "aliases": [
+        "System Call",
+        "Syscall"
+      ],
+      "description": "用户程序请求操作系统服务的接口。通常通过执行特定的访管指令（如int 0x80, syscall）触发访管中断，从而进入内核态执行。",
+      "sourceQuestionIds": [
+        "2024下-046"
+      ],
+      "createdAt": "2026-08-23T01:23:57.491Z"
+    },
+    {
+      "id": "knowledge-知识产权",
+      "name": "知识产权",
+      "type": "domain",
+      "aliases": [
+        "Intellectual Property"
+      ],
+      "description": "涉及专利、商标、著作权等法律保护的知识领域，是软考综合知识中的重要考点。",
+      "sourceQuestionIds": [
+        "2024下-047"
+      ],
+      "createdAt": "2026-08-23T01:24:25.949Z"
+    },
+    {
+      "id": "knowledge-专利法",
+      "name": "专利法",
+      "type": "category",
+      "aliases": [
+        "Patent Law"
+      ],
+      "description": "规范专利申请、授权及保护的法律体系，重点考察职务发明、专利权属等概念。",
+      "sourceQuestionIds": [
+        "2024下-047"
+      ],
+      "createdAt": "2026-08-23T01:24:25.949Z"
+    },
+    {
+      "id": "knowledge-职务发明创造",
+      "name": "职务发明创造",
+      "type": "concept",
+      "aliases": [
+        "Service Invention",
+        "职务发明"
+      ],
+      "description": "指执行本单位的任务或者主要是利用本单位的物质技术条件所完成的发明创造，其专利申请权和专利权通常归属于单位。",
+      "sourceQuestionIds": [
+        "2024下-047"
+      ],
+      "createdAt": "2026-08-23T01:24:25.949Z"
+    },
+    {
+      "id": "knowledge-离职后职务发明追溯期",
+      "name": "离职后职务发明追溯期",
+      "type": "concept",
+      "aliases": [
+        "Post-employment Invention Period",
+        "1年追溯期"
+      ],
+      "description": "指员工退休、调离原单位或劳动关系终止后，在一定期限内作出的与原单位本职工作或分配任务有关的发明创造，仍视为职务发明。法定期限为1年。",
+      "sourceQuestionIds": [
+        "2024下-047"
+      ],
+      "createdAt": "2026-08-23T01:24:25.949Z"
+    },
+    {
+      "id": "knowledge-推荐系统",
+      "name": "推荐系统",
+      "type": "domain",
+      "aliases": [
+        "Recommender Systems",
+        "信息过滤"
+      ],
+      "description": "信息过滤技术的延续与发展，旨在根据用户偏好和物品特征提供个性化推荐。",
+      "sourceQuestionIds": [
+        "2024下-048"
+      ],
+      "createdAt": "2026-08-23T01:28:39.529Z"
+    },
+    {
+      "id": "knowledge-基于内容的推荐",
+      "name": "基于内容的推荐",
+      "type": "concept",
+      "aliases": [
+        "Content-Based Filtering",
+        "CBF"
+      ],
+      "description": "依据用户历史偏好和物品属性特征进行匹配推荐，不依赖其他用户数据，存在新用户冷启动问题。",
+      "sourceQuestionIds": [
+        "2024下-048"
+      ],
+      "createdAt": "2026-08-23T01:28:39.529Z"
+    },
+    {
+      "id": "knowledge-协同过滤",
+      "name": "协同过滤",
+      "type": "concept",
+      "aliases": [
+        "Collaborative Filtering",
+        "CF"
+      ],
+      "description": "依据用户或物品之间的行为相似性进行推荐，依赖群体智慧，存在新项目冷启动问题。",
+      "sourceQuestionIds": [
+        "2024下-048"
+      ],
+      "createdAt": "2026-08-23T01:28:39.530Z"
+    },
+    {
+      "id": "knowledge-冷启动问题",
+      "name": "冷启动问题",
+      "type": "concept",
+      "aliases": [
+        "Cold Start Problem"
+      ],
+      "description": "推荐系统中因缺乏新用户历史数据或新项目交互数据导致无法生成有效推荐的问题。",
+      "sourceQuestionIds": [
+        "2024下-048"
+      ],
+      "createdAt": "2026-08-23T01:28:39.530Z"
+    },
+    {
+      "id": "knowledge-企业应用集成",
+      "name": "企业应用集成",
+      "type": "domain",
+      "aliases": [
+        "EAI",
+        "Enterprise Application Integration"
+      ],
+      "description": "EAI (Enterprise Application Integration) 是一种架构风格，旨在将不同的应用程序、数据源和系统集成在一起，以实现业务流程的自动化和数据共享。",
+      "sourceQuestionIds": [
+        "2024下-049"
+      ],
+      "createdAt": "2026-08-23T01:29:08.730Z"
+    },
+    {
+      "id": "knowledge-数据集成",
+      "name": "数据集成",
+      "type": "category",
+      "aliases": [
+        "Data Integration"
+      ],
+      "description": "企业集成的最底层，解决异构系统间数据格式、存储和交换的问题，是其他集成的基础。",
+      "sourceQuestionIds": [
+        "2024下-049",
+        "2024下-064"
+      ],
+      "createdAt": "2026-08-23T01:29:08.730Z"
+    },
+    {
+      "id": "knowledge-数据联邦",
+      "name": "数据联邦",
+      "type": "concept",
+      "aliases": [
+        "Data Federation"
+      ],
+      "description": "一种虚拟数据集成技术，不移动数据，而是通过统一查询接口实时访问分布在多个异构数据源中的数据，使其看起来像单一数据源。",
+      "sourceQuestionIds": [
+        "2024下-049"
+      ],
+      "createdAt": "2026-08-23T01:29:08.730Z"
+    },
+    {
+      "id": "knowledge-数据复制",
+      "name": "数据复制",
+      "type": "concept",
+      "aliases": [
+        "Data Replication"
+      ],
+      "description": "将数据从一个源系统复制到另一个目标系统，保持数据同步的集成方式。",
+      "sourceQuestionIds": [
+        "2024下-049"
+      ],
+      "createdAt": "2026-08-23T01:29:08.730Z"
+    },
+    {
+      "id": "knowledge-基于接口的数据集成",
+      "name": "基于接口的数据集成",
+      "type": "concept",
+      "aliases": [
+        "Interface-based Integration"
+      ],
+      "description": "通过 API 或消息中间件，在应用层进行数据交换和处理的集成方式。",
+      "sourceQuestionIds": [
+        "2024下-049"
+      ],
+      "createdAt": "2026-08-23T01:29:08.730Z"
+    },
+    {
+      "id": "knowledge-wsdl服务功能定义",
+      "name": "WSDL服务功能定义",
+      "type": "concept",
+      "aliases": [
+        "What",
+        "服务做什么"
+      ],
+      "description": "描述服务做什么（What），通过types和message元素定义操作及数据结构。",
+      "sourceQuestionIds": [
+        "2024下-050"
+      ],
+      "createdAt": "2026-08-23T01:29:37.725Z"
+    },
+    {
+      "id": "knowledge-wsdl服务交互定义",
+      "name": "WSDL服务交互定义",
+      "type": "concept",
+      "aliases": [
+        "How",
+        "如何访问服务"
+      ],
+      "description": "描述如何访问服务（How），通过portType和binding元素定义抽象接口及协议绑定。",
+      "sourceQuestionIds": [
+        "2024下-050"
+      ],
+      "createdAt": "2026-08-23T01:29:37.725Z"
+    },
+    {
+      "id": "knowledge-wsdl服务位置定义",
+      "name": "WSDL服务位置定义",
+      "type": "concept",
+      "aliases": [
+        "Where",
+        "服务位于何处"
+      ],
+      "description": "描述服务位于何处（Where），通过service和port元素定义具体的网络地址（Endpoint URL）。",
+      "sourceQuestionIds": [
+        "2024下-050"
+      ],
+      "createdAt": "2026-08-23T01:29:37.725Z"
+    },
+    {
+      "id": "knowledge-软件测试",
+      "name": "软件测试",
+      "type": "category",
+      "aliases": [
+        "Software Testing"
+      ],
+      "description": "软件工程中用于发现错误、验证软件质量的活动，包括不同层级的测试。",
+      "sourceQuestionIds": [
+        "2024下-051",
+        "2024下-055",
+        "2024下-069"
+      ],
+      "createdAt": "2026-08-23T01:31:14.965Z"
+    },
+    {
+      "id": "knowledge-测试脚本",
+      "name": "测试脚本",
+      "type": "concept",
+      "aliases": [
+        "Test Script"
+      ],
+      "description": "包含测试步骤、逻辑和断言的可执行指令集合，用于驱动自动化测试或结构化测试过程。",
+      "sourceQuestionIds": [
+        "2024下-051"
+      ],
+      "createdAt": "2026-08-23T01:31:14.965Z"
+    },
+    {
+      "id": "knowledge-脚本文件",
+      "name": "脚本文件",
+      "type": "concept",
+      "aliases": [
+        "Script File"
+      ],
+      "description": "存储测试脚本代码的文件，如.py, .js, .bat等，是测试逻辑的载体。",
+      "sourceQuestionIds": [
+        "2024下-051"
+      ],
+      "createdAt": "2026-08-23T01:31:14.965Z"
+    },
+    {
+      "id": "knowledge-数据驱动测试",
+      "name": "数据驱动测试",
+      "type": "concept",
+      "aliases": [
+        "Data-Driven Testing"
+      ],
+      "description": "一种测试技术，将测试数据与测试逻辑分离，通过读取外部数据文件来驱动测试执行。",
+      "sourceQuestionIds": [
+        "2024下-051"
+      ],
+      "createdAt": "2026-08-23T01:31:14.966Z"
+    },
+    {
+      "id": "knowledge-数据文件",
+      "name": "数据文件",
+      "type": "concept",
+      "aliases": [
+        "Data File"
+      ],
+      "description": "存储测试输入数据的外部文件（如CSV, Excel, JSON），与测试脚本逻辑分离。",
+      "sourceQuestionIds": [
+        "2024下-051"
+      ],
+      "createdAt": "2026-08-23T01:31:14.966Z"
+    },
+    {
+      "id": "knowledge-软件重用",
+      "name": "软件重用",
+      "type": "category",
+      "aliases": [
+        "Software Reuse"
+      ],
+      "description": "软件复用是指在开发新的软件系统时，利用已有的软件构件或知识来构建新系统的过程。",
+      "sourceQuestionIds": [
+        "2024下-052",
+        "2024下-068"
+      ],
+      "createdAt": "2026-08-23T01:31:44.526Z"
+    },
+    {
+      "id": "knowledge-横向重用",
+      "name": "横向重用",
+      "type": "concept",
+      "aliases": [
+        "Horizontal Reuse"
+      ],
+      "description": "指在不同应用领域之间，对具有普适性的通用软件元素（如数据结构、通用算法、UI组件）进行重用。",
+      "sourceQuestionIds": [
+        "2024下-052"
+      ],
+      "createdAt": "2026-08-23T01:31:44.526Z"
+    },
+    {
+      "id": "knowledge-纵向重用",
+      "name": "纵向重用",
+      "type": "concept",
+      "aliases": [
+        "Vertical Reuse"
+      ],
+      "description": "指在同一应用领域内，对包含特定业务规则或专业知识的领域专用软件元素进行重用。",
+      "sourceQuestionIds": [
+        "2024下-052"
+      ],
+      "createdAt": "2026-08-23T01:31:44.526Z"
+    },
+    {
+      "id": "knowledge-死锁",
+      "name": "死锁",
+      "type": "category",
+      "aliases": [
+        "Deadlock"
+      ],
+      "description": "指两个或两个以上的进程在执行过程中，因竞争资源或互相通信而造成的死锁或僵局状态。",
+      "sourceQuestionIds": [
+        "2024下-053"
+      ],
+      "createdAt": "2026-08-23T01:33:00.027Z"
+    },
+    {
+      "id": "knowledge-死锁必要条件",
+      "name": "死锁必要条件",
+      "type": "concept",
+      "aliases": [
+        "Deadlock Necessary Conditions"
+      ],
+      "description": "死锁发生的四个必要条件：互斥、请求与保持、不可抢占、循环等待。",
+      "sourceQuestionIds": [
+        "2024下-053"
+      ],
+      "createdAt": "2026-08-23T01:33:00.027Z"
+    },
+    {
+      "id": "knowledge-互斥条件",
+      "name": "互斥条件",
+      "type": "concept",
+      "aliases": [
+        "Mutual Exclusion"
+      ],
+      "description": "资源每次只能被一个进程占用，其他进程必须等待。这是独占型资源的本质属性，通常无法通过软件手段破坏。",
+      "sourceQuestionIds": [
+        "2024下-053"
+      ],
+      "createdAt": "2026-08-23T01:33:00.027Z"
+    },
+    {
+      "id": "knowledge-请求与保持条件",
+      "name": "请求与保持条件",
+      "type": "concept",
+      "aliases": [
+        "Hold and Wait"
+      ],
+      "description": "进程在等待新资源时，不释放已获得的资源。可通过一次性申请所有资源来破坏。",
+      "sourceQuestionIds": [
+        "2024下-053"
+      ],
+      "createdAt": "2026-08-23T01:33:00.027Z"
+    },
+    {
+      "id": "knowledge-不可抢占条件",
+      "name": "不可抢占条件",
+      "type": "concept",
+      "aliases": [
+        "No Preemption"
+      ],
+      "description": "进程已获得的资源在未使用完前不能被强行剥夺。可通过允许系统强制剥夺资源来破坏。",
+      "sourceQuestionIds": [
+        "2024下-053"
+      ],
+      "createdAt": "2026-08-23T01:33:00.027Z"
+    },
+    {
+      "id": "knowledge-循环等待条件",
+      "name": "循环等待条件",
+      "type": "concept",
+      "aliases": [
+        "Circular Wait"
+      ],
+      "description": "存在进程等待的循环链。可通过资源有序分配策略（按序申请）来破坏。",
+      "sourceQuestionIds": [
+        "2024下-053"
+      ],
+      "createdAt": "2026-08-23T01:33:00.027Z"
+    },
+    {
+      "id": "knowledge-死锁预防",
+      "name": "死锁预防",
+      "type": "concept",
+      "aliases": [
+        "Deadlock Prevention"
+      ],
+      "description": "通过破坏死锁的四个必要条件中的至少一个，从系统设计上确保死锁不可能发生。",
+      "sourceQuestionIds": [
+        "2024下-053"
+      ],
+      "createdAt": "2026-08-23T01:33:00.027Z"
+    },
+    {
+      "id": "knowledge-软件质量特性",
+      "name": "软件质量特性",
+      "type": "category",
+      "aliases": [
+        "Software Quality Characteristics",
+        "ISO/IEC 25010"
+      ],
+      "description": "ISO/IEC 25010标准中定义的软件产品质量维度，包括功能性、性能效率、兼容性、易用性、可靠性、安全性、可维护性和可移植性。",
+      "sourceQuestionIds": [
+        "2024下-054"
+      ],
+      "createdAt": "2026-08-23T01:33:56.968Z"
+    },
+    {
+      "id": "knowledge-易用性",
+      "name": "易用性",
+      "type": "concept",
+      "aliases": [
+        "Usability",
+        "易操作性",
+        "Operability"
+      ],
+      "description": "易用性子特性，指用户操作软件产品完成特定任务的效率和准确性。通常通过操作效率、错误率来衡量。",
+      "sourceQuestionIds": [
+        "2024下-054"
+      ],
+      "createdAt": "2026-08-23T01:33:56.968Z"
+    },
+    {
+      "id": "knowledge-可靠性",
+      "name": "可靠性",
+      "type": "concept",
+      "aliases": [
+        "Reliability"
+      ],
+      "description": "软件产品在指定条件下和指定时间内执行规定功能的能力。包括成熟性、可用性、容错性和可恢复性。",
+      "sourceQuestionIds": [
+        "2024下-054"
+      ],
+      "createdAt": "2026-08-23T01:33:56.968Z"
+    },
+    {
+      "id": "knowledge-可维护性",
+      "name": "可维护性",
+      "type": "concept",
+      "aliases": [
+        "Maintainability"
+      ],
+      "description": "软件产品被修改以纠正故障、改进性能或适应环境变化的能力。包括易分析性、易变更性、稳定性和易测试性。",
+      "sourceQuestionIds": [
+        "2024下-054"
+      ],
+      "createdAt": "2026-08-23T01:33:56.968Z"
+    },
+    {
+      "id": "knowledge-易学习性",
+      "name": "易学习性",
+      "type": "concept",
+      "aliases": [
+        "Learnability"
+      ],
+      "description": "易用性子特性，指用户学习使用软件产品所需的时间和努力程度。通常通过学习曲线来衡量。",
+      "sourceQuestionIds": [
+        "2024下-054"
+      ],
+      "createdAt": "2026-08-23T01:33:56.968Z"
+    },
+    {
+      "id": "knowledge-可恢复性",
+      "name": "可恢复性",
+      "type": "concept",
+      "aliases": [
+        "Recoverability"
+      ],
+      "description": "可靠性子特性，指在发生故障后，软件产品恢复其规定功能的能力。通常通过平均修复时间（MTTR）来衡量。",
+      "sourceQuestionIds": [
+        "2024下-054"
+      ],
+      "createdAt": "2026-08-23T01:33:56.968Z"
+    },
+    {
+      "id": "knowledge-进程状态",
+      "name": "进程状态",
+      "type": "category",
+      "aliases": [
+        "Process States"
+      ],
+      "description": "进程在生命周期中可能处于的各种状态，包括就绪、运行、阻塞等。",
+      "sourceQuestionIds": [
+        "2024下-004"
+      ],
+      "createdAt": "2026-08-23T01:35:50.403Z"
+    },
+    {
+      "id": "knowledge-就绪状态",
+      "name": "就绪状态",
+      "type": "concept",
+      "aliases": [
+        "Ready State",
+        "就绪"
+      ],
+      "description": "进程已具备运行条件，仅因CPU被占用（时间片结束或被抢占）而暂时停止运行，进入就绪队列等待调度。",
+      "sourceQuestionIds": [
+        "2024下-004"
+      ],
+      "createdAt": "2026-08-23T01:35:50.403Z"
+    },
+    {
+      "id": "knowledge-运行状态",
+      "name": "运行状态",
+      "type": "concept",
+      "aliases": [
+        "Running State",
+        "执行态"
+      ],
+      "description": "进程正在CPU上执行的状态。",
+      "sourceQuestionIds": [
+        "2024下-004"
+      ],
+      "createdAt": "2026-08-23T01:35:50.403Z"
+    },
+    {
+      "id": "knowledge-阻塞状态",
+      "name": "阻塞状态",
+      "type": "concept",
+      "aliases": [
+        "Blocked State",
+        "等待状态",
+        "阻塞"
+      ],
+      "description": "进程因等待某事件（如I/O操作完成、申请资源失败）而暂时无法运行的状态。",
+      "sourceQuestionIds": [
+        "2024下-004"
+      ],
+      "createdAt": "2026-08-23T01:35:50.403Z"
+    },
+    {
+      "id": "knowledge-挂起状态",
+      "name": "挂起状态",
+      "type": "concept",
+      "aliases": [
+        "Suspended State",
+        "挂起"
+      ],
+      "description": "进程被从内存交换到外存（磁盘）中，以释放内存空间的状态，分为挂起就绪和挂起阻塞。",
+      "sourceQuestionIds": [
+        "2024下-004"
+      ],
+      "createdAt": "2026-08-23T01:35:50.403Z"
+    },
+    {
+      "id": "knowledge-进程调度",
+      "name": "进程调度",
+      "type": "category",
+      "aliases": [
+        "Process Scheduling",
+        "CPU调度"
+      ],
+      "description": "决定哪个就绪进程获得CPU使用权的机制，常见算法包括先来先服务(FCFS)、短作业优先(SJF)等。",
+      "sourceQuestionIds": [
+        "2024下-004",
+        "2024下-062"
+      ],
+      "createdAt": "2026-08-23T01:35:50.403Z"
+    },
+    {
+      "id": "knowledge-抢占式调度",
+      "name": "抢占式调度",
+      "type": "concept",
+      "aliases": [
+        "Preemptive Scheduling"
+      ],
+      "description": "允许高优先级进程抢占低优先级进程CPU使用权的调度方式，被抢占进程进入就绪状态。",
+      "sourceQuestionIds": [
+        "2024下-004"
+      ],
+      "createdAt": "2026-08-23T01:35:50.403Z"
+    },
+    {
+      "id": "knowledge-时间片轮转",
+      "name": "时间片轮转",
+      "type": "concept",
+      "aliases": [
+        "Round Robin",
+        "RR"
+      ],
+      "description": "每个进程轮流使用一个固定长度的时间片，时间片用尽后进程进入就绪状态。",
+      "sourceQuestionIds": [
+        "2024下-004"
+      ],
+      "createdAt": "2026-08-23T01:35:50.403Z"
+    },
+    {
+      "id": "knowledge-4-1视图模型",
+      "name": "4+1视图模型",
+      "type": "concept",
+      "aliases": [
+        "4+1 View Model",
+        "Kruchten 4+1"
+      ],
+      "description": "由Philippe Kruchten提出的软件架构描述模型，通过五个视图（逻辑、开发、进程、物理、场景）从不同角度描述系统架构，以满足不同利益相关者的需求。",
+      "sourceQuestionIds": [
+        "2024下-005"
+      ],
+      "createdAt": "2026-08-23T01:48:25.225Z"
+    },
+    {
+      "id": "knowledge-逻辑视图",
+      "name": "逻辑视图",
+      "type": "concept",
+      "aliases": [
+        "Logical View"
+      ],
+      "description": "关注系统的功能需求，描述系统提供给最终用户的服务，通常使用类图或对象图表示。",
+      "sourceQuestionIds": [
+        "2024下-005"
+      ],
+      "createdAt": "2026-08-23T01:48:25.225Z"
+    },
+    {
+      "id": "knowledge-开发视图",
+      "name": "开发视图",
+      "type": "concept",
+      "aliases": [
+        "Development View",
+        "实现视图",
+        "Implementation View"
+      ],
+      "description": "关注软件模块的组织和管理，主要面向开发人员，描述代码的静态结构，也称为实现视图。",
+      "sourceQuestionIds": [
+        "2024下-005"
+      ],
+      "createdAt": "2026-08-23T01:48:25.225Z"
+    },
+    {
+      "id": "knowledge-进程视图",
+      "name": "进程视图",
+      "type": "concept",
+      "aliases": [
+        "Process View"
+      ],
+      "description": "关注系统的性能和可用性需求，涉及并发、同步、分布式等机制，描述系统的动态行为。",
+      "sourceQuestionIds": [
+        "2024下-005"
+      ],
+      "createdAt": "2026-08-23T01:48:25.225Z"
+    },
+    {
+      "id": "knowledge-物理视图",
+      "name": "物理视图",
+      "type": "concept",
+      "aliases": [
+        "Physical View",
+        "部署视图",
+        "Deployment View"
+      ],
+      "description": "关注系统硬件拓扑结构，描述软件如何映射到硬件节点上，也称为部署视图。",
+      "sourceQuestionIds": [
+        "2024下-005"
+      ],
+      "createdAt": "2026-08-23T01:48:25.225Z"
+    },
+    {
+      "id": "knowledge-场景视图",
+      "name": "场景视图",
+      "type": "concept",
+      "aliases": [
+        "Scenarios View",
+        "用例视图",
+        "Use Case View"
+      ],
+      "description": "即用例视图，用于验证上述四个视图，通过具体的使用场景来描述系统行为，是连接其他四个视图的纽带。",
+      "sourceQuestionIds": [
+        "2024下-005"
+      ],
+      "createdAt": "2026-08-23T01:48:25.225Z"
+    },
+    {
+      "id": "knowledge-白盒测试",
+      "name": "白盒测试",
+      "type": "concept",
+      "aliases": [
+        "White-box Testing",
+        "结构测试"
+      ],
+      "description": "基于程序内部逻辑结构的测试方法，关注代码路径、分支和条件的覆盖。",
+      "sourceQuestionIds": [
+        "2024下-055"
+      ],
+      "createdAt": "2026-08-23T03:36:57.331Z"
+    },
+    {
+      "id": "knowledge-语句覆盖",
+      "name": "语句覆盖",
+      "type": "concept",
+      "aliases": [
+        "Statement Coverage"
+      ],
+      "description": "最弱的覆盖标准，要求程序中每条可执行语句至少执行一次。",
+      "sourceQuestionIds": [
+        "2024下-055"
+      ],
+      "createdAt": "2026-08-23T03:36:57.331Z"
+    },
+    {
+      "id": "knowledge-判断覆盖",
+      "name": "判断覆盖",
+      "type": "concept",
+      "aliases": [
+        "Decision Coverage",
+        "Branch Coverage"
+      ],
+      "description": "要求程序中每个判断的真假分支至少执行一次，强度高于语句覆盖。",
+      "sourceQuestionIds": [
+        "2024下-055"
+      ],
+      "createdAt": "2026-08-23T03:36:57.331Z"
+    },
+    {
+      "id": "knowledge-条件覆盖",
+      "name": "条件覆盖",
+      "type": "concept",
+      "aliases": [
+        "Condition Coverage"
+      ],
+      "description": "要求程序中每个判断条件的每个取值（真/假）至少出现一次，强度高于语句覆盖。",
+      "sourceQuestionIds": [
+        "2024下-055"
+      ],
+      "createdAt": "2026-08-23T03:36:57.331Z"
+    },
+    {
+      "id": "knowledge-条件组合覆盖",
+      "name": "条件组合覆盖",
+      "type": "concept",
+      "aliases": [
+        "Multiple Condition Coverage",
+        "MC/DC"
+      ],
+      "description": "要求覆盖判断中所有条件的各种可能组合，强度高于判断覆盖和条件覆盖。",
+      "sourceQuestionIds": [
+        "2024下-055"
+      ],
+      "createdAt": "2026-08-23T03:36:57.332Z"
+    },
+    {
+      "id": "knowledge-路径覆盖",
+      "name": "路径覆盖",
+      "type": "concept",
+      "aliases": [
+        "Path Coverage"
+      ],
+      "description": "最强的覆盖标准，要求覆盖程序中所有可能的执行路径，理论上包含其他所有覆盖标准。",
+      "sourceQuestionIds": [
+        "2024下-055"
+      ],
+      "createdAt": "2026-08-23T03:36:57.332Z"
+    },
+    {
+      "id": "knowledge-基于度量的评估方法",
+      "name": "基于度量的评估方法",
+      "type": "concept",
+      "aliases": [
+        "Measurement-based Evaluation"
+      ],
+      "description": "一种通过建立度量指标与质量属性之间的映射关系，从架构文档中提取数据并推导系统质量属性水平的评估方法。",
+      "sourceQuestionIds": [
+        "2024下-056"
+      ],
+      "createdAt": "2026-08-23T03:39:47.273Z"
+    },
+    {
+      "id": "knowledge-度量指标",
+      "name": "度量指标",
+      "type": "concept",
+      "aliases": [
+        "Metrics",
+        "度量"
+      ],
+      "description": "用于量化软件架构特征的具体数值或参数，如响应时间、吞吐量、代码复杂度等，是评估的基础数据。",
+      "sourceQuestionIds": [
+        "2024下-056"
+      ],
+      "createdAt": "2026-08-23T03:39:47.273Z"
+    },
+    {
+      "id": "knowledge-映射原则",
+      "name": "映射原则",
+      "type": "concept",
+      "aliases": [
+        "Mapping Principle"
+      ],
+      "description": "定义度量指标与质量属性之间对应关系的规则，是连接客观数据与主观质量属性的桥梁。",
+      "sourceQuestionIds": [
+        "2024下-056"
+      ],
+      "createdAt": "2026-08-23T03:39:47.273Z"
+    },
+    {
+      "id": "knowledge-设计模式",
+      "name": "设计模式",
+      "type": "category",
+      "aliases": [
+        "GoF Patterns",
+        "Gang of Four Patterns"
+      ],
+      "description": "GoF设计模式，分为创建型、结构型和行为型三大类，用于解决软件设计中重复出现的问题。",
+      "sourceQuestionIds": [
+        "2024下-022"
+      ],
+      "createdAt": "2026-08-23T04:17:37.761Z"
+    },
+    {
+      "id": "knowledge-创建型模式",
+      "name": "创建型模式",
+      "type": "category",
+      "aliases": [
+        "Creational Patterns"
+      ],
+      "description": "关注对象的创建机制，试图以更灵活的方式创建对象，如工厂方法、抽象工厂、单例、建造者、原型等。",
+      "sourceQuestionIds": [
+        "2024下-022"
+      ],
+      "createdAt": "2026-08-23T04:17:37.761Z"
+    },
+    {
+      "id": "knowledge-结构型模式",
+      "name": "结构型模式",
+      "type": "category",
+      "aliases": [
+        "Structural Patterns"
+      ],
+      "description": "关注类和对象的组合，通过组合来形成更大的结构，如适配器、桥接、组合、装饰器、外观、享元、代理等。",
+      "sourceQuestionIds": [
+        "2024下-022"
+      ],
+      "createdAt": "2026-08-23T04:17:37.761Z"
+    },
+    {
+      "id": "knowledge-行为型模式",
+      "name": "行为型模式",
+      "type": "category",
+      "aliases": [
+        "Behavioral Patterns"
+      ],
+      "description": "关注对象之间的职责分配和通信，如责任链、命令、解释器、迭代器、中介者、备忘录、观察者、状态、策略、模板方法、访问者等。",
+      "sourceQuestionIds": [
+        "2024下-022"
+      ],
+      "createdAt": "2026-08-23T04:17:37.761Z"
+    },
+    {
+      "id": "knowledge-原型模式",
+      "name": "原型模式",
+      "type": "concept",
+      "aliases": [
+        "Prototype"
+      ],
+      "description": "通过复制一个已有对象（原型）来创建新对象，而不是通过new关键字实例化，属于创建型模式。",
+      "sourceQuestionIds": [
+        "2024下-022"
+      ],
+      "createdAt": "2026-08-23T04:17:37.761Z"
+    },
+    {
+      "id": "knowledge-装饰器模式",
+      "name": "装饰器模式",
+      "type": "concept",
+      "aliases": [
+        "Decorator"
+      ],
+      "description": "允许向一个对象动态地添加职责，而不影响其他对象，属于结构型模式。",
+      "sourceQuestionIds": [
+        "2024下-022"
+      ],
+      "createdAt": "2026-08-23T04:17:37.761Z"
+    },
+    {
+      "id": "knowledge-观察者模式",
+      "name": "观察者模式",
+      "type": "concept",
+      "aliases": [
+        "Observer"
+      ],
+      "description": "定义对象间的一对多依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新，属于行为型模式。",
+      "sourceQuestionIds": [
+        "2024下-022"
+      ],
+      "createdAt": "2026-08-23T04:17:37.761Z"
+    },
+    {
+      "id": "knowledge-代理模式",
+      "name": "代理模式",
+      "type": "concept",
+      "aliases": [
+        "Proxy"
+      ],
+      "description": "为其他对象提供一种代理以控制对这个对象的访问，属于结构型模式。",
+      "sourceQuestionIds": [
+        "2024下-022"
+      ],
+      "createdAt": "2026-08-23T04:17:37.761Z"
+    },
+    {
+      "id": "knowledge-完整性约束",
+      "name": "完整性约束",
+      "type": "category",
+      "aliases": [
+        "Integrity Constraints"
+      ],
+      "description": "保证数据库中数据的正确性、有效性和相容性的规则，分为实体、参照和用户定义完整性。",
+      "sourceQuestionIds": [
+        "2024下-057"
+      ],
+      "createdAt": "2026-08-23T04:53:52.108Z"
+    },
+    {
+      "id": "knowledge-实体完整性",
+      "name": "实体完整性",
+      "type": "concept",
+      "aliases": [
+        "Entity Integrity"
+      ],
+      "description": "要求关系中的主属性（主键）不能取空值，以确保每一行数据都能被唯一标识。",
+      "sourceQuestionIds": [
+        "2024下-057"
+      ],
+      "createdAt": "2026-08-23T04:53:52.108Z"
+    },
+    {
+      "id": "knowledge-参照完整性",
+      "name": "参照完整性",
+      "type": "concept",
+      "aliases": [
+        "Referential Integrity"
+      ],
+      "description": "用于维护表与表之间的数据一致性，主要涉及外键约束，要求外键值必须存在于被参照表中或为空。",
+      "sourceQuestionIds": [
+        "2024下-057"
+      ],
+      "createdAt": "2026-08-23T04:53:52.108Z"
+    },
+    {
+      "id": "knowledge-用户定义完整性",
+      "name": "用户定义完整性",
+      "type": "concept",
+      "aliases": [
+        "User-defined Integrity"
+      ],
+      "description": "针对某一具体应用的数据必须满足的语义要求，如取值范围、枚举值等，通常通过CHECK约束或DOMAIN实现。",
+      "sourceQuestionIds": [
+        "2024下-057"
+      ],
+      "createdAt": "2026-08-23T04:53:52.108Z"
+    },
+    {
+      "id": "knowledge-关系模型",
+      "name": "关系模型",
+      "type": "category",
+      "aliases": [
+        "Relational Model"
+      ],
+      "description": "关系数据库的理论基础，将数据组织为二维表（关系），基于集合论。",
+      "sourceQuestionIds": [
+        "2024下-058",
+        "2025下-008"
+      ],
+      "createdAt": "2026-08-23T11:42:00.020Z"
+    },
+    {
+      "id": "knowledge-函数依赖",
+      "name": "函数依赖",
+      "type": "concept",
+      "aliases": [
+        "Functional Dependency",
+        "FD"
+      ],
+      "description": "关系模式中属性集之间的约束关系，表示一个属性集的值可以唯一确定另一个属性集的值。",
+      "sourceQuestionIds": [
+        "2024下-058"
+      ],
+      "createdAt": "2026-08-23T11:42:00.020Z"
+    },
+    {
+      "id": "knowledge-候选键",
+      "name": "候选键",
+      "type": "concept",
+      "aliases": [
+        "Candidate Key",
+        "码",
+        "Key"
+      ],
+      "description": "能唯一标识关系中元组的最小属性集，也称为码。",
+      "sourceQuestionIds": [
+        "2024下-058"
+      ],
+      "createdAt": "2026-08-23T11:42:00.020Z"
+    },
+    {
+      "id": "knowledge-属性闭包",
+      "name": "属性闭包",
+      "type": "concept",
+      "aliases": [
+        "Attribute Closure",
+        "Closure"
+      ],
+      "description": "在给定函数依赖集下，由属性集X能推导出的所有属性的集合，用于判断X是否为超键或候选键。",
+      "sourceQuestionIds": [
+        "2024下-058"
+      ],
+      "createdAt": "2026-08-23T11:42:00.021Z"
+    },
+    {
+      "id": "knowledge-超键",
+      "name": "超键",
+      "type": "concept",
+      "aliases": [
+        "Super Key"
+      ],
+      "description": "能唯一标识关系中元组的属性集，候选键是超键的子集。",
+      "sourceQuestionIds": [
+        "2024下-058"
+      ],
+      "createdAt": "2026-08-23T11:42:00.021Z"
+    },
+    {
+      "id": "knowledge-基于知识源的架构风格",
+      "name": "基于知识源的架构风格",
+      "type": "category",
+      "aliases": [
+        "Knowledge-Source Based",
+        "基于知识源风格"
+      ],
+      "description": "一种架构风格大类，其核心组件是黑板（Blackboard）和知识源（Knowledge Sources）。知识源独立工作，通过读写共享的黑板来协作解决问题。",
+      "sourceQuestionIds": [
+        "2024下-030"
+      ],
+      "createdAt": "2026-08-23T11:43:23.617Z"
+    },
+    {
+      "id": "knowledge-顺序执行",
+      "name": "顺序执行",
+      "type": "concept",
+      "aliases": [
+        "Sequential Execution",
+        "线性处理"
+      ],
+      "description": "批处理顺序风格的核心特征。数据以批次为单位，依次通过一系列处理步骤，前一个阶段完成后后一个阶段才开始，强调线性依赖。",
+      "sourceQuestionIds": [
+        "2024下-030"
+      ],
+      "createdAt": "2026-08-23T11:43:23.617Z"
+    },
+    {
+      "id": "knowledge-并行处理",
+      "name": "并行处理",
+      "type": "concept",
+      "aliases": [
+        "Parallel Processing",
+        "并发执行"
+      ],
+      "description": "管道-过滤器风格的主要优势。各个过滤器是独立的组件，只要输入数据可用，它们就可以同时运行，互不阻塞，支持高并发。",
+      "sourceQuestionIds": [
+        "2024下-030"
+      ],
+      "createdAt": "2026-08-23T11:43:23.617Z"
+    },
+    {
+      "id": "knowledge-敏感点",
+      "name": "敏感点",
+      "type": "concept",
+      "aliases": [
+        "Sensitivity Point",
+        "Sensitivity Points",
+        "Trade-off Point",
+        "Trade-off"
+      ],
+      "description": "在软件架构评估中，改变某个质量属性（如安全性）会显著影响另一个质量属性（如性能）的点。安全性与性能是典型的权衡对。",
+      "sourceQuestionIds": [
+        "2024下-059",
+        "2024下-065",
+        "2025下-009"
+      ],
+      "createdAt": "2026-08-23T11:46:36.537Z"
+    },
+    {
+      "id": "knowledge-权衡点",
+      "name": "权衡点",
+      "type": "concept",
+      "aliases": [
+        "Trade-off Point",
+        "Tradeoff Points"
+      ],
+      "description": "架构决策中，对多个质量属性都有显著影响的点。改变该决策会同时影响多个质量属性，通常涉及权衡。",
+      "sourceQuestionIds": [
+        "2024下-059",
+        "2024下-065"
+      ],
+      "createdAt": "2026-08-23T11:46:36.537Z"
+    },
+    {
+      "id": "knowledge-性能",
+      "name": "性能",
+      "type": "concept",
+      "aliases": [
+        "Performance",
+        "响应时间",
+        "吞吐量"
+      ],
+      "description": "软件在特定条件下处理请求的速度、响应时间和吞吐量等指标。加密级别提高会增加计算开销，从而降低性能。",
+      "sourceQuestionIds": [
+        "2024下-059",
+        "2025下-009"
+      ],
+      "createdAt": "2026-08-23T11:46:36.537Z"
+    },
+    {
+      "id": "knowledge-安全性",
+      "name": "安全性",
+      "type": "concept",
+      "aliases": [
+        "Security",
+        "保密性",
+        "完整性"
+      ],
+      "description": "软件保护数据和功能免受未授权访问、篡改或破坏的能力。加密是提升安全性的主要手段，但往往以牺牲性能为代价。",
+      "sourceQuestionIds": [
+        "2024下-059",
+        "2025下-009"
+      ],
+      "createdAt": "2026-08-23T11:46:36.537Z"
+    },
+    {
+      "id": "knowledge-关系代数",
+      "name": "关系代数",
+      "type": "category",
+      "aliases": [
+        "Relational Algebra"
+      ],
+      "description": "关系数据库的查询语言基础，包含集合运算、专门关系运算等。",
+      "sourceQuestionIds": [
+        "2024下-060",
+        "2025下-007"
+      ],
+      "createdAt": "2026-08-23T11:47:27.933Z"
+    },
+    {
+      "id": "knowledge-自然连接",
+      "name": "自然连接",
+      "type": "concept",
+      "aliases": [
+        "Natural Join"
+      ],
+      "description": "一种特殊的等值连接，要求两个关系在公共属性上匹配，并去除结果中的重复列。结果列数 = R列数 + S列数 - 公共属性数。",
+      "sourceQuestionIds": [
+        "2024下-060"
+      ],
+      "createdAt": "2026-08-23T11:47:27.933Z"
+    },
+    {
+      "id": "knowledge-笛卡尔积",
+      "name": "笛卡尔积",
+      "type": "concept",
+      "aliases": [
+        "Cartesian Product"
+      ],
+      "description": "两个关系的所有元组组合，结果列数为两表列数之和，不要求属性匹配。",
+      "sourceQuestionIds": [
+        "2024下-060"
+      ],
+      "createdAt": "2026-08-23T11:47:27.933Z"
+    },
+    {
+      "id": "knowledge-软件著作权",
+      "name": "软件著作权",
+      "type": "category",
+      "aliases": [
+        "Computer Software Copyright"
+      ],
+      "description": "指软件开发者对其开发的计算机软件依法享有的专有权利，包括发表权、署名权、修改权、复制权、发行权、出租权、信息网络传播权、翻译权等。",
+      "sourceQuestionIds": [
+        "2024下-061"
+      ],
+      "createdAt": "2026-08-23T11:53:31.789Z"
+    },
+    {
+      "id": "knowledge-合理使用",
+      "name": "合理使用",
+      "type": "concept",
+      "aliases": [
+        "Fair Use",
+        "Fair Dealing"
+      ],
+      "description": "指在特定条件下，使用他人已发表的作品，可以不经著作权人许可，不向其支付报酬，但应当指明作者姓名、作品名称，并且不得侵犯著作权人依照本条例享有的其他权利。",
+      "sourceQuestionIds": [
+        "2024下-061"
+      ],
+      "createdAt": "2026-08-23T11:53:31.789Z"
+    },
+    {
+      "id": "knowledge-学习研究目的",
+      "name": "学习研究目的",
+      "type": "concept",
+      "aliases": [
+        "Study and Research Purpose"
+      ],
+      "description": "合理使用的一种典型情形，指为了个人学习、研究或者欣赏，使用他人已经发表的作品。在软件领域，特指为了学习和研究软件内含的设计思想和原理。",
+      "sourceQuestionIds": [
+        "2024下-061"
+      ],
+      "createdAt": "2026-08-23T11:53:31.789Z"
+    },
+    {
+      "id": "knowledge-安装部署运行",
+      "name": "安装部署运行",
+      "type": "concept",
+      "aliases": [
+        "Installation, Deployment and Execution"
+      ],
+      "description": "在软件合理使用中，为了研究软件工作原理和结构，通过安装、显示、传输或者存储等方式使用软件的行为。",
+      "sourceQuestionIds": [
+        "2024下-061"
+      ],
+      "createdAt": "2026-08-23T11:53:31.789Z"
+    },
+    {
+      "id": "knowledge-免许可免付费",
+      "name": "免许可免付费",
+      "type": "concept",
+      "aliases": [
+        "No Permission Required",
+        "No Royalty Payment"
+      ],
+      "description": "合理使用情形下的法律后果，即使用者无需获得著作权人的许可，也无需向其支付报酬。",
+      "sourceQuestionIds": [
+        "2024下-061"
+      ],
+      "createdAt": "2026-08-23T11:53:31.789Z"
+    },
+    {
+      "id": "knowledge-进程管理",
+      "name": "进程管理",
+      "type": "category",
+      "aliases": [
+        "Process Management"
+      ],
+      "description": "负责进程的创建、撤销、调度及同步互斥，是多道程序并发执行的核心机制。",
+      "sourceQuestionIds": [
+        "2024下-062"
+      ],
+      "createdAt": "2026-08-27T08:15:14.534Z"
+    },
+    {
+      "id": "knowledge-多道程序设计",
+      "name": "多道程序设计",
+      "type": "concept",
+      "aliases": [
+        "Multiprogramming",
+        "多道程序"
+      ],
+      "description": "允许多个程序同时驻留内存并交替执行，通过CPU与I/O设备的并行工作提高系统资源利用率。",
+      "sourceQuestionIds": [
+        "2024下-062"
+      ],
+      "createdAt": "2026-08-27T08:15:14.534Z"
+    },
+    {
+      "id": "knowledge-甘特图",
+      "name": "甘特图",
+      "type": "concept",
+      "aliases": [
+        "Gantt Chart",
+        "时间轴图"
+      ],
+      "description": "用于可视化展示任务时间轴、资源占用及并行重叠情况的图表，是解决并发时间计算题的关键工具。",
+      "sourceQuestionIds": [
+        "2024下-062"
+      ],
+      "createdAt": "2026-08-27T08:15:14.534Z"
+    },
+    {
+      "id": "knowledge-cpu与i-o并行",
+      "name": "CPU与I/O并行",
+      "type": "concept",
+      "aliases": [
+        "CPU-IO Parallelism",
+        "重叠执行"
+      ],
+      "description": "指一个进程进行I/O操作时，CPU可切换到另一个就绪进程进行计算，从而实现宏观上的并行执行。",
+      "sourceQuestionIds": [
+        "2024下-062"
+      ],
+      "createdAt": "2026-08-27T08:15:14.534Z"
+    },
+    {
+      "id": "knowledge-数据安全",
+      "name": "数据安全",
+      "type": "domain",
+      "aliases": [
+        "Data Security"
+      ],
+      "description": "保护数据在存储、传输和处理过程中的机密性、完整性和可用性。",
+      "sourceQuestionIds": [
+        "2024下-063"
+      ],
+      "createdAt": "2026-08-27T08:59:46.734Z"
+    },
+    {
+      "id": "knowledge-数据安全架构",
+      "name": "数据安全架构",
+      "type": "category",
+      "aliases": [
+        "Data Security Architecture"
+      ],
+      "description": "数据安全体系的分层模型，通常包括基础安全层、权限控制层、应用接口层和战略安全层。",
+      "sourceQuestionIds": [
+        "2024下-063"
+      ],
+      "createdAt": "2026-08-27T08:59:46.734Z"
+    },
+    {
+      "id": "knowledge-基础安全层",
+      "name": "基础安全层",
+      "type": "concept",
+      "aliases": [
+        "Infrastructure Security Layer",
+        "基础设施安全层"
+      ],
+      "description": "数据安全治理体系的底层支撑，包括物理安全、网络安全、主机安全等基础设施保障。",
+      "sourceQuestionIds": [
+        "2024下-063",
+        "2024下-075"
+      ],
+      "createdAt": "2026-08-27T08:59:46.734Z"
+    },
+    {
+      "id": "knowledge-数据分级分类",
+      "name": "数据分级分类",
+      "type": "concept",
+      "aliases": [
+        "Data Classification",
+        "Data Grading"
+      ],
+      "description": "根据数据的重要程度和敏感程度进行划分，是确定安全保护策略的基础。",
+      "sourceQuestionIds": [
+        "2024下-063"
+      ],
+      "createdAt": "2026-08-27T08:59:46.734Z"
+    },
+    {
+      "id": "knowledge-权限控制层",
+      "name": "权限控制层",
+      "type": "concept",
+      "aliases": [
+        "Access Control Layer",
+        "Data Access Control"
+      ],
+      "description": "数据全生命周期安全层中的具体技术手段，用于控制用户对数据的访问权限，属于使用或共享阶段的安全措施。",
+      "sourceQuestionIds": [
+        "2024下-063",
+        "2024下-075"
+      ],
+      "createdAt": "2026-08-27T08:59:46.734Z"
+    },
+    {
+      "id": "knowledge-应用接口层",
+      "name": "应用接口层",
+      "type": "concept",
+      "aliases": [
+        "Application Interface Layer"
+      ],
+      "description": "负责API安全、数据脱敏、数据交换安全等应用层面的接口保护。",
+      "sourceQuestionIds": [
+        "2024下-063"
+      ],
+      "createdAt": "2026-08-27T08:59:46.734Z"
+    },
+    {
+      "id": "knowledge-战略安全层",
+      "name": "战略安全层",
+      "type": "concept",
+      "aliases": [
+        "Strategic Security Layer"
+      ],
+      "description": "涉及数据安全治理、合规性、风险评估和安全策略制定的宏观管理层。",
+      "sourceQuestionIds": [
+        "2024下-063"
+      ],
+      "createdAt": "2026-08-27T08:59:46.734Z"
+    },
+    {
+      "id": "knowledge-企业集成",
+      "name": "企业集成",
+      "type": "category",
+      "aliases": [
+        "Enterprise Integration",
+        "系统集成"
+      ],
+      "description": "指将分散的、异构的系统、数据和应用整合为一个统一、协同工作的整体，通常遵循自下而上的层次结构。",
+      "sourceQuestionIds": [
+        "2024下-064"
+      ],
+      "createdAt": "2026-08-27T09:11:55.637Z"
+    },
+    {
+      "id": "knowledge-会聚集成",
+      "name": "会聚集成",
+      "type": "concept",
+      "aliases": [
+        "Convergence Integration"
+      ],
+      "description": "指网络、计算、存储等基础设施的融合，为上层提供统一的运行环境，位于数据集成之上。",
+      "sourceQuestionIds": [
+        "2024下-064"
+      ],
+      "createdAt": "2026-08-27T09:11:55.637Z"
+    },
+    {
+      "id": "knowledge-服务集成",
+      "name": "服务集成",
+      "type": "concept",
+      "aliases": [
+        "Service Integration"
+      ],
+      "description": "基于SOA或微服务架构，通过标准化接口（如API）实现功能模块的复用和组合，位于会聚集成之上。",
+      "sourceQuestionIds": [
+        "2024下-064"
+      ],
+      "createdAt": "2026-08-27T09:11:55.637Z"
+    },
+    {
+      "id": "knowledge-应用集成",
+      "name": "应用集成",
+      "type": "concept",
+      "aliases": [
+        "Application Integration"
+      ],
+      "description": "企业集成的最上层，直接面向最终用户或业务流程，实现不同应用系统之间的协同工作。",
+      "sourceQuestionIds": [
+        "2024下-064"
+      ],
+      "createdAt": "2026-08-27T09:11:55.637Z"
+    },
+    {
+      "id": "knowledge-软件架构评估",
+      "name": "软件架构评估",
+      "type": "category",
+      "aliases": [
+        "Architecture Evaluation"
+      ],
+      "description": "对软件架构设计进行分析和评价的过程，旨在识别架构中的风险、敏感点和权衡点。",
+      "sourceQuestionIds": [
+        "2024下-065"
+      ],
+      "createdAt": "2026-08-27T09:12:33.815Z"
+    },
+    {
+      "id": "knowledge-atam",
+      "name": "ATAM",
+      "type": "concept",
+      "aliases": [
+        "Architecture Tradeoff Analysis Method",
+        "架构权衡分析法"
+      ],
+      "description": "架构权衡分析法（Architecture Tradeoff Analysis Method），一种用于评估软件架构的方法，通过识别架构决策及其对质量属性的影响来进行权衡分析。",
+      "sourceQuestionIds": [
+        "2024下-065",
+        "2024下-066"
+      ],
+      "createdAt": "2026-08-27T09:12:33.816Z"
+    },
+    {
+      "id": "knowledge-saam",
+      "name": "SAAM",
+      "type": "concept",
+      "aliases": [
+        "Software Architecture Analysis Method",
+        "软件架构分析法"
+      ],
+      "description": "软件架构分析法（Software Architecture Analysis Method），主要用于评估架构对可修改性的支持程度，通常只关注单一质量属性。",
+      "sourceQuestionIds": [
+        "2024下-065"
+      ],
+      "createdAt": "2026-08-27T09:12:33.816Z"
+    },
+    {
+      "id": "knowledge-cbam",
+      "name": "CBAM",
+      "type": "concept",
+      "aliases": [
+        "Cost-Benefit Analysis Method",
+        "成本效益分析法"
+      ],
+      "description": "成本效益分析法（Cost-Benefit Analysis Method），用于评估架构决策对成本和效益的影响，侧重于经济价值。",
+      "sourceQuestionIds": [
+        "2024下-065"
+      ],
+      "createdAt": "2026-08-27T09:12:33.816Z"
+    },
+    {
+      "id": "knowledge-效用树",
+      "name": "效用树",
+      "type": "concept",
+      "aliases": [
+        "Utility Tree",
+        "Quality Attribute Utility Tree"
+      ],
+      "description": "用于识别、评估和优先级排序系统质量属性需求的工具，通过树状结构展示质量属性及其场景。",
+      "sourceQuestionIds": [
+        "2024下-065",
+        "2024下-066",
+        "2024下-072"
+      ],
+      "createdAt": "2026-08-27T09:12:33.816Z"
+    },
+    {
+      "id": "knowledge-质量属性驱动因素",
+      "name": "质量属性驱动因素",
+      "type": "concept",
+      "aliases": [
+        "Quality Attribute Drivers"
+      ],
+      "description": "效用树的第二层，具体描述质量属性的量化指标或具体需求，如响应时间、吞吐量等。",
+      "sourceQuestionIds": [
+        "2024下-065"
+      ],
+      "createdAt": "2026-08-27T09:12:33.816Z"
+    },
+    {
+      "id": "knowledge-属性分类",
+      "name": "属性分类",
+      "type": "concept",
+      "aliases": [
+        "驱动因素",
+        "Attribute Classification"
+      ],
+      "description": "效用树的第二层节点，对具体的质量属性进行细分，也称为驱动因素。例如性能下的响应时间、吞吐量等。",
+      "sourceQuestionIds": [
+        "2024下-066"
+      ],
+      "createdAt": "2026-08-27T09:13:11.308Z"
+    },
+    {
+      "id": "knowledge-可复用资产",
+      "name": "可复用资产",
+      "type": "concept",
+      "aliases": [
+        "Reusable Assets"
+      ],
+      "description": "指在软件开发过程中可以重复使用的任何产物，如代码、文档、模型、测试用例等。",
+      "sourceQuestionIds": [
+        "2024下-068"
+      ],
+      "createdAt": "2026-08-27T09:13:54.500Z"
+    },
+    {
+      "id": "knowledge-可复用资产生命周期",
+      "name": "可复用资产生命周期",
+      "type": "concept",
+      "aliases": [
+        "Lifecycle of Reusable Assets"
+      ],
+      "description": "可复用资产从产生到废弃的全过程，包括分析、构造/获取、管理和使用四个主要阶段。",
+      "sourceQuestionIds": [
+        "2024下-068"
+      ],
+      "createdAt": "2026-08-27T09:13:54.500Z"
+    },
+    {
+      "id": "knowledge-分析可复用资产",
+      "name": "分析可复用资产",
+      "type": "concept",
+      "aliases": [
+        "Analyze Reusable Assets"
+      ],
+      "description": "对现有或潜在的可复用资产进行评估，确定其适用性、质量和复用潜力。",
+      "sourceQuestionIds": [
+        "2024下-068"
+      ],
+      "createdAt": "2026-08-27T09:13:54.500Z"
+    },
+    {
+      "id": "knowledge-构造-获取可复用资产",
+      "name": "构造/获取可复用资产",
+      "type": "concept",
+      "aliases": [
+        "Construct/Acquire Reusable Assets"
+      ],
+      "description": "根据分析结果，通过自行开发（构造）或从外部购买/下载（获取）的方式获得所需的资产。",
+      "sourceQuestionIds": [
+        "2024下-068"
+      ],
+      "createdAt": "2026-08-27T09:13:54.500Z"
+    },
+    {
+      "id": "knowledge-管理可复用资产",
+      "name": "管理可复用资产",
+      "type": "concept",
+      "aliases": [
+        "Manage Reusable Assets"
+      ],
+      "description": "对获取或构造好的资产进行版本控制、存储、分类和维护，确保资产库的有序性和可检索性。",
+      "sourceQuestionIds": [
+        "2024下-068"
+      ],
+      "createdAt": "2026-08-27T09:13:54.500Z"
+    },
+    {
+      "id": "knowledge-使用可复用资产",
+      "name": "使用可复用资产",
+      "type": "concept",
+      "aliases": [
+        "Use Reusable Assets"
+      ],
+      "description": "在具体的软件项目中检索并集成这些资产，实现复用，提高开发效率和质量。",
+      "sourceQuestionIds": [
+        "2024下-068"
+      ],
+      "createdAt": "2026-08-27T09:13:54.500Z"
+    },
+    {
+      "id": "knowledge-单元测试",
+      "name": "单元测试",
+      "type": "concept",
+      "aliases": [
+        "Unit Testing"
+      ],
+      "description": "针对软件最小可测试单元（如函数、类）进行的测试，主要发现编码阶段的错误。",
+      "sourceQuestionIds": [
+        "2024下-069"
+      ],
+      "createdAt": "2026-08-27T09:14:36.997Z"
+    },
+    {
+      "id": "knowledge-集成测试",
+      "name": "集成测试",
+      "type": "concept",
+      "aliases": [
+        "Integration Testing"
+      ],
+      "description": "将单元组装成子系统或系统，验证接口和模块间交互的测试，主要发现详细设计阶段的错误。",
+      "sourceQuestionIds": [
+        "2024下-069"
+      ],
+      "createdAt": "2026-08-27T09:14:36.997Z"
+    },
+    {
+      "id": "knowledge-系统测试",
+      "name": "系统测试",
+      "type": "concept",
+      "aliases": [
+        "System Testing"
+      ],
+      "description": "将软件作为完整系统，在真实或模拟环境下进行的测试，验证是否满足需求规格说明书，主要发现需求分析阶段的错误。",
+      "sourceQuestionIds": [
+        "2024下-069"
+      ],
+      "createdAt": "2026-08-27T09:14:36.997Z"
+    },
+    {
+      "id": "knowledge-验收测试",
+      "name": "验收测试",
+      "type": "concept",
+      "aliases": [
+        "Acceptance Testing"
+      ],
+      "description": "由用户或客户参与的测试，确认软件是否满足业务需求，主要发现需求分析阶段的错误。",
+      "sourceQuestionIds": [
+        "2024下-069"
+      ],
+      "createdAt": "2026-08-27T09:14:36.997Z"
+    },
+    {
+      "id": "knowledge-需求分析",
+      "name": "需求分析",
+      "type": "concept",
+      "aliases": [
+        "Requirements Analysis"
+      ],
+      "description": "软件开发生命周期中确定系统功能和非功能需求的阶段，其错误通常在系统测试和验收测试中暴露。",
+      "sourceQuestionIds": [
+        "2024下-069"
+      ],
+      "createdAt": "2026-08-27T09:14:36.997Z"
+    },
+    {
+      "id": "knowledge-概要设计",
+      "name": "概要设计",
+      "type": "concept",
+      "aliases": [
+        "High-Level Design",
+        "HLD"
+      ],
+      "description": "确定系统总体架构、模块划分及接口定义的阶段，其错误通常在集成测试中暴露。",
+      "sourceQuestionIds": [
+        "2024下-069"
+      ],
+      "createdAt": "2026-08-27T09:14:36.997Z"
+    },
+    {
+      "id": "knowledge-详细设计",
+      "name": "详细设计",
+      "type": "concept",
+      "aliases": [
+        "Low-Level Design",
+        "LLD"
+      ],
+      "description": "确定模块内部算法、数据结构及具体实现逻辑的阶段，其错误通常在单元测试和集成测试中暴露。",
+      "sourceQuestionIds": [
+        "2024下-069"
+      ],
+      "createdAt": "2026-08-27T09:14:36.997Z"
+    },
+    {
+      "id": "knowledge-仓库系统风格",
+      "name": "仓库系统风格",
+      "type": "concept",
+      "aliases": [
+        "Repository System",
+        "仓库风格"
+      ],
+      "description": "一种基于中央数据结构的体系结构风格，所有构件通过共享中央数据结构进行通信和协作，构件不直接相互通信。",
+      "sourceQuestionIds": [
+        "2024下-070"
+      ],
+      "createdAt": "2026-08-27T09:15:02.686Z"
+    },
+    {
+      "id": "knowledge-中央数据结构",
+      "name": "中央数据结构",
+      "type": "concept",
+      "aliases": [
+        "Central Data Structure"
+      ],
+      "description": "仓库系统的核心组件，用于存储当前数据的状态、中间结果或全局信息，所有构件读写此结构以共享状态。",
+      "sourceQuestionIds": [
+        "2024下-070"
+      ],
+      "createdAt": "2026-08-27T09:15:02.686Z"
+    },
+    {
+      "id": "knowledge-独立构件",
+      "name": "独立构件",
+      "type": "concept",
+      "aliases": [
+        "Independent Components"
+      ],
+      "description": "负责处理特定任务的单元，从中央数据结构读取数据，处理后将结果写回，不直接与其他构件通信。",
+      "sourceQuestionIds": [
+        "2024下-070"
+      ],
+      "createdAt": "2026-08-27T09:15:02.686Z"
+    },
+    {
+      "id": "knowledge-黑板系统",
+      "name": "黑板系统",
+      "type": "concept",
+      "aliases": [
+        "Blackboard System"
+      ],
+      "description": "一种基于共享黑板的体系结构风格，多个专家（构件）协作求解问题，黑板存储当前状态，知识源提供初始数据。",
+      "sourceQuestionIds": [
+        "2024下-070"
+      ],
+      "createdAt": "2026-08-27T09:15:02.686Z"
+    },
+    {
+      "id": "knowledge-知识源",
+      "name": "知识源",
+      "type": "concept",
+      "aliases": [
+        "Knowledge Source"
+      ],
+      "description": "黑板系统中的静态数据集合，为黑板提供初始数据或约束条件，区别于动态共享的中央数据结构。",
+      "sourceQuestionIds": [
+        "2024下-070"
+      ],
+      "createdAt": "2026-08-27T09:15:02.686Z"
+    },
+    {
+      "id": "knowledge-体系结构演化",
+      "name": "体系结构演化",
+      "type": "concept",
+      "aliases": [
+        "Architecture Evolution"
+      ],
+      "description": "指随着需求变化，对现有软件体系结构进行修改、扩展或重构的过程，旨在保持系统适应性和质量属性。",
+      "sourceQuestionIds": [
+        "2024下-071"
+      ],
+      "createdAt": "2026-08-27T09:15:49.604Z"
+    },
+    {
+      "id": "knowledge-构件",
+      "name": "构件",
+      "type": "concept",
+      "aliases": [
+        "Component"
+      ],
+      "description": "软件体系结构中的基本组成单元，具有特定的功能、接口和实现，是演化的主要操作对象。",
+      "sourceQuestionIds": [
+        "2024下-071"
+      ],
+      "createdAt": "2026-08-27T09:15:49.605Z"
+    },
+    {
+      "id": "knowledge-构件相互作用",
+      "name": "构件相互作用",
+      "type": "concept",
+      "aliases": [
+        "Component Interaction",
+        "构件交互"
+      ],
+      "description": "指构件之间通过连接件进行的交互、依赖和数据传递关系。在构件变动后，必须同步更新这些相互作用以维持系统一致性。",
+      "sourceQuestionIds": [
+        "2024下-071"
+      ],
+      "createdAt": "2026-08-27T09:15:49.605Z"
+    },
+    {
+      "id": "knowledge-构件组装与测试",
+      "name": "构件组装与测试",
+      "type": "concept",
+      "aliases": [
+        "Component Assembly and Testing"
+      ],
+      "description": "体系结构演化步骤之一，指将更新后的构件重新组合，并进行集成测试和系统测试，以验证演化的正确性。",
+      "sourceQuestionIds": [
+        "2024下-071"
+      ],
+      "createdAt": "2026-08-27T09:15:49.605Z"
+    },
+    {
+      "id": "knowledge-技术评审",
+      "name": "技术评审",
+      "type": "concept",
+      "aliases": [
+        "Technical Review"
+      ],
+      "description": "体系结构演化的最后一步，由专家对演化后的体系结构进行正式审查，确认其满足新需求且质量属性达标。",
+      "sourceQuestionIds": [
+        "2024下-071"
+      ],
+      "createdAt": "2026-08-27T09:15:49.605Z"
+    },
+    {
+      "id": "knowledge-实现难度",
+      "name": "实现难度",
+      "type": "concept",
+      "aliases": [
+        "Difficulty",
+        "Implementation Difficulty"
+      ],
+      "description": "评估质量属性场景实现所需技术或资源挑战程度的维度，与重要性共同决定优先级。",
+      "sourceQuestionIds": [
+        "2024下-072"
+      ],
+      "createdAt": "2026-08-27T09:16:13.757Z"
+    },
+    {
+      "id": "knowledge-优先级组合",
+      "name": "优先级组合",
+      "type": "concept",
+      "aliases": [
+        "Priority Combination",
+        "H/M/L Combination"
+      ],
+      "description": "效用树中用于表示场景重要性和实现难度组合的标记方式，如(H,H)、(H,L)等。",
+      "sourceQuestionIds": [
+        "2024下-072"
+      ],
+      "createdAt": "2026-08-27T09:16:13.757Z"
+    },
+    {
+      "id": "knowledge-项目管理",
+      "name": "项目管理",
+      "type": "domain",
+      "aliases": [
+        "Project Management"
+      ],
+      "description": "涉及项目计划、进度、成本、质量等管理的知识领域。",
+      "sourceQuestionIds": [
+        "2024下-073"
+      ],
+      "createdAt": "2026-08-27T09:17:57.981Z"
+    },
+    {
+      "id": "knowledge-项目进度管理",
+      "name": "项目进度管理",
+      "type": "category",
+      "aliases": [
+        "Project Schedule Management"
+      ],
+      "description": "关注项目活动的时间安排、关键路径分析及工期优化。",
+      "sourceQuestionIds": [
+        "2024下-073"
+      ],
+      "createdAt": "2026-08-27T09:17:57.981Z"
+    },
+    {
+      "id": "knowledge-关键路径法",
+      "name": "关键路径法",
+      "type": "concept",
+      "aliases": [
+        "Critical Path Method",
+        "CPM"
+      ],
+      "description": "通过识别项目网络图中最长的路径来确定项目最短工期和关键活动的方法。",
+      "sourceQuestionIds": [
+        "2024下-073"
+      ],
+      "createdAt": "2026-08-27T09:17:57.981Z"
+    },
+    {
+      "id": "knowledge-赶工",
+      "name": "赶工",
+      "type": "concept",
+      "aliases": [
+        "Crashing"
+      ],
+      "description": "通过增加资源投入来缩短关键路径上活动持续时间，从而压缩项目工期的技术。",
+      "sourceQuestionIds": [
+        "2024下-073"
+      ],
+      "createdAt": "2026-08-27T09:17:57.981Z"
+    },
+    {
+      "id": "knowledge-直接费用",
+      "name": "直接费用",
+      "type": "concept",
+      "aliases": [
+        "Direct Cost"
+      ],
+      "description": "与项目活动直接相关的成本，如人工、材料、设备等，通常随工期压缩而增加。",
+      "sourceQuestionIds": [
+        "2024下-073"
+      ],
+      "createdAt": "2026-08-27T09:17:57.981Z"
+    },
+    {
+      "id": "knowledge-间接费用",
+      "name": "间接费用",
+      "type": "concept",
+      "aliases": [
+        "Indirect Cost"
+      ],
+      "description": "不直接归属于特定活动，而是随项目持续时间变化的成本，如管理费、租金等，通常随工期缩短而减少。",
+      "sourceQuestionIds": [
+        "2024下-073"
+      ],
+      "createdAt": "2026-08-27T09:17:57.981Z"
+    },
+    {
+      "id": "knowledge-总工程费用",
+      "name": "总工程费用",
+      "type": "concept",
+      "aliases": [
+        "Total Project Cost"
+      ],
+      "description": "项目总成本，等于直接费用与间接费用之和。在进度优化中需寻找总费用最低的工期方案。",
+      "sourceQuestionIds": [
+        "2024下-073"
+      ],
+      "createdAt": "2026-08-27T09:17:57.981Z"
+    },
+    {
+      "id": "knowledge-数据安全治理",
+      "name": "数据安全治理",
+      "type": "category",
+      "aliases": [
+        "Data Security Governance"
+      ],
+      "description": "针对数据全生命周期的安全管理体系，包含战略、过程控制和基础支撑三个层面。",
+      "sourceQuestionIds": [
+        "2024下-074",
+        "2024下-075"
+      ],
+      "createdAt": "2026-08-27T09:18:17.324Z"
+    },
+    {
+      "id": "knowledge-满足合规要求",
+      "name": "满足合规要求",
+      "type": "concept",
+      "aliases": [
+        "Compliance",
+        "合规性"
+      ],
+      "description": "数据安全治理的底线目标，确保数据处理活动符合《数据安全法》、《个人信息保护法》等法律法规及行业标准。",
+      "sourceQuestionIds": [
+        "2024下-074"
+      ],
+      "createdAt": "2026-08-27T09:18:17.324Z"
+    },
+    {
+      "id": "knowledge-管理数据安全风险",
+      "name": "管理数据安全风险",
+      "type": "concept",
+      "aliases": [
+        "Risk Management",
+        "数据风控"
+      ],
+      "description": "数据安全治理的核心目标，通过识别、评估和控制数据在采集、存储、使用等环节的风险，防止泄露、篡改和丢失。",
+      "sourceQuestionIds": [
+        "2024下-074"
+      ],
+      "createdAt": "2026-08-27T09:18:17.325Z"
+    },
+    {
+      "id": "knowledge-促进数据开发利用",
+      "name": "促进数据开发利用",
+      "type": "concept",
+      "aliases": [
+        "Data Utilization",
+        "数据价值释放"
+      ],
+      "description": "数据安全治理的价值导向目标，在保障安全的前提下，释放数据要素价值，促进数据的合法、合规、高效利用。",
+      "sourceQuestionIds": [
+        "2024下-074"
+      ],
+      "createdAt": "2026-08-27T09:18:17.325Z"
+    },
+    {
+      "id": "knowledge-数据安全战略层",
+      "name": "数据安全战略层",
+      "type": "concept",
+      "aliases": [
+        "Strategy Layer"
+      ],
+      "description": "数据安全治理体系的顶层，负责制定安全目标、策略、制度和标准。",
+      "sourceQuestionIds": [
+        "2024下-075"
+      ],
+      "createdAt": "2026-08-27T09:18:56.370Z"
+    },
+    {
+      "id": "knowledge-数据全生命周期安全层",
+      "name": "数据全生命周期安全层",
+      "type": "concept",
+      "aliases": [
+        "Data Lifecycle Security Layer",
+        "Lifecycle Security Layer"
+      ],
+      "description": "数据安全治理体系的核心执行层，针对数据各阶段实施具体的安全技术和管理措施。",
+      "sourceQuestionIds": [
+        "2024下-075"
+      ],
+      "createdAt": "2026-08-27T09:18:56.370Z"
+    },
+    {
+      "id": "knowledge-多智能体系统",
+      "name": "多智能体系统",
+      "type": "concept",
+      "aliases": [
+        "Multi-Agent Systems",
+        "MAS"
+      ],
+      "description": "由多个自主智能体组成的系统，智能体之间通过交互协作完成复杂任务。",
+      "sourceQuestionIds": [
+        "2025下-001",
+        "2025下-002",
+        "2025下-003",
+        "2025下-004",
+        "2025下-005"
+      ],
+      "createdAt": "2026-08-27T09:25:41.414Z"
+    },
+    {
+      "id": "knowledge-集中式架构",
+      "name": "集中式架构",
+      "type": "concept",
+      "aliases": [
+        "Centralized Architecture",
+        "Centralized Network"
+      ],
+      "description": "存在中央控制单元，包含全局知识库，负责连接智能体并监督信息。优点是通信容易、知识共享方便；缺点是存在单点故障风险。",
+      "sourceQuestionIds": [
+        "2025下-001",
+        "2025下-002",
+        "2025下-003",
+        "2025下-004",
+        "2025下-005"
+      ],
+      "createdAt": "2026-08-27T09:25:41.415Z"
+    },
+    {
+      "id": "knowledge-去中心化架构",
+      "name": "去中心化架构",
+      "type": "concept",
+      "aliases": [
+        "Decentralized Architecture",
+        "Decentralized Network",
+        "分布式架构"
+      ],
+      "description": "无中央控制单元，智能体与邻居交换信息。优点是鲁棒性强、模块化好，无单点故障；挑战在于缺乏全局视野。",
+      "sourceQuestionIds": [
+        "2025下-001",
+        "2025下-002",
+        "2025下-003",
+        "2025下-004",
+        "2025下-005"
+      ],
+      "createdAt": "2026-08-27T09:25:41.415Z"
+    },
+    {
+      "id": "knowledge-全局知识库",
+      "name": "全局知识库",
+      "type": "concept",
+      "aliases": [
+        "Global Knowledge Base"
+      ],
+      "description": "在中心化系统中，存储所有智能体共享信息的中央数据库。",
+      "sourceQuestionIds": [
+        "2025下-001",
+        "2025下-004"
+      ],
+      "createdAt": "2026-08-27T09:25:41.415Z"
+    },
+    {
+      "id": "knowledge-单点故障",
+      "name": "单点故障",
+      "type": "concept",
+      "aliases": [
+        "Single Point of Failure",
+        "SPOF"
+      ],
+      "description": "系统中某个关键组件（如中央单元）失效导致整个系统瘫痪的现象。中心化网络的主要弱点。",
+      "sourceQuestionIds": [
+        "2025下-001",
+        "2025下-003",
+        "2025下-005"
+      ],
+      "createdAt": "2026-08-27T09:25:41.415Z"
+    },
+    {
+      "id": "knowledge-鲁棒性",
+      "name": "鲁棒性",
+      "type": "concept",
+      "aliases": [
+        "Robustness",
+        "容错性",
+        "健壮性"
+      ],
+      "description": "系统在部分组件失效或受到干扰时仍能维持正常运行的能力。去中心化系统因无单点故障而具有较高的鲁棒性。",
+      "sourceQuestionIds": [
+        "2025下-001",
+        "2025下-003",
+        "2025下-004"
+      ],
+      "createdAt": "2026-08-27T09:25:41.415Z"
+    },
+    {
+      "id": "knowledge-智能体协调",
+      "name": "智能体协调",
+      "type": "concept",
+      "aliases": [
+        "Agent Coordination",
+        "行为统一",
+        "Coordination",
+        "协调"
+      ],
+      "description": "在去中心化系统中，智能体通过协商、契约网等机制调整自身行为，以避免冲突并实现全局目标的过程。",
+      "sourceQuestionIds": [
+        "2025下-002",
+        "2025下-005"
+      ],
+      "createdAt": "2026-08-27T09:26:30.798Z"
+    },
+    {
+      "id": "knowledge-局部信息共享",
+      "name": "局部信息共享",
+      "type": "concept",
+      "aliases": [
+        "Local Information Sharing",
+        "Share Information"
+      ],
+      "description": "去中心化系统中智能体与其邻近智能体交换和共享局部信息（如状态、观测值）的机制，用于替代全局知识库。",
+      "sourceQuestionIds": [
+        "2025下-004"
+      ],
+      "createdAt": "2026-08-27T09:28:46.158Z"
+    },
+    {
+      "id": "knowledge-概率论与数理统计",
+      "name": "概率论与数理统计",
+      "type": "domain",
+      "aliases": [
+        "Probability and Statistics"
+      ],
+      "description": "软考综合知识中涉及数学基础的重要领域，主要考察概率分布、期望、方差等基本概念。",
+      "sourceQuestionIds": [
+        "2025下-006"
+      ],
+      "createdAt": "2026-08-27T09:29:37.690Z"
+    },
+    {
+      "id": "knowledge-连续型随机变量",
+      "name": "连续型随机变量",
+      "type": "category",
+      "aliases": [
+        "Continuous Random Variable"
+      ],
+      "description": "取值在某个区间内连续变化的随机变量，其概率通过概率密度函数积分计算。",
+      "sourceQuestionIds": [
+        "2025下-006"
+      ],
+      "createdAt": "2026-08-27T09:29:37.690Z"
+    },
+    {
+      "id": "knowledge-均匀分布",
+      "name": "均匀分布",
+      "type": "concept",
+      "aliases": [
+        "Uniform Distribution",
+        "U(a,b)"
+      ],
+      "description": "随机变量在区间[a,b]内取值概率相等的分布，记为U(a,b)。其概率密度函数在区间内为常数1/(b-a)，概率等于目标区间长度与总区间长度之比。",
+      "sourceQuestionIds": [
+        "2025下-006"
+      ],
+      "createdAt": "2026-08-27T09:29:37.691Z"
+    },
+    {
+      "id": "knowledge-概率密度函数",
+      "name": "概率密度函数",
+      "type": "concept",
+      "aliases": [
+        "Probability Density Function",
+        "PDF"
+      ],
+      "description": "描述连续型随机变量取值概率分布的函数，曲线下方的面积表示概率。",
+      "sourceQuestionIds": [
+        "2025下-006"
+      ],
+      "createdAt": "2026-08-27T09:29:37.691Z"
+    },
+    {
+      "id": "knowledge-数据全生命周期",
+      "name": "数据全生命周期",
+      "type": "concept",
+      "aliases": [
+        "Data Lifecycle"
+      ],
+      "description": "数据从产生、采集、存储、使用、共享、交换到销毁的全过程，是数据安全治理的核心视角之一。",
+      "sourceQuestionIds": [
+        "2024下-075"
+      ],
+      "createdAt": "2026-08-27T13:17:07.595Z"
+    },
+    {
+      "id": "knowledge-集合运算",
+      "name": "集合运算",
+      "type": "category",
+      "aliases": [
+        "Set Operations"
+      ],
+      "description": "基于集合论的运算，包括并、差、交、笛卡尔积等。",
+      "sourceQuestionIds": [
+        "2025下-007"
+      ],
+      "createdAt": "2026-08-28T04:25:31.780Z"
+    },
+    {
+      "id": "knowledge-差集",
+      "name": "差集",
+      "type": "concept",
+      "aliases": [
+        "Difference",
+        "Set Difference"
+      ],
+      "description": "关系R-S表示属于R但不属于S的元组集合。",
+      "sourceQuestionIds": [
+        "2025下-007"
+      ],
+      "createdAt": "2026-08-28T04:25:31.780Z"
+    },
+    {
+      "id": "knowledge-交集",
+      "name": "交集",
+      "type": "concept",
+      "aliases": [
+        "Intersection"
+      ],
+      "description": "关系R∩S表示同时属于R和S的元组集合。",
+      "sourceQuestionIds": [
+        "2025下-007"
+      ],
+      "createdAt": "2026-08-28T04:25:31.780Z"
+    },
+    {
+      "id": "knowledge-关系代数恒等式",
+      "name": "关系代数恒等式",
+      "type": "concept",
+      "aliases": [
+        "Relational Algebra Identities"
+      ],
+      "description": "关系代数中不同表达式之间的等价转换规则，如R-(R-S)=R∩S。",
+      "sourceQuestionIds": [
+        "2025下-007"
+      ],
+      "createdAt": "2026-08-28T04:25:31.780Z"
+    },
+    {
+      "id": "knowledge-关系",
+      "name": "关系",
+      "type": "concept",
+      "aliases": [
+        "Relation",
+        "表"
+      ],
+      "description": "在关系模型中，关系对应一张二维表，数学上定义为元组的有限集合。",
+      "sourceQuestionIds": [
+        "2025下-008"
+      ],
+      "createdAt": "2026-08-28T04:25:48.689Z"
+    },
+    {
+      "id": "knowledge-元组",
+      "name": "元组",
+      "type": "concept",
+      "aliases": [
+        "Tuple",
+        "行"
+      ],
+      "description": "关系中的一行记录，是集合中的元素。",
+      "sourceQuestionIds": [
+        "2025下-008"
+      ],
+      "createdAt": "2026-08-28T04:25:48.689Z"
+    },
+    {
+      "id": "knowledge-属性",
+      "name": "属性",
+      "type": "concept",
+      "aliases": [
+        "Attribute",
+        "列"
+      ],
+      "description": "关系中的一列，表示实体的一个特征。",
+      "sourceQuestionIds": [
+        "2025下-008"
+      ],
+      "createdAt": "2026-08-28T04:25:48.689Z"
+    },
+    {
+      "id": "knowledge-select语句",
+      "name": "SELECT语句",
+      "type": "concept",
+      "aliases": [
+        "查询语句"
+      ],
+      "description": "SQL中用于从基表中检索数据的语句，其结果集是一个新的关系（集合）。",
+      "sourceQuestionIds": [
+        "2025下-008"
+      ],
+      "createdAt": "2026-08-28T04:25:48.689Z"
+    },
+    {
+      "id": "knowledge-网络安全",
+      "name": "网络安全",
+      "type": "domain",
+      "aliases": [],
+      "description": "根据刷题记录自动积累的知识领域",
+      "sourceQuestionIds": [
+        "2025下-009",
+        "2025下-011"
+      ],
+      "createdAt": "2026-08-28T04:26:31.795Z"
+    },
+    {
+      "id": "knowledge-架构变化类型",
+      "name": "架构变化类型",
+      "type": "category",
+      "aliases": [
+        "Architecture Change Types",
+        "架构变更分类"
+      ],
+      "description": "软件架构演进中变更的分类，包括行为变化、风格变化、属性改名和架构变化等，用于评估变更对系统的影响范围。",
+      "sourceQuestionIds": [
+        "2025下-011"
+      ],
+      "createdAt": "2026-08-28T04:27:46.227Z"
+    },
+    {
+      "id": "knowledge-行为变化",
+      "name": "行为变化",
+      "type": "concept",
+      "aliases": [
+        "Behavioral Change"
+      ],
+      "description": "指系统对外表现出的功能、逻辑或处理流程发生改变。例如更换加密算法、修改业务规则等，会影响系统的输入输出处理和安全策略。",
+      "sourceQuestionIds": [
+        "2025下-011"
+      ],
+      "createdAt": "2026-08-28T04:27:46.227Z"
+    },
+    {
+      "id": "knowledge-风格变化",
+      "name": "风格变化",
+      "type": "concept",
+      "aliases": [
+        "Stylistic Change"
+      ],
+      "description": "指不影响系统行为、仅涉及代码可读性、命名规范或内部组织形式的变更，如变量重命名、代码格式化等。",
+      "sourceQuestionIds": [
+        "2025下-011"
+      ],
+      "createdAt": "2026-08-28T04:27:46.227Z"
+    },
+    {
+      "id": "knowledge-属性改名",
+      "name": "属性改名",
+      "type": "concept",
+      "aliases": [
+        "Attribute Renaming"
+      ],
+      "description": "指仅修改数据字段或属性的名称，不改变其含义、结构或处理逻辑的变更。",
+      "sourceQuestionIds": [
+        "2025下-011"
+      ],
+      "createdAt": "2026-08-28T04:27:46.227Z"
+    },
+    {
+      "id": "knowledge-架构变化",
+      "name": "架构变化",
+      "type": "concept",
+      "aliases": [
+        "Architectural Change"
+      ],
+      "description": "指系统整体结构、组件划分、交互模式或核心中间件的根本性重构，如从单体架构转为微服务架构。",
+      "sourceQuestionIds": [
+        "2025下-011"
+      ],
+      "createdAt": "2026-08-28T04:27:46.227Z"
+    },
+    {
+      "id": "knowledge-加密算法",
+      "name": "加密算法",
+      "type": "concept",
+      "aliases": [
+        "Encryption Algorithm"
+      ],
+      "description": "用于保护数据机密性的数学算法，如DES、AES等。更换加密算法属于改变系统数据处理逻辑的行为变化。",
+      "sourceQuestionIds": [
+        "2025下-011"
+      ],
+      "createdAt": "2026-08-28T04:27:46.227Z"
+    },
+    {
+      "id": "knowledge-xml",
+      "name": "XML",
+      "type": "concept",
+      "aliases": [
+        "Extensible Markup Language",
+        "可扩展标记语言"
+      ],
+      "description": "可扩展标记语言，用于存储和传输数据，具有自描述性和结构化特点，实现结构与数据分离。",
+      "sourceQuestionIds": [
+        "2025下-012"
+      ],
+      "createdAt": "2026-08-28T04:28:35.681Z"
+    },
+    {
+      "id": "knowledge-xml-schema",
+      "name": "XML Schema",
+      "type": "concept",
+      "aliases": [
+        "XML模式"
+      ],
+      "description": "用于定义和验证XML文档结构的规范，比DTD更强大，支持数据类型定义，是XML技术栈的重要组成部分。",
+      "sourceQuestionIds": [
+        "2025下-012"
+      ],
+      "createdAt": "2026-08-28T04:28:35.681Z"
+    },
+    {
+      "id": "knowledge-xml命名空间",
+      "name": "XML命名空间",
+      "type": "concept",
+      "aliases": [
+        "Namespace",
+        "命名空间"
+      ],
+      "description": "XML Namespace，用于区分来自不同来源的相同标签名或属性名，避免命名冲突，通过URI进行唯一标识。",
+      "sourceQuestionIds": [
+        "2025下-012"
+      ],
+      "createdAt": "2026-08-28T04:28:35.682Z"
+    },
+    {
+      "id": "knowledge-xslt",
+      "name": "XSLT",
+      "type": "concept",
+      "aliases": [
+        "Extensible Stylesheet Language Transformations",
+        "可扩展样式表语言转换"
+      ],
+      "description": "可扩展样式表语言转换，用于将XML文档转换为其他格式（如HTML），XML本身不具备显示格式能力，需依赖XSLT或CSS。",
+      "sourceQuestionIds": [
+        "2025下-012"
+      ],
+      "createdAt": "2026-08-28T04:28:35.682Z"
     }
   ],
   "edges": [
@@ -257,6 +3923,2386 @@
       "from": "knowledge-soap",
       "to": "knowledge-soap-rpc表示",
       "type": "related"
+    },
+    {
+      "from": "knowledge-soap信封",
+      "to": "knowledge-soap编码规则",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-综合知识",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-数学与逻辑",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数学与逻辑",
+      "to": "knowledge-集合论",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-集合论",
+      "to": "knowledge-容斥原理",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-集合论",
+      "to": "knowledge-韦恩图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-容斥原理",
+      "to": "knowledge-韦恩图",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-质量属性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-质量属性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性",
+      "to": "knowledge-质量属性场景",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-响应",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-刺激源",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-环境",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-制品",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-响应度量",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-响应",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-刺激源",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-环境",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-制品",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-质量属性场景",
+      "to": "knowledge-响应度量",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-uml图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-uml图",
+      "to": "knowledge-用例图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-uml图",
+      "to": "knowledge-活动图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-uml图",
+      "to": "knowledge-顺序图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-uml图",
+      "to": "knowledge-类图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-用例图",
+      "to": "knowledge-活动图",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-uml图",
+      "to": "knowledge-软件架构设计",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-连接件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-消息传递",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-消息传递",
+      "to": "knowledge-消息队列",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-消息传递",
+      "to": "knowledge-消息中间件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-消息传递",
+      "to": "knowledge-连接件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-消息队列",
+      "to": "knowledge-消息传递",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-消息中间件",
+      "to": "knowledge-消息传递",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-综合知识",
+      "to": "knowledge-信息安全",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息安全",
+      "to": "knowledge-密码学基础",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-密码学基础",
+      "to": "knowledge-哈希函数",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-哈希函数",
+      "to": "knowledge-md5",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-哈希函数",
+      "to": "knowledge-哈希碰撞",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息安全",
+      "to": "knowledge-数据完整性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-md5",
+      "to": "knowledge-哈希碰撞",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-md5",
+      "to": "knowledge-数据完整性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-哈希函数",
+      "to": "knowledge-数据完整性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-事件驱动架构",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-松耦合",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-消息传递",
+      "to": "knowledge-异步通信",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-事件驱动架构",
+      "to": "knowledge-松耦合",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-事件驱动架构",
+      "to": "knowledge-异步通信",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-事件驱动架构",
+      "to": "knowledge-消息队列",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-通信原理",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-通信原理",
+      "to": "knowledge-信道容量",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-通信原理",
+      "to": "knowledge-香农公式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-通信原理",
+      "to": "knowledge-带宽",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-通信原理",
+      "to": "knowledge-信噪比",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-香农公式",
+      "to": "knowledge-信道容量",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-香农公式",
+      "to": "knowledge-带宽",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-香农公式",
+      "to": "knowledge-信噪比",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-带宽",
+      "to": "knowledge-信道容量",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-信噪比",
+      "to": "knowledge-信道容量",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-数据库系统",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据库系统",
+      "to": "knowledge-三级模式结构",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-三级模式结构",
+      "to": "knowledge-外模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-三级模式结构",
+      "to": "knowledge-概念模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-三级模式结构",
+      "to": "knowledge-内模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-三级模式结构",
+      "to": "knowledge-两级映像",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-两级映像",
+      "to": "knowledge-逻辑数据独立性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-两级映像",
+      "to": "knowledge-物理数据独立性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-外模式",
+      "to": "knowledge-概念模式",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-概念模式",
+      "to": "knowledge-内模式",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-外模式",
+      "to": "knowledge-逻辑数据独立性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-内模式",
+      "to": "knowledge-物理数据独立性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-综合知识",
+      "to": "knowledge-软件可靠性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件可靠性",
+      "to": "knowledge-n版本程序设计",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-n版本程序设计",
+      "to": "knowledge-相异成分规范评审",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-n版本程序设计",
+      "to": "knowledge-相异性确认",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-n版本程序设计",
+      "to": "knowledge-背对背测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件可靠性",
+      "to": "knowledge-共模故障",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-n版本程序设计",
+      "to": "knowledge-共模故障",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-n版本程序设计",
+      "to": "knowledge-相异成分规范评审",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-n版本程序设计",
+      "to": "knowledge-相异性确认",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-n版本程序设计",
+      "to": "knowledge-背对背测试",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-综合知识",
+      "to": "knowledge-信息化需求",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息化需求",
+      "to": "knowledge-战略需求",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息化需求",
+      "to": "knowledge-运作需求",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息化需求",
+      "to": "knowledge-技术需求",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-战略需求",
+      "to": "knowledge-运作需求",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-运作需求",
+      "to": "knowledge-技术需求",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-调用-返回风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-调用-返回风格",
+      "to": "knowledge-层次型体系结构风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-调用-返回风格",
+      "to": "knowledge-主程序-子过程体系结构风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-调用-返回风格",
+      "to": "knowledge-面向对象体系结构风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-数据流风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-层次型体系结构风格",
+      "to": "knowledge-调用-返回风格",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-主程序-子过程体系结构风格",
+      "to": "knowledge-调用-返回风格",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-面向对象体系结构风格",
+      "to": "knowledge-调用-返回风格",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-黑板风格",
+      "to": "knowledge-数据流风格",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-管道-过滤器风格",
+      "to": "knowledge-数据流风格",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-软件工程",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件工程",
+      "to": "knowledge-模块内聚",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-模块内聚",
+      "to": "knowledge-过程内聚",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-模块内聚",
+      "to": "knowledge-通信内聚",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-模块内聚",
+      "to": "knowledge-时间内聚",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-模块内聚",
+      "to": "knowledge-逻辑内聚",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-过程内聚",
+      "to": "knowledge-通信内聚",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-过程内聚",
+      "to": "knowledge-时间内聚",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-过程内聚",
+      "to": "knowledge-逻辑内聚",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-信息安全",
+      "to": "knowledge-信息安全审计",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息安全审计",
+      "to": "knowledge-控制目标",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息安全审计",
+      "to": "knowledge-安全漏洞",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息安全审计",
+      "to": "knowledge-控制措施",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息安全审计",
+      "to": "knowledge-控制测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-信息安全审计",
+      "to": "knowledge-控制目标",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-信息安全审计",
+      "to": "knowledge-安全漏洞",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-信息安全审计",
+      "to": "knowledge-控制措施",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-信息安全审计",
+      "to": "knowledge-控制测试",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-控制目标",
+      "to": "knowledge-安全漏洞",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-安全漏洞",
+      "to": "knowledge-控制措施",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-控制措施",
+      "to": "knowledge-控制测试",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-综合知识",
+      "to": "knowledge-人工智能",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-人工智能",
+      "to": "knowledge-专家系统",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-专家系统",
+      "to": "knowledge-知识库",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-专家系统",
+      "to": "knowledge-推理机",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-专家系统",
+      "to": "knowledge-解释器",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-人工智能",
+      "to": "knowledge-注意力机制",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-专家系统",
+      "to": "knowledge-知识库",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-专家系统",
+      "to": "knowledge-推理机",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-专家系统",
+      "to": "knowledge-解释器",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-知识库",
+      "to": "knowledge-推理机",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-注意力机制",
+      "to": "knowledge-专家系统",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-操作系统",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-操作系统",
+      "to": "knowledge-中断机制",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-中断机制",
+      "to": "knowledge-访管中断",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-中断机制",
+      "to": "knowledge-外部中断",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-中断机制",
+      "to": "knowledge-异常",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-操作系统",
+      "to": "knowledge-特权指令",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-操作系统",
+      "to": "knowledge-系统调用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-系统调用",
+      "to": "knowledge-访管中断",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-特权指令",
+      "to": "knowledge-系统调用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-访管中断",
+      "to": "knowledge-外部中断",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-访管中断",
+      "to": "knowledge-异常",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-知识产权",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-知识产权",
+      "to": "knowledge-专利法",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-专利法",
+      "to": "knowledge-职务发明创造",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-职务发明创造",
+      "to": "knowledge-离职后职务发明追溯期",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-职务发明创造",
+      "to": "knowledge-离职后职务发明追溯期",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-专利法",
+      "to": "knowledge-职务发明创造",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-综合知识",
+      "to": "knowledge-推荐系统",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-推荐系统",
+      "to": "knowledge-基于内容的推荐",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-推荐系统",
+      "to": "knowledge-协同过滤",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-推荐系统",
+      "to": "knowledge-冷启动问题",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-基于内容的推荐",
+      "to": "knowledge-冷启动问题",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-协同过滤",
+      "to": "knowledge-冷启动问题",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-基于内容的推荐",
+      "to": "knowledge-协同过滤",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-人工智能",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-企业应用集成",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-企业应用集成",
+      "to": "knowledge-数据集成",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据集成",
+      "to": "knowledge-数据联邦",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据集成",
+      "to": "knowledge-数据复制",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据集成",
+      "to": "knowledge-基于接口的数据集成",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据联邦",
+      "to": "knowledge-数据集成",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据复制",
+      "to": "knowledge-数据集成",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-基于接口的数据集成",
+      "to": "knowledge-数据集成",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据集成",
+      "to": "knowledge-企业应用集成",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-wsdl",
+      "to": "knowledge-wsdl服务功能定义",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-wsdl",
+      "to": "knowledge-wsdl服务交互定义",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-wsdl",
+      "to": "knowledge-wsdl服务位置定义",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-wsdl",
+      "to": "knowledge-wsdl服务功能定义",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-wsdl",
+      "to": "knowledge-wsdl服务交互定义",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-wsdl",
+      "to": "knowledge-wsdl服务位置定义",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-wsdl",
+      "to": "knowledge-soap",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件工程",
+      "to": "knowledge-软件测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-测试脚本",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-脚本文件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-数据驱动测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-数据文件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-测试脚本",
+      "to": "knowledge-脚本文件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据驱动测试",
+      "to": "knowledge-数据文件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-测试脚本",
+      "to": "knowledge-数据文件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件工程",
+      "to": "knowledge-软件重用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件重用",
+      "to": "knowledge-横向重用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件重用",
+      "to": "knowledge-纵向重用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-横向重用",
+      "to": "knowledge-纵向重用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-操作系统",
+      "to": "knowledge-死锁",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-死锁",
+      "to": "knowledge-死锁必要条件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-死锁必要条件",
+      "to": "knowledge-互斥条件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-死锁必要条件",
+      "to": "knowledge-请求与保持条件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-死锁必要条件",
+      "to": "knowledge-不可抢占条件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-死锁必要条件",
+      "to": "knowledge-循环等待条件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-死锁",
+      "to": "knowledge-死锁预防",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-死锁预防",
+      "to": "knowledge-死锁必要条件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-死锁预防",
+      "to": "knowledge-请求与保持条件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-死锁预防",
+      "to": "knowledge-不可抢占条件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-死锁预防",
+      "to": "knowledge-循环等待条件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-死锁预防",
+      "to": "knowledge-互斥条件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-质量属性",
+      "to": "knowledge-软件质量特性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件质量特性",
+      "to": "knowledge-易用性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件质量特性",
+      "to": "knowledge-可靠性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件质量特性",
+      "to": "knowledge-可维护性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-易用性",
+      "to": "knowledge-易学习性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-可靠性",
+      "to": "knowledge-可恢复性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-易用性",
+      "to": "knowledge-易学习性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-可靠性",
+      "to": "knowledge-可恢复性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-操作系统",
+      "to": "knowledge-进程状态",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程状态",
+      "to": "knowledge-就绪状态",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程状态",
+      "to": "knowledge-运行状态",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程状态",
+      "to": "knowledge-阻塞状态",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程状态",
+      "to": "knowledge-挂起状态",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-操作系统",
+      "to": "knowledge-进程调度",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程调度",
+      "to": "knowledge-抢占式调度",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程调度",
+      "to": "knowledge-时间片轮转",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-运行状态",
+      "to": "knowledge-就绪状态",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-运行状态",
+      "to": "knowledge-阻塞状态",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-抢占式调度",
+      "to": "knowledge-就绪状态",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-时间片轮转",
+      "to": "knowledge-就绪状态",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-4-1视图模型",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-逻辑视图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-开发视图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-进程视图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-物理视图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-场景视图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-逻辑视图",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-开发视图",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-进程视图",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-物理视图",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-4-1视图模型",
+      "to": "knowledge-场景视图",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-场景视图",
+      "to": "knowledge-用例图",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-白盒测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-语句覆盖",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-判断覆盖",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-条件覆盖",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-条件组合覆盖",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-路径覆盖",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-语句覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-判断覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-条件覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-条件组合覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-白盒测试",
+      "to": "knowledge-路径覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-路径覆盖",
+      "to": "knowledge-语句覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-路径覆盖",
+      "to": "knowledge-判断覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-路径覆盖",
+      "to": "knowledge-条件覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-路径覆盖",
+      "to": "knowledge-条件组合覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-条件组合覆盖",
+      "to": "knowledge-判断覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-条件组合覆盖",
+      "to": "knowledge-条件覆盖",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-基于度量的评估方法",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-度量指标",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-映射原则",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-基于度量的评估方法",
+      "to": "knowledge-度量指标",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-基于度量的评估方法",
+      "to": "knowledge-质量属性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-映射原则",
+      "to": "knowledge-度量指标",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-映射原则",
+      "to": "knowledge-质量属性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-设计模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-设计模式",
+      "to": "knowledge-创建型模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-设计模式",
+      "to": "knowledge-结构型模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-设计模式",
+      "to": "knowledge-行为型模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-创建型模式",
+      "to": "knowledge-原型模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-结构型模式",
+      "to": "knowledge-装饰器模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-行为型模式",
+      "to": "knowledge-观察者模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-结构型模式",
+      "to": "knowledge-代理模式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-原型模式",
+      "to": "knowledge-创建型模式",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-装饰器模式",
+      "to": "knowledge-结构型模式",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-观察者模式",
+      "to": "knowledge-行为型模式",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-代理模式",
+      "to": "knowledge-结构型模式",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据库系统",
+      "to": "knowledge-完整性约束",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-完整性约束",
+      "to": "knowledge-实体完整性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-完整性约束",
+      "to": "knowledge-参照完整性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-完整性约束",
+      "to": "knowledge-用户定义完整性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-完整性约束",
+      "to": "knowledge-实体完整性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-完整性约束",
+      "to": "knowledge-参照完整性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-完整性约束",
+      "to": "knowledge-用户定义完整性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据库系统",
+      "to": "knowledge-关系模型",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-函数依赖",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-候选键",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-属性闭包",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-超键",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-函数依赖",
+      "to": "knowledge-候选键",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-属性闭包",
+      "to": "knowledge-候选键",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-候选键",
+      "to": "knowledge-超键",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-基于知识源的架构风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-批处理顺序风格",
+      "to": "knowledge-顺序执行",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-管道-过滤器风格",
+      "to": "knowledge-并行处理",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-黑板风格",
+      "to": "knowledge-基于知识源的架构风格",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-批处理顺序风格",
+      "to": "knowledge-顺序执行",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-管道-过滤器风格",
+      "to": "knowledge-并行处理",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-质量属性",
+      "to": "knowledge-敏感点",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性",
+      "to": "knowledge-权衡点",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性",
+      "to": "knowledge-性能",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性",
+      "to": "knowledge-安全性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-敏感点",
+      "to": "knowledge-权衡点",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-性能",
+      "to": "knowledge-安全性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据库系统",
+      "to": "knowledge-关系代数",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系代数",
+      "to": "knowledge-自然连接",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系代数",
+      "to": "knowledge-笛卡尔积",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-自然连接",
+      "to": "knowledge-笛卡尔积",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-知识产权",
+      "to": "knowledge-软件著作权",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件著作权",
+      "to": "knowledge-合理使用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-合理使用",
+      "to": "knowledge-学习研究目的",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-学习研究目的",
+      "to": "knowledge-安装部署运行",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-合理使用",
+      "to": "knowledge-免许可免付费",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件著作权",
+      "to": "knowledge-合理使用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-合理使用",
+      "to": "knowledge-学习研究目的",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-学习研究目的",
+      "to": "knowledge-安装部署运行",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-合理使用",
+      "to": "knowledge-免许可免付费",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-操作系统",
+      "to": "knowledge-进程管理",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程管理",
+      "to": "knowledge-多道程序设计",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程管理",
+      "to": "knowledge-进程调度",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多道程序设计",
+      "to": "knowledge-甘特图",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多道程序设计",
+      "to": "knowledge-cpu与i-o并行",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-进程管理",
+      "to": "knowledge-操作系统",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-多道程序设计",
+      "to": "knowledge-进程管理",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-进程调度",
+      "to": "knowledge-进程管理",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-甘特图",
+      "to": "knowledge-多道程序设计",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-cpu与i-o并行",
+      "to": "knowledge-多道程序设计",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-进程调度",
+      "to": "knowledge-cpu与i-o并行",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-信息安全",
+      "to": "knowledge-数据安全",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全",
+      "to": "knowledge-数据安全架构",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全架构",
+      "to": "knowledge-基础安全层",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-基础安全层",
+      "to": "knowledge-数据分级分类",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全架构",
+      "to": "knowledge-权限控制层",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全架构",
+      "to": "knowledge-应用接口层",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全架构",
+      "to": "knowledge-战略安全层",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据分级分类",
+      "to": "knowledge-基础安全层",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-权限控制层",
+      "to": "knowledge-数据分级分类",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-应用接口层",
+      "to": "knowledge-数据安全架构",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-战略安全层",
+      "to": "knowledge-数据安全架构",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-企业集成",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-企业集成",
+      "to": "knowledge-数据集成",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-企业集成",
+      "to": "knowledge-会聚集成",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-企业集成",
+      "to": "knowledge-服务集成",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-企业集成",
+      "to": "knowledge-应用集成",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据集成",
+      "to": "knowledge-会聚集成",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-会聚集成",
+      "to": "knowledge-服务集成",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-服务集成",
+      "to": "knowledge-应用集成",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-软件架构评估",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构评估",
+      "to": "knowledge-atam",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构评估",
+      "to": "knowledge-saam",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构评估",
+      "to": "knowledge-cbam",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-atam",
+      "to": "knowledge-效用树",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-效用树",
+      "to": "knowledge-质量属性驱动因素",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构评估",
+      "to": "knowledge-敏感点",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构评估",
+      "to": "knowledge-权衡点",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-atam",
+      "to": "knowledge-效用树",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-效用树",
+      "to": "knowledge-质量属性驱动因素",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-atam",
+      "to": "knowledge-敏感点",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-atam",
+      "to": "knowledge-权衡点",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-saam",
+      "to": "knowledge-质量属性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-cbam",
+      "to": "knowledge-软件架构评估",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-atam",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-效用树",
+      "to": "knowledge-属性分类",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-效用树",
+      "to": "knowledge-质量属性场景",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-效用树",
+      "to": "knowledge-属性分类",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-可复用资产生命周期",
+      "to": "knowledge-分析可复用资产",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-可复用资产生命周期",
+      "to": "knowledge-构造-获取可复用资产",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-可复用资产生命周期",
+      "to": "knowledge-管理可复用资产",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-可复用资产生命周期",
+      "to": "knowledge-使用可复用资产",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-分析可复用资产",
+      "to": "knowledge-构造-获取可复用资产",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-构造-获取可复用资产",
+      "to": "knowledge-管理可复用资产",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-管理可复用资产",
+      "to": "knowledge-使用可复用资产",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-可复用资产生命周期",
+      "to": "knowledge-分析可复用资产",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-可复用资产生命周期",
+      "to": "knowledge-构造-获取可复用资产",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-可复用资产生命周期",
+      "to": "knowledge-管理可复用资产",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-可复用资产生命周期",
+      "to": "knowledge-使用可复用资产",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-单元测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-集成测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-系统测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件测试",
+      "to": "knowledge-验收测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件工程",
+      "to": "knowledge-需求分析",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件工程",
+      "to": "knowledge-概要设计",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件工程",
+      "to": "knowledge-详细设计",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-集成测试",
+      "to": "knowledge-详细设计",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-系统测试",
+      "to": "knowledge-需求分析",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-验收测试",
+      "to": "knowledge-需求分析",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-系统测试",
+      "to": "knowledge-概要设计",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-仓库系统风格",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-仓库系统风格",
+      "to": "knowledge-中央数据结构",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-仓库系统风格",
+      "to": "knowledge-独立构件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构风格",
+      "to": "knowledge-黑板系统",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-黑板系统",
+      "to": "knowledge-知识源",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-仓库系统风格",
+      "to": "knowledge-中央数据结构",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-仓库系统风格",
+      "to": "knowledge-独立构件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-黑板系统",
+      "to": "knowledge-知识源",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-仓库系统风格",
+      "to": "knowledge-黑板系统",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-体系结构演化",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-构件",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-构件相互作用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-构件组装与测试",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-软件工程",
+      "to": "knowledge-技术评审",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-体系结构演化",
+      "to": "knowledge-构件",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-体系结构演化",
+      "to": "knowledge-构件相互作用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-体系结构演化",
+      "to": "knowledge-构件组装与测试",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-体系结构演化",
+      "to": "knowledge-技术评审",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-构件",
+      "to": "knowledge-构件相互作用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-质量属性",
+      "to": "knowledge-效用树",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-优先级组合",
+      "to": "knowledge-实现难度",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-项目管理",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-项目管理",
+      "to": "knowledge-项目进度管理",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-项目进度管理",
+      "to": "knowledge-关键路径法",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-项目进度管理",
+      "to": "knowledge-赶工",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-项目管理",
+      "to": "knowledge-直接费用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-项目管理",
+      "to": "knowledge-间接费用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-项目管理",
+      "to": "knowledge-总工程费用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关键路径法",
+      "to": "knowledge-赶工",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-赶工",
+      "to": "knowledge-直接费用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-总工程费用",
+      "to": "knowledge-直接费用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-总工程费用",
+      "to": "knowledge-间接费用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-信息安全",
+      "to": "knowledge-数据安全治理",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-满足合规要求",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-管理数据安全风险",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-促进数据开发利用",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-满足合规要求",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-管理数据安全风险",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-促进数据开发利用",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-数据安全战略层",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-数据全生命周期安全层",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-基础安全层",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据全生命周期安全层",
+      "to": "knowledge-权限控制层",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据安全战略层",
+      "to": "knowledge-数据全生命周期安全层",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据全生命周期安全层",
+      "to": "knowledge-基础安全层",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-多智能体系统",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-集中式架构",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-去中心化架构",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-集中式架构",
+      "to": "knowledge-全局知识库",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-集中式架构",
+      "to": "knowledge-单点故障",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-去中心化架构",
+      "to": "knowledge-鲁棒性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-集中式架构",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-去中心化架构",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-集中式架构",
+      "to": "knowledge-全局知识库",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-集中式架构",
+      "to": "knowledge-单点故障",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-去中心化架构",
+      "to": "knowledge-鲁棒性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-人工智能",
+      "to": "knowledge-多智能体系统",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-智能体协调",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-人工智能",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件可靠性",
+      "to": "knowledge-单点故障",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-质量属性",
+      "to": "knowledge-鲁棒性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-全局知识库",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-单点故障",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-多智能体系统",
+      "to": "knowledge-事件驱动架构",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-综合知识",
+      "to": "knowledge-概率论与数理统计",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-概率论与数理统计",
+      "to": "knowledge-连续型随机变量",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-连续型随机变量",
+      "to": "knowledge-均匀分布",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-连续型随机变量",
+      "to": "knowledge-概率密度函数",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-均匀分布",
+      "to": "knowledge-概率密度函数",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-数据安全治理",
+      "to": "knowledge-数据全生命周期",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-数据全生命周期",
+      "to": "knowledge-数据全生命周期安全层",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-关系代数",
+      "to": "knowledge-集合运算",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-集合运算",
+      "to": "knowledge-差集",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-集合运算",
+      "to": "knowledge-交集",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系代数",
+      "to": "knowledge-关系代数恒等式",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-差集",
+      "to": "knowledge-交集",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-关系代数恒等式",
+      "to": "knowledge-差集",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-关系代数恒等式",
+      "to": "knowledge-交集",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-关系",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-元组",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-属性",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-select语句",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-关系",
+      "to": "knowledge-元组",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-元组",
+      "to": "knowledge-属性",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-select语句",
+      "to": "knowledge-关系",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-关系模型",
+      "to": "knowledge-集合论",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-root",
+      "to": "knowledge-网络安全",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-安全性",
+      "to": "knowledge-性能",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-权衡点",
+      "to": "knowledge-质量属性场景",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-软件架构设计",
+      "to": "knowledge-架构变化类型",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构变化类型",
+      "to": "knowledge-行为变化",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构变化类型",
+      "to": "knowledge-风格变化",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构变化类型",
+      "to": "knowledge-属性改名",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-架构变化类型",
+      "to": "knowledge-架构变化",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-密码学基础",
+      "to": "knowledge-加密算法",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-行为变化",
+      "to": "knowledge-加密算法",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-架构变化类型",
+      "to": "knowledge-软件架构设计",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-web服务技术",
+      "to": "knowledge-xml",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-xml",
+      "to": "knowledge-xml-schema",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-xml",
+      "to": "knowledge-xml命名空间",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-xml",
+      "to": "knowledge-xslt",
+      "type": "contains"
+    },
+    {
+      "from": "knowledge-xml",
+      "to": "knowledge-xml-schema",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-xml",
+      "to": "knowledge-xml命名空间",
+      "type": "related"
+    },
+    {
+      "from": "knowledge-xml",
+      "to": "knowledge-xslt",
+      "type": "related"
     }
   ],
   "questionLinks": {
@@ -268,6 +6314,262 @@
     "2024下-031": [
       "W",
       "We"
+    ],
+    "2024下-032": [
+      "集",
+      "数学"
+    ],
+    "2024下-033": [
+      "响",
+      "软件"
+    ],
+    "2024下-034": [
+      "U",
+      "用例",
+      "活动图"
+    ],
+    "2024下-035": [
+      "连",
+      "消息"
+    ],
+    "2024下-036": [
+      "哈",
+      "哈希",
+      "数据完"
+    ],
+    "2024下-037": [
+      "松",
+      "架构"
+    ],
+    "2024下-038": [
+      "信",
+      "带宽",
+      "信噪比"
+    ],
+    "2024下-039": [
+      "三",
+      "外模",
+      "概念模",
+      "内模式"
+    ],
+    "2024下-040": [
+      "软",
+      "相异",
+      "相异性",
+      "背对背测"
+    ],
+    "2024下-041": [
+      "战",
+      "运作",
+      "技术需"
+    ],
+    "2024下-042": [
+      "调",
+      "黑板",
+      "数据流"
+    ],
+    "2024下-043": [
+      "过",
+      "软件"
+    ],
+    "2024下-044": [
+      "控",
+      "安全",
+      "控制措",
+      "控制测试"
+    ],
+    "2024下-045": [
+      "知",
+      "推理",
+      "人工智"
+    ],
+    "2024下-046": [
+      "系",
+      "中断",
+      "特权指"
+    ],
+    "2024下-047": [
+      "专",
+      "职务",
+      "离职后"
+    ],
+    "2024下-048": [
+      "基",
+      "冷启"
+    ],
+    "2024下-049": [
+      "数",
+      "数据"
+    ],
+    "2024下-050": [
+      "W",
+      "综合"
+    ],
+    "2024下-051": [
+      "脚",
+      "软件"
+    ],
+    "2024下-052": [
+      "横",
+      "纵向"
+    ],
+    "2024下-053": [
+      "死",
+      "操作"
+    ],
+    "2024下-054": [
+      "可",
+      "软件",
+      "ISO"
+    ],
+    "2024下-004": [
+      "就",
+      "进程"
+    ],
+    "2024下-005": [
+      "软"
+    ],
+    "2024下-055": [
+      "覆",
+      "路径",
+      "判断覆",
+      "条件覆盖"
+    ],
+    "2024下-056": [
+      "质",
+      "度量"
+    ],
+    "2024下-022": [
+      "创",
+      "结构",
+      "行为型",
+      "原型模式"
+    ],
+    "2024下-057": [
+      "完",
+      "数据"
+    ],
+    "2024下-058": [
+      "候",
+      "属性"
+    ],
+    "2024下-059": [
+      "权",
+      "敏感"
+    ],
+    "2024下-060": [
+      "关",
+      "数据"
+    ],
+    "2024下-061": [
+      "合",
+      "知识"
+    ],
+    "2024下-062": [
+      "进",
+      "甘特",
+      "CPU"
+    ],
+    "2024下-063": [
+      "数",
+      "基础"
+    ],
+    "2024下-064": [
+      "集",
+      "自下"
+    ],
+    "2024下-065": [
+      "效",
+      "软件",
+      "SAA",
+      "CBAM"
+    ],
+    "2024下-066": [
+      "效",
+      "软件"
+    ],
+    "2024下-068": [
+      "可",
+      "软件"
+    ],
+    "2024下-069": [
+      "系",
+      "需求",
+      "错误发"
+    ],
+    "2024下-070": [
+      "中",
+      "架构"
+    ],
+    "2024下-071": [
+      "构",
+      "软件"
+    ],
+    "2024下-072": [
+      "实",
+      "优先"
+    ],
+    "2024下-073": [
+      "关",
+      "赶工",
+      "成本优"
+    ],
+    "2024下-074": [
+      "信",
+      "合规"
+    ],
+    "2024下-075": [
+      "数",
+      "安全",
+      "信息"
+    ],
+    "2025下-001": [
+      "集",
+      "去中",
+      "软件架"
+    ],
+    "2025下-002": [
+      "去",
+      "智能"
+    ],
+    "2025下-003": [
+      "中",
+      "去中",
+      "单点故"
+    ],
+    "2025下-004": [
+      "去",
+      "局部"
+    ],
+    "2025下-005": [
+      "去",
+      "智能"
+    ],
+    "2025下-006": [
+      "概"
+    ],
+    "2025下-007": [
+      "集",
+      "差集",
+      "交集"
+    ],
+    "2025下-008": [
+      "集",
+      "SE"
+    ],
+    "2025下-009": [
+      "性",
+      "安全",
+      "权衡点"
+    ],
+    "2025下-011": [
+      "行",
+      "加密"
+    ],
+    "2025下-012": [
+      "X",
+      "XM",
+      "XSL"
     ]
   }
 }

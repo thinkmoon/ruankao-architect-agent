@@ -15,7 +15,7 @@ import { rebuildPlanSnapshot, readPlan, writePlan, todayShanghai as planToday } 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const app = express();
 const server = createServer(app);
-const accessToken = 'thinkmoon';
+const accessToken = 'Thinkmoon';
 const agent = createAgent({ root });
 const tokenMatches = candidate => {
   if (!candidate) return false;
