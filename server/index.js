@@ -7,6 +7,7 @@ import express from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { AcpSession } from './acp-session.js';
 import { loadAllQuestions, listYears } from './zhenti-parser.js';
+import { loadCases, publicCase, validateCaseAnswers, caseGradePrompt } from './cases.js';
 import { getLlmConfig } from './llm.js';
 import { createAgent } from './agent.js';
 import { enrichKnowledgeGraph, readKnowledgeGraph } from './knowledge-graph.js';
@@ -65,7 +66,9 @@ async function syncReviewPlan() {
   const studyMinutesToday = completedSessions
     .filter(item => toShanghaiDate(new Date(item.stoppedAt || item.startedAt)) === planToday())
     .reduce((sum, item) => sum + sessionMinutes(item), 0);
-  const snapshot = rebuildPlanSnapshot(plan, attempts.items || [], mistakes.items || [], planToday(), { studyMinutes, studyMinutesToday });
+  const caseRecords = await readJson(path.join(stateDir, 'case-attempts.json'), { items: [] });
+  const caseCountToday = new Set(caseRecords.items.filter(a => toShanghaiDate(new Date(a.answeredAt)) === planToday()).map(a => a.questionId)).size;
+  const snapshot = rebuildPlanSnapshot(plan, attempts.items || [], mistakes.items || [], planToday(), { studyMinutes, studyMinutesToday, caseCountToday });
   await writePlan(reviewPlanFile, snapshot);
   return snapshot;
 }
@@ -96,6 +99,52 @@ function addDays(dateStr, delta) {
 }
 
 app.use(express.json({ limit: '10mb' }));
+
+// 案例答案只在提交后返回；记录与客观题正确率隔离。
+const caseAttemptsFile = path.join(stateDir, 'case-attempts.json');
+app.get('/api/cases', apiAuth, async (req, res) => {
+  const all = loadCases(root);
+  const records = await readJson(caseAttemptsFile, { items: [] });
+  res.json({ questions: all.filter(q => q.year === String(req.query.year || '2025下')).map(publicCase),
+    years: [...new Set(all.map(q => q.year))].sort().reverse(), attempts: records.items });
+});
+app.post('/api/cases/attempts', apiAuth, async (req, res) => {
+  const question = loadCases(root).find(q => q.id === req.body?.questionId);
+  if (!question || !validateCaseAnswers(question, req.body?.answers)) return res.status(400).json({ error: '请填写至少一个小问，每问最多 6000 字' });
+  const item = { id: randomUUID(), questionId: question.id, year: question.year, subject: '案例分析', answers: req.body.answers, answeredAt: new Date().toISOString(), status: 'submitted' };
+  await enqueue(caseAttemptsFile, async () => {
+    const records = await readJson(caseAttemptsFile, { items: [] });
+    records.items.push(item);
+    await writeFile(caseAttemptsFile, JSON.stringify(records, null, 2));
+  });
+  res.json({ attempt: item, reference: question.reference });
+});
+app.post('/api/cases/attempts/:id/grade', apiAuth, async (req, res) => {
+  try {
+    const records = await readJson(caseAttemptsFile, { items: [] });
+    const item = records.items.find(a => a.id === req.params.id);
+    if (!item) return res.status(404).json({ error: '作答记录不存在' });
+    if (item.feedback) return res.json({ attempt: item });
+    const question = loadCases(root).find(q => q.id === item.questionId);
+    if (!question) return res.status(404).json({ error: '题目不存在' });
+    const { baseURL, apiKey, model, maxOutputTokens } = await getLlmConfig();
+    const response = await fetch(`${baseURL}/chat/completions`, {
+      method: 'POST', signal: AbortSignal.timeout(180000),
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages: [{ role: 'user', content: caseGradePrompt(question, item.answers) }], temperature: 0.2, max_tokens: maxOutputTokens }),
+    });
+    const data = await response.json();
+    const feedback = data.choices?.[0]?.message?.content;
+    if (!response.ok || !feedback || data.choices?.[0]?.finish_reason === 'length') throw new Error('批改未完整返回，作答已保存，请重试');
+    Object.assign(item, { feedback, model, status: 'graded', gradedAt: new Date().toISOString() });
+    await enqueue(caseAttemptsFile, async () => {
+      const latest = await readJson(caseAttemptsFile, { items: [] });
+      latest.items = latest.items.map(a => a.id === item.id ? item : a);
+      await writeFile(caseAttemptsFile, JSON.stringify(latest, null, 2));
+    });
+    res.json({ attempt: item });
+  } catch (error) { res.status(502).json({ error: error.message }); }
+});
 
 // 0. 可用年份列表
 app.get('/api/years', apiAuth, (_req, res) => res.json({ years: listYears() }));

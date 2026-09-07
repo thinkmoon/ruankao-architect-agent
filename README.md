@@ -234,3 +234,11 @@ node --check server/review-plan.js
 git diff --check
 ./scripts/validate.sh
 ```
+
+### 案例分析练习
+
+进入「真题练习」后切换到「案例分析」，可按年份选择本地 8 个批次、40 道案例大题。支持分小问输入、浏览器草稿恢复、提交后查看非官方参考答案、AI 估算批改和历史作答。批改失败不丢失已提交答案，可在当前题或历史记录中重试；客观题正确率不混入案例评分。
+
+案例接口：`GET /api/cases?year=2025下`、`POST /api/cases/attempts`（`questionId`、以小问编号为键的 `answers`）、`POST /api/cases/attempts/:id/grade`，均使用现有 API 鉴权。提交前列表不返回参考答案。记录保存在 `state/case-attempts.json`；复习计划以当日实际提交的大题数量核验案例任务，包含案例的知识任务还需满足学习时长。资料属于非官方整理，缺失图表和不可评分部分仍保留原资料说明，批改不替代官方评分。
+
+验证：`node --test server/cases.test.js`、`bash scripts/validate.sh`、`npm run build`。

@@ -1,3 +1,4 @@
+import CasePractice from './CasePractice.jsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Area, AreaChart, PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from 'recharts';
@@ -15,6 +16,12 @@ import './acp.css';
 const EMPTY_STATS = { totalDone: 0, mistakeCount: 0, recentAccuracy: 0, studyDays: 0, trend: [], masteryByTopic: [], studyMinutes: 0, today: {}, reviewPlan: null };
 const DAILY_GOAL = 20;
 const ACCESS_TOKEN_KEY = 'rk_acp_token';
+const PRACTICE_YEAR_KEY = 'rk_practice_year';
+const DEFAULT_PRACTICE_YEAR = '2024下';
+
+function getStoredPracticeYear() {
+  return localStorage.getItem(PRACTICE_YEAR_KEY) || DEFAULT_PRACTICE_YEAR;
+}
 
 function getStoredToken() {
   return new URLSearchParams(location.search).get('token') || localStorage.getItem(ACCESS_TOKEN_KEY) || '';
@@ -433,6 +440,7 @@ function AccessGate({ onAuthorized }) {
 }
 
 function MainApp(){
+  const [practiceSubject, setPracticeSubject] = useState('综合知识');
   const [page,setPage]=useState('home');
   const [explainAi,setExplainAi]=useState('');
   const [explainFollowUps,setExplainFollowUps]=useState({});
@@ -450,7 +458,7 @@ function MainApp(){
   const [questions,setQuestions]=useState([]);
   const [questionsLoading,setQuestionsLoading]=useState(true);
   const [years,setYears]=useState([]);
-  const [year,setYear]=useState('2024下');
+  const [year,setYear]=useState(getStoredPracticeYear);
   const [stats,setStats]=useState(EMPTY_STATS);
   const [plan,setPlan]=useState(null);
   const [wrongIds,setWrongIds]=useState([]);
@@ -516,6 +524,11 @@ function MainApp(){
 
   const onSelectYear=useCallback(y=>setYear(y),[]);
 
+  // 记住用户最后选择的真题年份，下次打开刷题页继续使用。
+  useEffect(()=>{
+    localStorage.setItem(PRACTICE_YEAR_KEY, year);
+  },[year]);
+
   const onAnswered=useCallback(payload=>{
     return api('/api/attempts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
       .then(r=>r.json().then(data=>{if(!r.ok)throw new Error(data.error||'记录答题失败');return data.id;}))
@@ -561,7 +574,7 @@ function MainApp(){
   },[refreshStats]);
 
   const root=['home','practice','knowledge','chat','profile','plan'].includes(page);
-  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} attempts={stats.attempts} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>} {page==='knowledge'&&<KnowledgePage go={setPage}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
+  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<><div className="filter-row subject-tabs">{['综合知识','案例分析'].map(subject=><button key={subject} className={practiceSubject===subject?'active':''} onClick={()=>setPracticeSubject(subject)}>{subject}</button>)}</div>{practiceSubject==='案例分析'?<CasePractice api={api} Markdown={Markdown} onSaved={refreshStats}/>:<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} attempts={stats.attempts} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>}</>} {page==='knowledge'&&<KnowledgePage go={setPage}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setPracticeSubject('综合知识');setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
 }
 
 function App(){

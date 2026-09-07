@@ -132,7 +132,8 @@ export function rebuildPlanSnapshot(plan, attempts = [], mistakes = [], date = t
     if (task.type === 'questions' && completedQuestions >= (task.target || plan.dailyTargets?.questions || 20)) { task.status = 'completed'; task.completedAt = date; }
     // 没有到期错题时无需复习；有到期错题必须通过真实答题消化。
     if (task.type === 'review' && due.length === 0) { task.status = 'completed'; task.completedAt = date; }
-    if (!['questions', 'review'].includes(task.type) && Number(evidence.studyMinutesToday || 0) >= task.estimatedMinutes) {
+    if (['case', 'cases', 'case_analysis'].includes(task.type) && Number(evidence.caseCountToday || 0) >= (task.target || 1)) { task.status = 'completed'; task.completedAt = date; }
+    if (!['questions', 'review', 'case', 'cases', 'case_analysis'].includes(task.type) && Number(evidence.studyMinutesToday || 0) >= task.estimatedMinutes && (!task.title?.includes('案例') || Number(evidence.caseCountToday || 0) >= 1)) {
       task.status = 'completed'; task.completedAt = date;
     }
   }

@@ -46,7 +46,9 @@ function guessTopic(title) {
  */
 export function parseZhentiFile(filePath, year, subject) {
   if (!existsSync(filePath)) return [];
-  const content = readFileSync(filePath, 'utf-8');
+  // Normalize source files from different platforms so Markdown blocks and
+  // line-anchored parsing behave consistently.
+  const content = readFileSync(filePath, 'utf-8').replace(/\r\n?/g, '\n');
   const questions = [];
   let passageRef = null; // 最近一道含空号的题干原文，供后续无题干小题复用
 
@@ -69,17 +71,20 @@ export function parseZhentiFile(filePath, year, subject) {
     if (!answerMatch) continue;
     const answer = answerMatch[1].charCodeAt(0) - 65; // A=0
 
-    // Extract title: strip header, option lines, answer line, blockquotes, separators
+    // Extract title while preserving Markdown block structure. Source-maintenance
+    // notes are not part of the exam stem and remain hidden in practice mode.
     const beforeAnswer = section.split(/\*\*正确答案[：:]/)[0];
     const body = beforeAnswer
       .replace(/^#{2,3} 第[\d-]+题[^\n]*\n/, '')
       .replace(/第\d+题选项[：:][^\n]*\n?/g, '')
       .replace(/^[-*] \*\*[A-D][.．]\*\*.+$/mg, '')
       .replace(/^---$/mg, '')
-      .replace(/^> .+$/mg, '')
+      .replace(/^>\s+\*\*(?:结构化转录|结构化重绘示意|共用题干)[^\n]*$/mg, '')
       .trim();
 
-    const stem = body.split('\n').map(l => l.trim()).filter(Boolean).join('\n\n');
+    // Rebuilding this line-by-line inserts blank lines between table rows and
+    // code-fence contents, which makes valid Markdown impossible to render.
+    const stem = body;
     // 阅读理解 / 双空题：Markdown 只在首题写材料，后续小题只有「第N题选项」。
     // 仅当上一段材料里确实有本题空号（如 （7）（12））时才复用，避免串题。
     if (stem) passageRef = stem;
