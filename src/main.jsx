@@ -1,8 +1,9 @@
 import CasePractice from './CasePractice.jsx';
+import ExamPointsPage from './ExamPoints.jsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Area, AreaChart, PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { ArrowLeft, ArrowRight, BarChart3, BookOpen, Bookmark, BookmarkCheck, Bot, Calendar, Camera, Check, ChevronDown, ChevronRight, CircleUserRound, Clock3, Flame, Home, ImagePlus, Lightbulb, MessageCircle, MoreHorizontal, Network, RotateCcw, Send, Sparkles, Target, Trophy, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BarChart3, BookOpen, Bookmark, BookmarkCheck, Bot, Calendar, Camera, Check, ChevronDown, ChevronRight, CircleUserRound, Clock3, Flame, Home, ImagePlus, Lightbulb, MessageCircle, MoreHorizontal, Network, PieChart, RotateCcw, Send, Sparkles, Target, Trophy, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -11,9 +12,10 @@ import 'katex/dist/katex.min.css';
 import './styles.css';
 import './knowledge.css';
 import './plan-overrides.css';
+import './exam-points.css';
 import './acp.css';
 
-const EMPTY_STATS = { totalDone: 0, mistakeCount: 0, recentAccuracy: 0, studyDays: 0, trend: [], masteryByTopic: [], studyMinutes: 0, today: {}, reviewPlan: null };
+const EMPTY_STATS = { totalDone: 0, mistakeCount: 0, recentAccuracy: 0, studyDays: 0, trend: [], masteryByTopic: [], weakTopics: [], radarTopics: [], overallMastery: 0, studyMinutes: 0, today: {}, reviewPlan: null };
 const DAILY_GOAL = 20;
 const ACCESS_TOKEN_KEY = 'rk_acp_token';
 const PRACTICE_YEAR_KEY = 'rk_practice_year';
@@ -48,7 +50,7 @@ function Header({ title, back, onBack, action }) {
 
 function HomePage({ go, stats }) {
   const acc = Math.round(stats.recentAccuracy * 100);
-  const weak = [...stats.masteryByTopic].sort((a,b)=>a.value-b.value).slice(0,2);
+  const weak = stats.weakTopics?.length ? stats.weakTopics : [];
   const phase = stats.reviewPlan?.phase;
   const today = stats.today || {};
   const todayGoal = stats.reviewPlan?.todayPlan?.tasks?.find(t => t.type === 'questions') ? (stats.reviewPlan.todayPlan.tasks.find(t => t.type === 'questions').target || DAILY_GOAL) : DAILY_GOAL;
@@ -66,6 +68,7 @@ function HomePage({ go, stats }) {
       <button onClick={() => go('chat')}><span className="quick-icon purple"><Sparkles/></span><b>AI 答疑</b><small>截图秒懂难题</small></button>
       <button onClick={() => go('plan')}><span className="quick-icon blue"><Target/></span><b>复习计划</b><small>阶段任务与到期复习</small></button>
       <button onClick={() => go('insights')}><span className="quick-icon purple"><BarChart3/></span><b>知识画像</b><small>查看薄弱知识点</small></button>
+      <button onClick={() => go('exam-points')}><span className="quick-icon gold"><PieChart/></span><b>考点分布</b><small>三科分值与优先投入</small></button>
     </div>
     <div className="section-title"><div><h3>本周学情</h3><p>保持节奏，稳步提升</p></div><button onClick={() => go('insights')}>详情 <ChevronRight size={15}/></button></div>
     <section className="weekly-card">
@@ -75,7 +78,7 @@ function HomePage({ go, stats }) {
       <div className="mini-chart">{stats.trend.length>0 && <ResponsiveContainer width="100%" height={72}><AreaChart data={stats.trend}><defs><linearGradient id="mini" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#2c7a62" stopOpacity=".35"/><stop offset="1" stopColor="#2c7a62" stopOpacity="0"/></linearGradient></defs><Area type="monotone" dataKey="v" stroke="#2c7a62" strokeWidth={2.5} fill="url(#mini)"/></AreaChart></ResponsiveContainer>}</div>
     </section>
     <div className="section-title"><div><h3>薄弱知识点</h3><p>根据近期答题动态生成</p></div></div>
-    {weak.length ? <section className="weak-list">{weak.map(w=><div key={w.subject}><span className="weak-num">{w.subject.slice(0,2)}</span><p><b>{w.subject}</b><small>掌握度 {w.value}% · 建议优先复习</small></p><i><em style={{width:`${w.value}%`}}/></i></div>)}</section>
+    {weak.length ? <section className="weak-list">{weak.map(w=><div key={w.id || w.subject} role="button" onClick={() => w.id && go('knowledge', { examTopicId: w.id })}><span className="weak-num">{w.subject.slice(0,2)}</span><p><b>{w.subject}</b><small>已练 {w.attempted} 题 · 正确率 {w.value}%</small></p><i><em style={{width:`${w.value}%`}}/></i></div>)}</section>
       : <section className="weak-list"><div><span className="weak-num">--</span><p><b>暂无数据</b><small>完成几道题后自动生成</small></p><i><em style={{width:'0%'}}/></i></div></section>}
   </div>;
 }
@@ -363,12 +366,13 @@ function ChatPage() {
 }
 
 function InsightsPage({ go, stats }) {
-  const mastery = stats.masteryByTopic;
-  const overall = mastery.length ? Math.round(mastery.reduce((s,x)=>s+x.value,0)/mastery.length) : 0;
+  const mastery = stats.masteryByTopic || [];
+  const radar = stats.radarTopics?.length ? stats.radarTopics : mastery.filter(item => item.id !== 'other').slice(0, 8);
+  const overall = Number.isFinite(stats.overallMastery) ? stats.overallMastery : 0;
   const delta = stats.trend.length>=2 ? stats.trend[stats.trend.length-1].v - stats.trend[0].v : 0;
-  return <div className="page insights-page"><Header title="知识画像" back onBack={()=>go('home')}/><div className="insight-summary"><div><p>综合掌握度</p><strong>{overall}<small>%</small></strong><span><ArrowRight size={13}/> {stats.totalDone?`已刷 ${stats.totalDone} 题`:'暂无答题数据'}</span></div><div className="radar">{mastery.length>=3&&<ResponsiveContainer width="100%" height={180}><RadarChart data={mastery} outerRadius="68%"><PolarGrid stroke="#dce7e1"/><PolarAngleAxis dataKey="subject" tick={{fontSize:10,fill:'#64736b'}}/><Radar dataKey="value" stroke="#28745d" fill="#4c9b81" fillOpacity={.34}/></RadarChart></ResponsiveContainer>}</div></div>
+  return <div className="page insights-page"><Header title="知识画像" back onBack={()=>go('home')}/><div className="insight-summary"><div><p>综合掌握度</p><strong>{overall}<small>%</small></strong><span><ArrowRight size={13}/> {stats.totalDone?`已刷 ${stats.totalDone} 题，按最近一次作答`:'暂无答题数据'}</span></div><div className="radar">{radar.length>=3&&<ResponsiveContainer width="100%" height={180}><RadarChart data={radar} outerRadius="68%"><PolarGrid stroke="#dce7e1"/><PolarAngleAxis dataKey="subject" tick={{fontSize:9,fill:'#64736b'}}/><Radar dataKey="value" stroke="#28745d" fill="#4c9b81" fillOpacity={.34}/></RadarChart></ResponsiveContainer>}</div></div>
     <div className="section-title"><div><h3>正确率趋势</h3><p>最近 7 天练习表现</p></div>{stats.trend.length>=2&&<b className={delta>=0?'up':'down'}>{delta>=0?'+':''}{delta}%</b>}</div><section className="trend-card">{stats.trend.length>0?<ResponsiveContainer width="100%" height={155}><AreaChart data={stats.trend} margin={{top:10,right:8,left:-20,bottom:0}}><defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#2c7a62" stopOpacity=".28"/><stop offset="1" stopColor="#2c7a62" stopOpacity="0"/></linearGradient></defs><Tooltip/><Area type="monotone" dataKey="v" stroke="#2c7a62" strokeWidth={3} fill="url(#area)"/></AreaChart></ResponsiveContainer>:<div className="empty" style={{padding:'2rem 0'}}><p>完成几道题后展示趋势</p></div>}</section>
-    <div className="section-title"><div><h3>知识点掌握</h3><p>按答题记录统计</p></div></div><section className="mastery-list">{mastery.length?[...mastery].sort((a,b)=>a.value-b.value).map(x=><div key={x.subject}><span>{x.subject}</span><i><em style={{width:`${x.value}%`}}/></i><b className={x.value<55?'low':''}>{x.value}%</b></div>):<div className="empty" style={{padding:'1rem 0'}}><p>暂无知识点数据</p></div>}</section>
+    <div className="section-title"><div><h3>知识点掌握</h3><p>点进去就是知识地图上的同一个领域</p></div></div><section className="mastery-list">{mastery.length?mastery.map(x=><button type="button" key={x.id || x.subject} onClick={() => go('knowledge', { examTopicId: x.id })}><span>{x.subject}<small>{x.attempted}题{x.conceptCount ? ` · 图谱 ${x.conceptCount} 概念` : ''}</small></span><i><em style={{width:`${x.value}%`}}/></i><b className={x.value<55?'low':''}>{x.value}%</b></button>):<div className="empty" style={{padding:'1rem 0'}}><p>暂无知识点数据</p></div>}</section>
   </div>;
 }
 
@@ -392,33 +396,56 @@ function MistakesPage({ go, questions, wrongIds, onToggleMistake, stats, redo })
   const shown=filter==='wrong'?wrong:filter==='mastered'?mastered:items;
   return <div className="page simple-page"><Header title="我的错题" back onBack={()=>go('home')}/><div className="filter-row"><button className={filter==='all'?'active':''} onClick={()=>setFilter('all')}>全部 {items.length}</button><button className={filter==='wrong'?'active':''} onClick={()=>setFilter('wrong')}>待复习 {wrong.length}</button><button className={filter==='mastered'?'active':''} onClick={()=>setFilter('mastered')}>已掌握 {mastered.length}</button></div>{shown.length?<div className="mistake-list">{shown.map(q=><article key={q.id}><div><span>{q.source}</span><button onClick={()=>onToggleMistake(q.id,false)} title="移出错题本"><BookmarkCheck size={19}/></button></div><h3>{q.title}</h3><footer><span>{q.topic}</span><button onClick={()=>redo(q)}>再做一次 <ChevronRight size={15}/></button></footer></article>)}</div>:<div className="empty"><div><BookmarkCheck size={34}/></div><h3>{filter==='all'?'还没有错题':'该分类下暂无题目'}</h3><p>答错的题会自动收录在这里</p><button onClick={()=>go('practice')}>去刷真题</button></div>}</div> }
 
-function ProfilePage({ go, stats }) { return <div className="page profile-page"><Header title="我的学习"/><section className="profile-card"><div className="profile-avatar">L</div><div><h2>准架构师</h2><p>目标：2026 年下半年系统架构设计师</p></div><span>备考中</span></section><div className="profile-stats"><div><b>{stats.studyDays}</b><small>连续学习/天</small></div><div><b>{stats.totalDone?Math.round(stats.recentAccuracy*100)+'%':'—'}</b><small>近20题正确率</small></div><div><b>{stats.mistakeCount}</b><small>待复习错题</small></div></div><h3 className="group-title">学习分析</h3><div className="menu-list"><button onClick={()=>go('plan')}><span className="green"><Target/></span><p><b>复习计划</b><small>阶段任务与到期复习</small></p><ChevronRight/></button><button onClick={()=>go('insights')}><span className="green"><BarChart3/></span><p><b>知识画像</b><small>掌握度与薄弱项分析</small></p><ChevronRight/></button><button onClick={()=>go('mistakes')}><span className="orange"><BookmarkCheck/></span><p><b>错题本</b><small>针对性复习与重做</small></p><ChevronRight/></button></div><h3 className="group-title">备考设置</h3><div className="menu-list"><div className="menu-static"><span className="purple"><Target/></span><p><b>考试目标</b><small>2026-10-24 至 10-27 · 广东</small></p></div><div className="menu-static"><span className="gray"><RotateCcw/></span><p><b>复习偏好</b><small>严格评分 · 优先可核验真题</small></p></div></div></div> }
+function ProfilePage({ go, stats }) { return <div className="page profile-page"><Header title="我的学习"/><section className="profile-card"><div className="profile-avatar">L</div><div><h2>准架构师</h2><p>目标：2026 年下半年系统架构设计师</p></div><span>备考中</span></section><div className="profile-stats"><div><b>{stats.studyDays}</b><small>连续学习/天</small></div><div><b>{stats.totalDone?Math.round(stats.recentAccuracy*100)+'%':'—'}</b><small>近20题正确率</small></div><div><b>{stats.mistakeCount}</b><small>待复习错题</small></div></div><h3 className="group-title">学习分析</h3><div className="menu-list"><button onClick={()=>go('plan')}><span className="green"><Target/></span><p><b>复习计划</b><small>阶段任务与到期复习</small></p><ChevronRight/></button><button onClick={()=>go('insights')}><span className="green"><BarChart3/></span><p><b>知识画像</b><small>掌握度与薄弱项分析</small></p><ChevronRight/></button><button onClick={()=>go('exam-points')}><span className="gold"><PieChart/></span><p><b>考点分布</b><small>客观题、案例、论文分值</small></p><ChevronRight/></button><button onClick={()=>go('mistakes')}><span className="orange"><BookmarkCheck/></span><p><b>错题本</b><small>针对性复习与重做</small></p><ChevronRight/></button></div><h3 className="group-title">备考设置</h3><div className="menu-list"><div className="menu-static"><span className="purple"><Target/></span><p><b>考试目标</b><small>2026-10-24 至 10-27 · 广东</small></p></div><div className="menu-static"><span className="gray"><RotateCcw/></span><p><b>复习偏好</b><small>严格评分 · 优先可核验真题</small></p></div></div></div> }
 
 function MindMapNode({ node, childrenById, depth, expanded, onToggle, onSelect, selected }) {
   const children = childrenById.get(node.id) || [];
   const isOpen = expanded.has(node.id);
   return <div className={`mind-node depth-${Math.min(depth, 3)}`}>
     <div className={`mind-node-card ${selected?.id===node.id?'selected':''} type-${node.type}`}>
-      <button className="mind-node-main" onClick={() => onSelect(node)}><span className="mind-node-dot"/><div><b>{node.name}</b><small>{node.attemptCount ? `${node.mastery}% 掌握 · ${node.attemptCount} 次答题` : node.description || '刷题后持续完善'}</small></div></button>
+      <button className="mind-node-main" onClick={() => onSelect(node)}><span className="mind-node-dot"/><div><b>{node.name}</b><small>{node.attemptCount ? `已练 ${node.attemptCount} 题 · ${node.mastery}%` : node.description || '还没练到'}</small></div></button>
       {children.length > 0 && <button className="mind-node-toggle" aria-label={isOpen?'收起子节点':'展开子节点'} onClick={() => onToggle(node.id)}>{isOpen?<ChevronDown size={15}/>:<ChevronRight size={15}/>}<em>{children.length}</em></button>}
     </div>
     {isOpen && children.length > 0 && <div className="mind-children">{children.map(child => <MindMapNode key={child.id} node={child} childrenById={childrenById} depth={depth+1} expanded={expanded} onToggle={onToggle} onSelect={onSelect} selected={selected}/>)}</div>}
   </div>;
 }
 
-function KnowledgePage({ go }) {
+function KnowledgePage({ go, focusExamTopicId }) {
   const [graph, setGraph] = useState(null); const [selected, setSelected] = useState(null); const [expanded, setExpanded] = useState(() => new Set(['knowledge-root'])); const [error, setError] = useState('');
   const load = useCallback(async () => { try { const response=await api('/api/knowledge-graph'); if(!response.ok) throw new Error('知识图谱加载失败'); setGraph(await response.json()); setError(''); } catch(e) { setError(e.message); } },[]);
   useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    if (!graph || !focusExamTopicId) return;
+    const node = (graph.nodes || []).find(item => item.examTopicId === focusExamTopicId);
+    if (!node) return;
+    const parentOf = new Map();
+    for (const edge of (graph.edges || []).filter(edge => edge.type === 'contains')) parentOf.set(edge.to, edge.from);
+    const next = new Set(['knowledge-root', node.id]);
+    let cursor = node.id;
+    while (parentOf.has(cursor)) { cursor = parentOf.get(cursor); next.add(cursor); }
+    setExpanded(next);
+    setSelected(node);
+  }, [graph, focusExamTopicId]);
   const nodes = graph?.nodes || []; const childrenById = new Map(nodes.map(node => [node.id, []]));
   (graph?.edges || []).filter(edge => edge.type === 'contains').forEach(edge => { if(childrenById.has(edge.from) && childrenById.has(edge.to)) childrenById.get(edge.from).push(nodes.find(node => node.id === edge.to)); });
-  const root = nodes.find(node => node.id === 'knowledge-root') || nodes[0]; const concepts = nodes.filter(node => node.type === 'concept').length; const practiced = nodes.filter(node => node.attemptCount > 0).length;
+  const root = nodes.find(node => node.id === 'knowledge-root') || nodes[0];
+  if (root && childrenById.has(root.id)) {
+    childrenById.get(root.id).sort((a, b) => {
+      const ae = a.examTopicId ? 0 : 1;
+      const be = b.examTopicId ? 0 : 1;
+      if (ae !== be) return ae - be;
+      if (a.examTopicId === 'other') return 1;
+      if (b.examTopicId === 'other') return -1;
+      return (a.mastery ?? 101) - (b.mastery ?? 101);
+    });
+  }
+  const concepts = nodes.filter(node => node.type === 'concept').length; const practiced = nodes.filter(node => node.attemptCount > 0).length;
   return <div className="page knowledge-page"><Header title="知识地图" back onBack={()=>go('home')} action={<button className="icon-btn" onClick={load} aria-label="刷新知识地图"><RotateCcw size={18}/></button>}/>
-    <div className="knowledge-hero"><div><span>KNOWLEDGE MAP</span><h1>把每一道题，连成一张地图</h1><p>{graph?.updatedAt ? `最近更新 ${new Date(graph.updatedAt).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}` : '完成解析后，知识体系会自动生长'}</p></div><Network size={34}/></div>
-    <div className="knowledge-stats"><div><b>{nodes.length}</b><small>知识节点</small></div><div><b>{concepts}</b><small>具体概念</small></div><div><b>{practiced}</b><small>已刷节点</small></div></div>
+    <div className="knowledge-hero"><div><span>KNOWLEDGE MAP</span><h1>掌握度就是这张地图</h1><p>{root?.mastery != null ? `综合掌握度 ${root.mastery}%` : '先刷题，领域正确率会挂到这棵树上'}</p></div><Network size={34}/></div>
+    <div className="knowledge-stats"><div><b>{root?.mastery ?? '—'}{root?.mastery != null ? '%' : ''}</b><small>综合掌握度</small></div><div><b>{concepts}</b><small>具体概念</small></div><div><b>{practiced}</b><small>已刷节点</small></div></div>
     {error && <div className="knowledge-error">{error}<button onClick={load}>重试</button></div>}
     {!error && root && <div className="mind-map"><MindMapNode node={root} childrenById={childrenById} depth={0} expanded={expanded} onToggle={id=>setExpanded(prev=>{const next=new Set(prev);next.has(id)?next.delete(id):next.add(id);return next})} onSelect={setSelected} selected={selected}/></div>}
-    {selected && <section className="knowledge-detail"><div className="knowledge-detail-head"><div><span>{selected.type==='concept'?'具体概念':selected.type==='category'?'知识分类':'知识领域'}</span><h2>{selected.name}</h2></div><button onClick={()=>setSelected(null)} aria-label="关闭详情"><X size={17}/></button></div><p>{selected.description || '这个知识点会根据后续刷题继续完善。'}</p><div className="knowledge-detail-meta"><span>{selected.mastery == null ? '尚未答题' : `掌握度 ${selected.mastery}%`}</span><span>来源 {selected.sourceQuestions?.length || 0} 道题</span></div><button className="knowledge-practice" onClick={()=>go('practice')}><BookOpen size={14}/> 去刷相关真题 <ChevronRight size={14}/></button>{selected.sourceQuestions?.length > 0 && <div className="knowledge-sources"><b>关联真题</b>{selected.sourceQuestions.slice(0,4).map(question=><div key={question.id}><span>{question.source}</span><p>{question.title}</p></div>)}</div>}</section>}
+    {selected && <section className="knowledge-detail"><div className="knowledge-detail-head"><div><span>{selected.type==='concept'?'具体概念':selected.type==='category'?'知识分类':'知识领域'}</span><h2>{selected.name}</h2></div><button onClick={()=>setSelected(null)} aria-label="关闭详情"><X size={17}/></button></div><p>{selected.description || '这个知识点会根据后续刷题继续完善。'}</p><div className="knowledge-detail-meta"><span>{selected.mastery == null ? '尚未答题' : `已练 ${selected.attemptCount} 题 · ${selected.mastery}%`}</span><span>{selected.conceptCount ? `${selected.conceptCount} 个概念` : `关联 ${selected.sourceQuestions?.length || 0} 道题`}</span></div><button className="knowledge-practice" onClick={()=>go('practice')}><BookOpen size={14}/> 去刷相关真题 <ChevronRight size={14}/></button>{selected.sourceQuestions?.length > 0 && <div className="knowledge-sources"><b>关联真题</b>{selected.sourceQuestions.slice(0,4).map(question=><div key={question.id}><span>{question.source}{question.correct === true ? ' · 对' : question.correct === false ? ' · 错' : ''}</span><p>{question.title}</p></div>)}</div>}</section>}
   </div>;
 }
 
@@ -442,6 +469,8 @@ function AccessGate({ onAuthorized }) {
 function MainApp(){
   const [practiceSubject, setPracticeSubject] = useState('综合知识');
   const [page,setPage]=useState('home');
+  const [knowledgeFocus,setKnowledgeFocus]=useState(null);
+  const go=(next, opts={})=>{ setKnowledgeFocus(next==='knowledge' ? (opts.examTopicId || null) : null); setPage(next); };
   const [explainAi,setExplainAi]=useState('');
   const [explainFollowUps,setExplainFollowUps]=useState({});
   const [startPractice,setStartPractice]=useState(null); // {year, num} 从错题本「再做一次」进入
@@ -574,7 +603,7 @@ function MainApp(){
   },[refreshStats]);
 
   const root=['home','practice','knowledge','chat','profile','plan'].includes(page);
-  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={setPage} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={setPage} stats={stats} plan={plan}/>} {page==='practice'&&<><div className="filter-row subject-tabs">{['综合知识','案例分析'].map(subject=><button key={subject} className={practiceSubject===subject?'active':''} onClick={()=>setPracticeSubject(subject)}>{subject}</button>)}</div>{practiceSubject==='案例分析'?<CasePractice api={api} Markdown={Markdown} onSaved={refreshStats}/>:<PracticePage go={setPage} questions={questions} loading={questionsLoading} years={years} year={year} attempts={stats.attempts} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>}</>} {page==='knowledge'&&<KnowledgePage go={setPage}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={setPage} stats={stats}/>} {page==='mistakes'&&<MistakesPage go={setPage} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setPracticeSubject('综合知识');setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={setPage} stats={stats}/>}</div>{root&&<Nav current={page} go={setPage}/>}</div></main>;
+  return <main className="app-shell"><div className="phone"><div className="content">{page==='home'&&<HomePage go={go} stats={stats}/>} {page==='plan'&&<ReviewPlanPage go={go} stats={stats} plan={plan}/>} {page==='practice'&&<><div className="filter-row subject-tabs">{['综合知识','案例分析'].map(subject=><button key={subject} className={practiceSubject===subject?'active':''} onClick={()=>setPracticeSubject(subject)}>{subject}</button>)}</div>{practiceSubject==='案例分析'?<CasePractice api={api} Markdown={Markdown} onSaved={refreshStats}/>:<PracticePage go={go} questions={questions} loading={questionsLoading} years={years} year={year} attempts={stats.attempts} startNum={startPractice&&startPractice.year===year?startPractice.num:null} onConsumedStart={()=>setStartPractice(null)} onSelectYear={onSelectYear} wrongIds={wrongIds} onAnswered={onAnswered} onToggleMistake={onToggleMistake} askAi={askAi} explainAi={explainAi} explainFollowUps={explainFollowUps} askFollowUp={askFollowUp}/>}</>} {page==='knowledge'&&<KnowledgePage go={go} focusExamTopicId={knowledgeFocus}/>} {page==='chat'&&<ChatPage/>} {page==='insights'&&<InsightsPage go={go} stats={stats}/>} {page==='exam-points'&&<ExamPointsPage go={go} api={api}/>} {page==='mistakes'&&<MistakesPage go={go} questions={questions} wrongIds={wrongIds} onToggleMistake={onToggleMistake} stats={stats} redo={t=>{setPracticeSubject('综合知识');setYear(t.year);setStartPractice({year:t.year,num:t.num});setPage('practice')}}/>} {page==='profile'&&<ProfilePage go={go} stats={stats}/>}</div>{root&&<Nav current={page} go={go}/>}</div></main>;
 }
 
 function App(){

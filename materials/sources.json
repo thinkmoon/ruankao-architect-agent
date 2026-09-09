@@ -110,6 +110,22 @@
       "type": "官方教材",
       "retrieved_date": "2026-08-17",
       "notes": "全国计算机专业技术资格考试办公室编，清华大学出版社2022年12月出版。系统架构设计师暂未改版，仍以第2版为准。覆盖：计算机系统、OS、数据库、网络、软件工程、面向对象、信息安全、系统架构设计、质量属性与架构评估等"
+    },
+    {
+      "id": "exam-points-web-2026-09-09",
+      "name": "考点分布多源核对（官方及格线 + 机构章节分值）",
+      "local_path": "knowledge/考点分布-多源核对.md",
+      "markdown_path": "knowledge/exam-points-web.json",
+      "retrieved_date": "2026-09-09",
+      "type": "多源核对摘要",
+      "notes": "官方：ruankao.org.cn 2025 批次通告（时长）、人社部 2022-02-16 通告（及格为满分 60%）。章节分值来自希赛 2025-09/11，与技术栈、明航、本地真题对照；希赛两篇按同一来源。2026 上为考生回忆。",
+      "urls": [
+        "http://www.ruankao.org.cn/article/content/2509221645339772590700037.html",
+        "https://gxt.fujian.gov.cn/zwgk/ztjj/fjrkzl/xxfb/zcwj/202206/t20220622_5934058.htm",
+        "https://www.educity.cn/rk/5436852.html",
+        "https://jishuzhan.net/article/2058424325511364609",
+        "https://www.minghangzx.com/sys-nd/59.html"
+      ]
     }
   ],
   "policy": {

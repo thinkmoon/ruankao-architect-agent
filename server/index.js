@@ -7,11 +7,13 @@ import express from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { AcpSession } from './acp-session.js';
 import { loadAllQuestions, listYears } from './zhenti-parser.js';
-import { loadCases, publicCase, validateCaseAnswers, caseGradePrompt } from './cases.js';
+import { loadCases, publicCase, validateCasePartAnswer, casePartAlreadySubmitted, applyCasePartSubmission, isLegacyCaseAttempt, caseGradePrompt, casePartGradePrompt } from './cases.js';
 import { getLlmConfig } from './llm.js';
 import { createAgent } from './agent.js';
-import { enrichKnowledgeGraph, readKnowledgeGraph } from './knowledge-graph.js';
+import { enrichKnowledgeGraph, loadDecoratedGraph, syncQuestionToGraph } from './knowledge-graph.js';
 import { rebuildPlanSnapshot, readPlan, writePlan, todayShanghai as planToday } from './review-plan.js';
+import { loadExamPoints } from './exam-points.js';
+import { overallMastery, pickWeakTopics, radarTopics } from './mastery.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const app = express();
@@ -110,39 +112,92 @@ app.get('/api/cases', apiAuth, async (req, res) => {
 });
 app.post('/api/cases/attempts', apiAuth, async (req, res) => {
   const question = loadCases(root).find(q => q.id === req.body?.questionId);
-  if (!question || !validateCaseAnswers(question, req.body?.answers)) return res.status(400).json({ error: '请填写至少一个小问，每问最多 6000 字' });
-  const item = { id: randomUUID(), questionId: question.id, year: question.year, subject: '案例分析', answers: req.body.answers, answeredAt: new Date().toISOString(), status: 'submitted' };
+  const partId = String(req.body?.partId || '');
+  const answer = req.body?.answer;
+  if (!question || !validateCasePartAnswer(question, partId, answer)) return res.status(400).json({ error: '请填写当前小问，最多 6000 字' });
+  const part = question.parts.find(p => p.id === partId);
+  let item, conflict = false;
   await enqueue(caseAttemptsFile, async () => {
     const records = await readJson(caseAttemptsFile, { items: [] });
-    records.items.push(item);
+    const existing = req.body?.attemptId
+      ? records.items.find(a => a.id === req.body.attemptId && a.questionId === question.id && !isLegacyCaseAttempt(a))
+      : null;
+    if (existing && casePartAlreadySubmitted(existing, partId)) {
+      item = existing;
+      conflict = true;
+      return;
+    }
+    const now = new Date().toISOString();
+    if (existing) {
+      item = Object.assign(existing, applyCasePartSubmission(question, existing, partId, answer), { updatedAt: now });
+    } else {
+      item = { id: randomUUID(), answeredAt: now, updatedAt: now, ...applyCasePartSubmission(question, null, partId, answer) };
+      records.items.push(item);
+    }
     await writeFile(caseAttemptsFile, JSON.stringify(records, null, 2));
   });
-  res.json({ attempt: item, reference: question.reference });
+  const payload = { attempt: item, reference: part.reference || '' };
+  if (conflict) return res.status(409).json({ error: '该小问已提交', ...payload });
+  res.json(payload);
 });
 app.post('/api/cases/attempts/:id/grade', apiAuth, async (req, res) => {
   try {
     const records = await readJson(caseAttemptsFile, { items: [] });
     const item = records.items.find(a => a.id === req.params.id);
     if (!item) return res.status(404).json({ error: '作答记录不存在' });
-    if (item.feedback) return res.json({ attempt: item });
     const question = loadCases(root).find(q => q.id === item.questionId);
     if (!question) return res.status(404).json({ error: '题目不存在' });
+    const partId = req.body?.partId == null || req.body?.partId === '' ? '' : String(req.body.partId);
+    if (!partId) {
+      if (item.feedback) return res.json({ attempt: item });
+      if (item.partGrades) return res.status(400).json({ error: '请指定要批改的小问' });
+      const { baseURL, apiKey, model, maxOutputTokens } = await getLlmConfig();
+      const response = await fetch(`${baseURL}/chat/completions`, {
+        method: 'POST', signal: AbortSignal.timeout(180000),
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model, messages: [{ role: 'user', content: caseGradePrompt(question, item.answers) }], temperature: 0.2, max_tokens: maxOutputTokens }),
+      });
+      const data = await response.json();
+      const feedback = data.choices?.[0]?.message?.content;
+      if (!response.ok || !feedback || data.choices?.[0]?.finish_reason === 'length') throw new Error('批改未完整返回，作答已保存，请重试');
+      Object.assign(item, { feedback, model, status: 'graded', gradedAt: new Date().toISOString() });
+      await enqueue(caseAttemptsFile, async () => {
+        const latest = await readJson(caseAttemptsFile, { items: [] });
+        latest.items = latest.items.map(a => a.id === item.id ? item : a);
+        await writeFile(caseAttemptsFile, JSON.stringify(latest, null, 2));
+      });
+      return res.json({ attempt: item });
+    }
+    const part = question.parts.find(p => p.id === partId);
+    if (!part || !casePartAlreadySubmitted(item, partId)) return res.status(400).json({ error: '该小问尚未提交' });
+    if (item.partGrades?.[partId]?.feedback) return res.json({ attempt: item });
     const { baseURL, apiKey, model, maxOutputTokens } = await getLlmConfig();
     const response = await fetch(`${baseURL}/chat/completions`, {
       method: 'POST', signal: AbortSignal.timeout(180000),
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages: [{ role: 'user', content: caseGradePrompt(question, item.answers) }], temperature: 0.2, max_tokens: maxOutputTokens }),
+      body: JSON.stringify({ model, messages: [{ role: 'user', content: casePartGradePrompt(question, part, item.answers[partId]) }], temperature: 0.2, max_tokens: maxOutputTokens }),
     });
     const data = await response.json();
     const feedback = data.choices?.[0]?.message?.content;
     if (!response.ok || !feedback || data.choices?.[0]?.finish_reason === 'length') throw new Error('批改未完整返回，作答已保存，请重试');
-    Object.assign(item, { feedback, model, status: 'graded', gradedAt: new Date().toISOString() });
+    const gradeResult = { feedback, model, status: 'graded', gradedAt: new Date().toISOString() };
+    let saved = item;
     await enqueue(caseAttemptsFile, async () => {
       const latest = await readJson(caseAttemptsFile, { items: [] });
-      latest.items = latest.items.map(a => a.id === item.id ? item : a);
+      const current = latest.items.find(a => a.id === item.id);
+      if (!current) return;
+      if (current.partGrades?.[partId]?.feedback) { saved = current; return; }
+      current.partGrades = { ...current.partGrades, [partId]: gradeResult };
+      current.model = model;
+      current.updatedAt = gradeResult.gradedAt;
+      if (question.parts.every(p => current.partGrades?.[p.id]?.feedback)) {
+        current.status = 'graded';
+        current.gradedAt = gradeResult.gradedAt;
+      }
+      saved = current;
       await writeFile(caseAttemptsFile, JSON.stringify(latest, null, 2));
     });
-    res.json({ attempt: item });
+    res.json({ attempt: saved });
   } catch (error) { res.status(502).json({ error: error.message }); }
 });
 
@@ -272,15 +327,8 @@ app.get('/api/state', apiAuth, async (_req, res) => {
 
 // 知识图谱视图：掌握度由真实答题记录实时计算，图谱节点由刷题后的结构化提取累积。
 app.get('/api/knowledge-graph', apiAuth, async (_req, res) => {
-  const [graph, attempts] = await Promise.all([readKnowledgeGraph(), readJson(attemptsFile, { items: [] })]);
-  const questions = new Map(loadAllQuestions().map(question => [question.id, question]));
-  const nodes = graph.nodes.map(node => {
-    const relatedAttempts = (node.sourceQuestionIds || []).flatMap(id => attempts.items.filter(attempt => attempt.questionId === id));
-    const total = relatedAttempts.length; const correct = relatedAttempts.filter(attempt => attempt.correct).length;
-    const sourceQuestions = [...new Set(node.sourceQuestionIds || [])].map(id => questions.get(id)).filter(Boolean).slice(0, 12).map(question => ({ id: question.id, title: question.title, source: question.source }));
-    return { ...node, attemptCount: total, correctCount: correct, mastery: total ? Math.round(correct / total * 100) : null, sourceQuestions };
-  });
-  res.json({ ...graph, nodes });
+  const attempts = await readJson(attemptsFile, { items: [] });
+  res.json(await loadDecoratedGraph({ questions: loadAllQuestions(), attempts: attempts.items || [] }));
 });
 
 // 3. 记录一次答题
@@ -327,6 +375,8 @@ app.post('/api/attempts', apiAuth, async (req, res) => {
       await writeFile(progressFile, JSON.stringify(progress, null, 2) + '\n', 'utf-8');
     });
     await syncReviewPlan();
+    const question = loadAllQuestions().find(entry => entry.id === item.questionId);
+    if (question) void syncQuestionToGraph(question).catch(error => console.error('[knowledge-graph]', error));
     res.status(201).json({ ok: true, id: item.id });
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
@@ -552,7 +602,13 @@ app.post('/api/chat/stream', apiAuth, async (req, res) => {
   }
 });
 
-// 6. 首页统计（全部由后端 JSON 计算）
+// 6. 考点分布（历年真题分值估算，三科分开）
+app.get('/api/exam-points', apiAuth, async (_req, res) => {
+  const attempts = await readJson(attemptsFile, { items: [] });
+  res.json(loadExamPoints(root, attempts.items || []));
+});
+
+// 7. 首页统计（全部由后端 JSON 计算）
 app.get('/api/stats', apiAuth, async (_req, res) => {
   const [mistakes, attempts, sessions, plan] = await Promise.all([
     readJson(mistakesFile, { items: [] }),
@@ -587,17 +643,9 @@ app.get('/api/stats', apiAuth, async (_req, res) => {
     trend.push({ d: key === today ? '今天' : `${Number(key.slice(5, 7))}/${Number(key.slice(8, 10))}`, v: Math.round(e.correct / e.total * 100) });
   }
 
-  // 按知识点掌握度
-  const topicAgg = new Map();
-  for (const a of items) {
-    const t = a.topic || '未分类';
-    const e = topicAgg.get(t) || { total: 0, correct: 0 };
-    e.total++; if (a.correct) e.correct++;
-    topicAgg.set(t, e);
-  }
-  const masteryByTopic = [...topicAgg.entries()]
-    .map(([subject, e]) => ({ subject, value: Math.round(e.correct / e.total * 100) }))
-    .sort((a, b) => b.value - a.value);
+  const questions = loadAllQuestions();
+  const graphView = await loadDecoratedGraph({ questions, attempts: items });
+  const masteryByTopic = graphView.mastery;
 
   const dailyActivity = new Map();
   for (const attempt of items) {
@@ -620,6 +668,9 @@ app.get('/api/stats', apiAuth, async (_req, res) => {
     studyDays,
     trend,
     masteryByTopic,
+    overallMastery: overallMastery(masteryByTopic),
+    weakTopics: pickWeakTopics(masteryByTopic),
+    radarTopics: radarTopics(masteryByTopic),
     calendar: [...dailyActivity.values()].sort((a, b) => a.date.localeCompare(b.date)),
     studyMinutes: (sessions.items || []).reduce((sum, item) => sum + sessionMinutes(item), 0),
     attempts: items, // 供前端判断错题「待复习/已掌握」

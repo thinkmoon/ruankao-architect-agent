@@ -34,8 +34,9 @@
   },
   "preferences": {
     "practice_source": "优先可核验真题；仅在用户要求时生成模拟题",
-    "answer_reveal": "提交答案后",
+    "answer_reveal": "提交答案后；案例分析按小问提交、按小问揭晓",
     "grading": "默认严格按真实考试标准；用户可临时要求其他方式",
+    "case_practice": "按小问提交并即时批改",
     "storage": "本地 Markdown 和 JSON",
     "web_research": true
   },

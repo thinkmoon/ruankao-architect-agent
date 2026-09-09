@@ -237,8 +237,8 @@ git diff --check
 
 ### 案例分析练习
 
-进入「真题练习」后切换到「案例分析」，可按年份选择本地 8 个批次、40 道案例大题。支持分小问输入、浏览器草稿恢复、提交后查看非官方参考答案、AI 估算批改和历史作答。批改失败不丢失已提交答案，可在当前题或历史记录中重试；客观题正确率不混入案例评分。
+进入「真题练习」后切换到「案例分析」，可按年份选择本地 8 个批次、40 道案例大题。每道大题按小问作答：提交一问即保存并 AI 估算批改，未提交的小问不露参考答案、不计零分；浏览器草稿按题恢复，离开后可继续未完成的小问。批改失败不丢失已提交答案，可在当前小问或历史记录中重试；客观题正确率不混入案例评分。
 
-案例接口：`GET /api/cases?year=2025下`、`POST /api/cases/attempts`（`questionId`、以小问编号为键的 `answers`）、`POST /api/cases/attempts/:id/grade`，均使用现有 API 鉴权。提交前列表不返回参考答案。记录保存在 `state/case-attempts.json`；复习计划以当日实际提交的大题数量核验案例任务，包含案例的知识任务还需满足学习时长。资料属于非官方整理，缺失图表和不可评分部分仍保留原资料说明，批改不替代官方评分。
+案例接口：`GET /api/cases?year=2025下`、`POST /api/cases/attempts`（`questionId`、`partId`、`answer`，续做时带 `attemptId`）、`POST /api/cases/attempts/:id/grade`（`partId`），均使用现有 API 鉴权。提交前列表不返回参考答案，提交某小问后只返回该问参考答案。记录保存在 `state/case-attempts.json`；复习计划以当日实际提交过的大题数量核验案例任务（提交任一小问即计入该大题），包含案例的知识任务还需满足学习时长。资料属于非官方整理，缺失图表和不可评分部分仍保留原资料说明，批改不替代官方评分。
 
 验证：`node --test server/cases.test.js`、`bash scripts/validate.sh`、`npm run build`。

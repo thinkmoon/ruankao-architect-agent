@@ -82,7 +82,7 @@
           "metric": "studyMinutes",
           "target": 1800,
           "label": "累计学习 30 小时",
-          "actual": 236,
+          "actual": 253,
           "met": false
         }
       ]
@@ -496,6 +496,56 @@
         },
         {
           "id": "2026-09-06-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-07": {
+      "date": "2026-09-07",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-07-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-07-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-09": {
+      "date": "2026-09-09",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-09-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-09-review",
           "type": "review",
           "title": "复习到期错题",
           "estimatedMinutes": 20,
@@ -2389,20 +2439,20 @@
     }
   ],
   "stats": {
-    "asOf": "2026-09-06",
+    "asOf": "2026-09-09",
     "attemptedQuestions": 240,
-    "studyMinutes": 236,
+    "studyMinutes": 253,
     "completedDays": 1,
     "masteredMistakes": 2,
     "last20Accuracy": 40,
     "today": {
-      "date": "2026-09-06",
+      "date": "2026-09-09",
       "attemptedQuestions": 0,
       "correctQuestions": 0,
       "dueReviews": 115,
       "studyMinutes": 0,
-      "plannedMinutes": 210
+      "plannedMinutes": 90
     }
   },
-  "updatedAt": "2026-09-06T11:11:20.048Z"
+  "updatedAt": "2026-09-09T04:53:38.980Z"
 }

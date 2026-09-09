@@ -3,6 +3,7 @@ import path from 'node:path';
 import { CONTEXT_CHAR_BUDGET, getLlmConfig } from './llm.js';
 import { loadAllQuestions } from './zhenti-parser.js';
 import { rebuildPlanSnapshot, readPlan, todayShanghai as planToday } from './review-plan.js';
+import { loadExamPoints } from './exam-points.js';
 
 const TOOLS = [
   {
@@ -61,6 +62,17 @@ const TOOLS = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'get_exam_points',
+      description: '读取客观题、案例分析、论文的历年考点分值分布，含官方及格规则、机构章节估算与来源冲突。安排复习优先级时用。',
+      parameters: {
+        type: 'object',
+        properties: { window: { type: 'string', description: 'recent 或 all' } },
+      },
+    },
+  },
 ];
 
 const TOOL_LABELS = {
@@ -69,6 +81,7 @@ const TOOL_LABELS = {
   search_questions: '检索真题',
   list_mistakes: '查看错题本',
   save_note: '写入学习记录',
+  get_exam_points: '读取考点分布',
 };
 
 function todayShanghai() {
@@ -275,7 +288,37 @@ export function createAgent({ root }) {
     return { ok: true };
   }
 
-  const handlers = { get_study_state, search_materials, search_questions, list_mistakes, save_note };
+  async function get_exam_points({ window = 'recent' } = {}) {
+    const attempts = await readJson(path.join(stateDir, 'attempts.json'), { items: [] });
+    const data = loadExamPoints(root, attempts.items || []);
+    const key = window === 'all' ? 'all' : 'recent';
+    const view = data[key];
+    const compact = subject => (view[subject].topics || []).slice(0, 8).map(topic => ({
+      name: topic.name,
+      band: topic.band || topic.advice?.tag,
+      avgPointsPerPaper: topic.avgPointsPerPaper,
+      appearanceRate: topic.appearanceRate,
+      lastYear: topic.lastYear,
+      hint: topic.advice?.hint,
+      web: topic.web ? { pointsMin: topic.web.pointsMin, pointsMax: topic.web.pointsMax, combinedLocal: topic.web.combinedLocal, agreement: topic.web.agreement } : null,
+    }));
+    const verification = data.verification;
+    return {
+      window: key,
+      years: view.years,
+      note: data.meta.scoringNote,
+      official: verification?.official || null,
+      conflicts: (verification?.conflicts || []).map(item => ({ topic: item.topic, adopt: item.adopt || item.resolution })),
+      latestSitting: verification?.latestSitting
+        ? { year: verification.latestSitting.year, tier: verification.latestSitting.tier, caseRequired: verification.latestSitting.case?.required }
+        : null,
+      comprehensive: compact('comprehensive'),
+      case: compact('case'),
+      essay: compact('essay'),
+    };
+  }
+
+  const handlers = { get_study_state, search_materials, search_questions, list_mistakes, save_note, get_exam_points };
 
   async function runTool(name, args) {
     const fn = handlers[name];

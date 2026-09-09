@@ -2,6 +2,8 @@ import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { classifyComprehensive } from './topic-classify.js';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const ZHENTI_DIR = path.join(ROOT, 'zhenti');
@@ -14,26 +16,6 @@ const YEAR_LABELS = {
 
 export function yearLabel(year) {
   return YEAR_LABELS[year] || year;
-}
-
-const TOPIC_MAP = [
-  ['计算机网络', ['路由器', '交换机', 'OSI', 'TCP', 'UDP', 'IP地址', '子网', '以太', 'VLAN', 'DNS', 'HTTP', 'HTTPS', '协议']],
-  ['网络安全', ['加密', '解密', '认证', '防火墙', 'SSL', 'TLS', 'PKI', '数字签名', '证书', '漏洞', 'SQL注入', 'XSS', '密钥']],
-  ['软件架构设计', ['架构', 'MVC', 'MVP', 'MVVM', '微服务', 'SOA', 'REST', 'API', '视图', '风格', '模式', '黑板', '管道', '事件']],
-  ['质量属性', ['可用性', '可修改性', '性能', '安全性', '可扩展性', '可测试性', '可靠性', '效用树', '质量属性', 'QA']],
-  ['软件工程', ['SOLID', '设计模式', '重构', '测试', 'UML', '用例', '迭代', '敏捷', 'Scrum', '单元测试', '面向对象', '继承', '封装', '多态']],
-  ['项目管理', ['进度', '成本', '风险', 'WBS', '关键路径', 'PERT', '挣值', '里程碑', 'PV', 'EV', 'AC', 'SPI', 'CPI']],
-  ['数据库', ['SQL', '范式', '事务', '索引', 'ACID', 'ER图', '关系模型', '主键', '外键', '视图', '存储过程']],
-  ['操作系统', ['进程', '线程', '调度', '内存', '死锁', '文件系统', '虚拟内存', '页面', '信号量', '互斥']],
-  ['知识产权', ['专利', '著作权', '商标', '版权', '知识产权', '外观设计', '发明']],
-  ['人工智能', ['人工智能', '机器学习', '深度学习', '神经网络', 'AI', '大模型', 'LLM']],
-];
-
-function guessTopic(title) {
-  for (const [topic, keywords] of TOPIC_MAP) {
-    if (keywords.some(k => title.includes(k))) return topic;
-  }
-  return '综合知识';
 }
 
 /**
@@ -100,7 +82,7 @@ export function parseZhentiFile(filePath, year, subject) {
       title: finalTitle,
       options,
       answer,
-      topic: guessTopic(finalTitle),
+      topic: classifyComprehensive({ title: finalTitle, options }).name,
       difficulty: '中等',
       explain: '',
     });

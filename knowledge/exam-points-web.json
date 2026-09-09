@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "retrieved_date": "2026-09-09",
+  "official": {
+    "duration": {
+      "comprehensiveMaxMinutes": 150,
+      "comprehensiveMinMinutes": 120,
+      "caseCombinedMinutes": 240,
+      "essayMinutes": 120,
+      "note": "高级资格综合知识与案例分析连考，总时长 240 分钟；论文 120 分钟不得提前交卷离场。",
+      "sources": ["rk-2025-autumn-batch", "rk-2025-spring-batch"]
+    },
+    "passRule": {
+      "rule": "各科目合格标准为试卷满分的 60%",
+      "impliedPassScore": 45,
+      "impliedPaperScore": 75,
+      "paperScoreNote": "官方通告只写满分的 60%，未写每科满分数字。75 分来自历年 75 题卷面，并与多家培训机构口径一致。",
+      "sources": ["mohrss-2022-02-16", "fj-gxt-faq-2024", "gd-rsks-2025"]
+    }
+  },
+  "chapterWeights": {
+    "tier": "培训机构估算，不是官方评分细则",
+    "independence": "希赛 2025-09 与 2025-11 两篇数字几乎相同，按同一来源计；独立对照用技术栈重要程度、明航命题地图、本地真题统计。",
+    "comprehensive": [
+      { "id": "architecture-core", "name": "软件架构设计（含评估/质量属性）", "localIds": ["architecture", "quality"], "pointsMin": 16, "pointsMax": 28, "share": "21.3%-37.3%", "priority": "核心" },
+      { "id": "se", "name": "软件工程", "localIds": ["se"], "pointsMin": 9, "pointsMax": 19, "share": "12%-25.3%", "priority": "重点" },
+      { "id": "english", "name": "专业英语", "localIds": ["english"], "pointsMin": 5, "pointsMax": 5, "share": "6.7%", "priority": "固定" },
+      { "id": "db", "name": "数据库系统", "localIds": ["db"], "pointsMin": 4, "pointsMax": 5, "share": "5.3%-6.7%", "priority": "中" },
+      { "id": "hardware", "name": "计算机系统基础", "localIds": ["hardware", "os"], "pointsMin": 3, "pointsMax": 7, "share": "4%-9.3%", "priority": "中" },
+      { "id": "security", "name": "系统安全性与保密性", "localIds": ["security"], "pointsMin": 2, "pointsMax": 7, "share": "2.7%-9.3%", "priority": "重点" },
+      { "id": "network", "name": "计算机网络", "localIds": ["network"], "pointsMin": 3, "pointsMax": 4, "share": "4%-5.3%", "priority": "中" },
+      { "id": "informatization", "name": "系统工程与信息系统基础", "localIds": ["informatization"], "pointsMin": 0, "pointsMax": 6, "share": "0%-8%", "priority": "中低" },
+      { "id": "ip", "name": "法律法规与标准化", "localIds": ["ip"], "pointsMin": 3, "pointsMax": 3, "share": "4%", "priority": "固定" },
+      { "id": "cloud", "name": "未来信息技术", "localIds": ["cloud", "ai", "bigdata"], "pointsMin": 1, "pointsMax": 4, "share": "1.3%-5.3%", "priority": "上升" },
+      { "id": "math", "name": "数学与经济管理", "localIds": ["math"], "pointsMin": 1, "pointsMax": 3, "share": "1.3%-4%", "priority": "低" },
+      { "id": "pm", "name": "项目管理", "localIds": ["pm"], "pointsMin": 1, "pointsMax": 5, "share": "1.3%-6.7%", "priority": "低" },
+      { "id": "embedded", "name": "嵌入式系统", "localIds": ["embedded"], "pointsMin": 0, "pointsMax": 4, "share": "0%-5.3%", "priority": "低" }
+    ],
+    "case": [
+      { "name": "软件架构 / 质量属性", "frequency": "1-2道，通常试题一必做" },
+      { "name": "嵌入式", "frequency": "约 1 道" },
+      { "name": "Web 应用架构", "frequency": "约 1 道" },
+      { "name": "数据库 / 缓存", "frequency": "0-1 道；近年 Redis 实际更高" },
+      { "name": "需求工程 / 其它", "frequency": "0-1 道" }
+    ],
+    "essay": [
+      { "name": "软件架构设计", "frequency": "0-2 道" },
+      { "name": "新技术", "frequency": "0-2 道" },
+      { "name": "测试与运维", "frequency": "0-1 道" },
+      { "name": "安全性与可靠性", "frequency": "0-1 道" },
+      { "name": "系统建模 / 数据建模 / 企业架构", "frequency": "各 0-1 道" }
+    ]
+  },
+  "conflicts": [
+    {
+      "id": "case-question-count",
+      "topic": "案例分析题量与选答",
+      "claimA": "5 道大题，第 1 题必答，后 4 题选 2，共答 3 题",
+      "claimB": "4 题选 3",
+      "resolution": "本地 2020-2025 真题每年 5 题各 25 分；希赛、明航、2026 上半年考生回忆均支持 5 题且试题一为质量属性必做。技术栈备考指南写 4 题选 3，与其余来源冲突，不采用。官方批次通告未写选答规则，当次试卷为准。",
+      "adopt": "5题，试题一必做，其余选 2，共答 3 题"
+    },
+    {
+      "id": "uml-weight",
+      "topic": "UML / 系统建模权重",
+      "claimA": "旧经验把 UML 当案例必考",
+      "claimB": "新大纲后 UML 权重下降",
+      "resolution": "本地近 5 次案例 UML 出现率 40%；技术栈称建模权重约降至 15%。2026 上半年考生回忆未提到经典 UML 填图。投入产出上，架构评估和 Redis/缓存优先于押死 UML。"
+    }
+  ],
+  "latestSitting": {
+    "year": "2026上",
+    "examDate": "2026-05-23",
+    "tier": "考生回忆，不是官方原卷",
+    "sourceId": "jishuzhan-2026-05-23",
+    "comprehensive": "概念题偏多，法规不再是送分；计算题仍在但不是旧的集合题。",
+    "case": {
+      "required": "试题一：质量属性分类 + 架构风格（批处理/管道）",
+      "optional": ["智能安防（AI，含填图）", "智能养老（填空）", "学习辅导/知识图谱", "Redis 悲观锁/乐观锁"]
+    },
+    "essay": ["论向量数据库", "论高并发系统性能优化设计与实践", "论六边形架构设计", "论移动应用智能测试及应用"]
+  },
+  "sources": [
+    {
+      "id": "rk-2025-autumn-batch",
+      "title": "关于2025年下半年计算机软件资格考试批次安排的通告",
+      "url": "http://www.ruankao.org.cn/article/content/2509221645339772590700037.html",
+      "publisher": "中国计算机技术职业资格网 / 工业和信息化部教育与考试中心",
+      "published": "2025-09-22",
+      "tier": "官方"
+    },
+    {
+      "id": "rk-2025-spring-batch",
+      "title": "关于2025年上半年计算机技术与软件专业技术资格（水平）考试批次安排的通告",
+      "url": "http://www.ruankao.org.cn/article/content/2504271432042066942471973.html",
+      "publisher": "中国计算机技术职业资格网",
+      "published": "2025-04-27",
+      "tier": "官方"
+    },
+    {
+      "id": "mohrss-2022-02-16",
+      "title": "关于33项专业技术人员职业资格考试实行相对固定合格标准有关事项的通告",
+      "url": "https://gxt.fujian.gov.cn/zwgk/ztjj/fjrkzl/xxfb/zcwj/202206/t20220622_5934058.htm",
+      "publisher": "人力资源社会保障部办公厅（福建省工信厅转载）",
+      "published": "2022-02-16",
+      "retrieved": "2026-09-09",
+      "tier": "官方"
+    },
+    {
+      "id": "fj-gxt-faq-2024",
+      "title": "计算机软件资格考试合格分数线是多少？",
+      "url": "http://gxt.fujian.gov.cn/zwgk/ztjj/fjrkzl/ksfw/jlhd/202407/t20240705_6479313.htm",
+      "publisher": "福建省计算机软件资格考试办公室",
+      "published": "2024-07-05",
+      "tier": "官方转述"
+    },
+    {
+      "id": "gd-rsks-2025",
+      "title": "2025年度计算机技术与软件专业技术资格（水平）考试报考须知",
+      "url": "https://rsks.gd.gov.cn/wsbs/zyjsryzgks/2025/sbnjsjrj/content/post_4682986.html",
+      "publisher": "广东省人事考试局",
+      "published": "2025",
+      "tier": "官方转述"
+    },
+    {
+      "id": "xisai-2025-11-26",
+      "title": "2026年软考系统架构设计师各章节分值分布",
+      "url": "https://www.educity.cn/rk/5436852.html",
+      "publisher": "希赛网",
+      "published": "2025-11-26",
+      "tier": "培训机构"
+    },
+    {
+      "id": "xisai-2025-09-01",
+      "title": "软考系统架构设计师考点有哪些？怎么分布？",
+      "url": "https://www.educity.cn/rk/5416388.html",
+      "publisher": "希赛网",
+      "published": "2025-09-01",
+      "tier": "培训机构"
+    },
+    {
+      "id": "xisai-2025-12-17",
+      "title": "2025年软考高级系统架构设计师综合知识真题及答案",
+      "url": "https://www.educity.cn/rk/5441648.html",
+      "publisher": "希赛网",
+      "published": "2025-12-17",
+      "tier": "培训机构",
+      "note": "称 2025 综合知识里软件工程与架构设计合计超 50%。"
+    },
+    {
+      "id": "jishuzhan-2026-04-15",
+      "title": "2026软考高级·系统架构设计师备考指南",
+      "url": "https://jishuzhan.net/article/2044372206512308225",
+      "publisher": "技术栈",
+      "published": "2026-04-15",
+      "tier": "个人/技术博客",
+      "note": "案例题量写成 4 题选 3，与其余来源冲突。"
+    },
+    {
+      "id": "jishuzhan-2026-05-23",
+      "title": "2026年5月23日系统架构设计师考试总结",
+      "url": "https://jishuzhan.net/article/2058424325511364609",
+      "publisher": "技术栈（考生个人）",
+      "published": "2026-05-23",
+      "tier": "考生回忆"
+    },
+    {
+      "id": "minghang-2026-05-26",
+      "title": "系统架构设计师备考2026：考情复盘",
+      "url": "https://www.minghangzx.com/sys-nd/59.html",
+      "publisher": "北京明航管理咨询",
+      "published": "2026-05-26",
+      "tier": "培训机构"
+    }
+  ]
+}
