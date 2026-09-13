@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import FollowUpPanel from './FollowUpPanel.jsx';
+
+const CASE_FOLLOW_UP_SUGGESTIONS = ['我这问主要错在哪？', '评分点怎么踩才稳？', '结合项目经验怎么写？'];
 
 function latestFor(history) {
   return history.length ? history[history.length - 1] : null;
@@ -15,6 +18,42 @@ function progressMark(question, attempts) {
   const n = question.parts.filter(p => partDone(latest, p.id)).length;
   if (!n) return '';
   return n >= question.parts.length ? ' ✓' : ` ${n}/${question.parts.length}`;
+}
+function followUpKey(questionId, partId) {
+  return `${questionId}:${partId}`;
+}
+
+async function readSseText(response, onToken) {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let content = '';
+  const consume = raw => {
+    for (const block of raw.split(/\n\n/)) {
+      const event = (block.match(/^event:\s*(.+)$/m) || [])[1];
+      const data = (block.match(/^data:\s*(.+)$/m) || [])[1];
+      if (!data) continue;
+      try {
+        const payload = JSON.parse(data);
+        if (event === 'token') {
+          content += payload.text;
+          onToken(content);
+        }
+        if (event === 'error') throw new Error(payload.error);
+      } catch (e) {
+        if (event === 'error') throw e;
+      }
+    }
+  };
+  while (true) {
+    const { value, done } = await reader.read();
+    buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+    const chunks = buffer.split(/\r?\n\r?\n/);
+    buffer = chunks.pop() || '';
+    consume(chunks.join('\n\n'));
+    if (done) break;
+  }
+  return content;
 }
 
 export default function CasePractice({ api, Markdown, onSaved }) {
@@ -55,6 +94,7 @@ function CaseAnswer({ question: q, api, Markdown, history, onSaved }) {
   const [partRefs, setPartRefs] = useState(() => ({ ...(initial?.partReferences || {}) }));
   const [busyPart, setBusyPart] = useState('');
   const [errors, setErrors] = useState({});
+  const [followUps, setFollowUps] = useState({});
   useEffect(() => {
     const draft = { ...answers };
     for (const id of Object.keys(attempt?.answers || {})) if (partDone(attempt, id)) delete draft[id];
@@ -67,6 +107,48 @@ function CaseAnswer({ question: q, api, Markdown, history, onSaved }) {
   };
   const locked = p => partDone(attempt, p.id) || isLegacy(attempt) || busyPart === p.id;
   const doneCount = q.parts.filter(p => partDone(attempt, p.id)).length;
+  const askFollowUp = async (ctx, message, previousTurns) => {
+    const sessionKey = followUpKey(ctx.questionId, ctx.partId);
+    const historyTurns = Array.isArray(previousTurns) ? previousTurns : [];
+    const userTurn = { role: 'user', content: message };
+    setFollowUps(prev => ({
+      ...prev,
+      [sessionKey]: { items: [...historyTurns, userTurn, { role: 'assistant', content: '' }], loading: true, error: '' },
+    }));
+    try {
+      const response = await api('/api/cases/follow-up/stream', {
+        method: 'POST',
+        body: JSON.stringify({
+          questionId: ctx.questionId,
+          partId: ctx.partId,
+          answer: ctx.answer,
+          feedback: ctx.feedback,
+          reference: ctx.reference || '',
+          history: historyTurns,
+          message,
+        }),
+      });
+      if (!response.ok) {
+        const d = await response.json().catch(() => ({}));
+        throw new Error(d.error || '追问请求失败');
+      }
+      await readSseText(response, text => {
+        setFollowUps(prev => {
+          const current = prev[sessionKey];
+          if (!current) return prev;
+          const items = current.items.slice();
+          items[items.length - 1] = { role: 'assistant', content: text };
+          return { ...prev, [sessionKey]: { ...current, items } };
+        });
+      });
+      setFollowUps(prev => ({ ...prev, [sessionKey]: { ...prev[sessionKey], loading: false } }));
+    } catch (e) {
+      setFollowUps(prev => ({
+        ...prev,
+        [sessionKey]: { ...prev[sessionKey], loading: false, error: `追问失败：${e.message}` },
+      }));
+    }
+  };
   const submitPart = async partId => {
     if (busyPart || !answers[partId]?.trim()) return;
     setBusyPart(partId);
@@ -107,18 +189,19 @@ function CaseAnswer({ question: q, api, Markdown, history, onSaved }) {
     }
   };
   const reset = () => {
-    setAttempt(null); setFresh(true); setPartRefs({}); setAnswers({}); setErrors({});
+    setAttempt(null); setFresh(true); setPartRefs({}); setAnswers({}); setErrors({}); setFollowUps({});
     localStorage.removeItem(key);
   };
   return <>
     <h3>{q.title}</h3><p className="case-source">{q.source} · {q.sourcePath}</p>
-    <p>按小问提交、当场批改。未提交的小问不露答案、不计零分。参考答案非官方，AI 批改为估算评分；材料缺失的小问不计入可评满分。</p>
+    <p>按小问提交、当场批改。未提交的小问不露答案、不计零分。参考答案非官方，AI 批改为估算评分；材料缺失的小问不计入可评满分。批改后可继续追问本问。</p>
     <p className="case-progress">已完成 {doneCount} / {q.parts.length} 小问 · 可随时离开，下次接着做</p>
     <Markdown content={q.material}/>
     {q.parts.map(p => {
       const submitted = partDone(attempt, p.id);
       const grade = attempt?.partGrades?.[p.id];
       const reference = partRefs[p.id] ?? attempt?.partReferences?.[p.id];
+      const sessionKey = followUpKey(q.id, p.id);
       return <section className="case-part" key={p.id}>
         <h3>{p.title}</h3>
         <Markdown content={p.text}/>
@@ -130,6 +213,21 @@ function CaseAnswer({ question: q, api, Markdown, history, onSaved }) {
           {busyPart === p.id && !grade?.feedback && <p>作答已保存，正在批改…</p>}
           {grade?.feedback && <Markdown content={grade.feedback}/>}
           {reference ? <details><summary>查看本问非官方参考答案</summary><Markdown content={reference}/></details> : submitted && <p className="case-source">本题该小问暂无非官方参考答案。</p>}
+          {grade?.feedback && (
+            <FollowUpPanel
+              context={{
+                questionId: q.id,
+                partId: p.id,
+                answer: answers[p.id] || attempt?.answers?.[p.id] || '',
+                feedback: grade.feedback,
+                reference: reference || '',
+              }}
+              session={followUps[sessionKey]}
+              onAsk={askFollowUp}
+              Markdown={Markdown}
+              suggestions={CASE_FOLLOW_UP_SUGGESTIONS}
+            />
+          )}
         </div>}
       </section>;
     })}

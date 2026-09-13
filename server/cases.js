@@ -123,3 +123,46 @@ export function casePartGradePrompt(question, part, answer) {
     reference: part.reference || '',
   })}`;
 }
+
+function clipCaseText(text, max) {
+  const s = String(text || '').replace(/\s+/g, ' ').trim();
+  return s.length <= max ? s : `${s.slice(0, max - 1)}…`;
+}
+
+export function casePartFollowUpPrompt({ question, part, answer, feedback, reference, history, message }) {
+  const turns = (Array.isArray(history) ? history : []).slice(-6).map(item => {
+    const role = item?.role === 'assistant' ? 'AI' : '用户';
+    return `${role}：${clipCaseText(item?.content, item?.role === 'assistant' ? 1800 : 1000)}`;
+  }).join('\n');
+  return `你正在继续辅导一道软考高级系统架构设计师案例分析真题的单个小问。请基于材料、该小问、考生作答、批改反馈和非官方参考回答用户的追问。
+
+来源：${question.source || '历年真题'}
+大题：${clipCaseText(question.title, 200)}
+材料：
+${clipCaseText(question.material, 3500)}
+当前小问：${part.title}
+${clipCaseText(part.text, 2000)}
+考生作答：
+${clipCaseText(answer, 3000)}
+批改反馈：
+${clipCaseText(feedback, 7000)}
+非官方参考：
+${clipCaseText(reference || part.reference || '', 3000)}
+
+历史追问：
+${turns || '（暂无）'}
+
+本次追问：${clipCaseText(message, 2000)}
+
+要求：直接回答本次追问，优先解释用户困惑；可以举例、类比或给出答题表达。不要泄露未提交的其他小问答案，不要无必要地重复完整批改，不要编造官方评分细则或出处。使用适合移动端阅读的中文 Markdown。`;
+}
+
+export function validateCaseFollowUpBody(body) {
+  const { questionId, partId, answer, feedback, message } = body || {};
+  if (!questionId || !partId || !String(answer || '').trim() || !String(feedback || '').trim() || !String(message || '').trim()) {
+    return '题目、小问、作答、批改反馈和追问内容为必填项';
+  }
+  if (String(message).trim().length > 2000) return '追问内容不能超过 2000 字';
+  if (Array.isArray(body.history) && body.history.length > 12) return '追问历史过长，请重新开始本问追问';
+  return null;
+}

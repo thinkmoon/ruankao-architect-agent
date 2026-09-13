@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { loadCases, parseCases, publicCase, validateCaseAnswers, validateCasePartAnswer, applyCasePartSubmission, casePartAlreadySubmitted, casePartGradePrompt } from './cases.js';
+import { loadCases, parseCases, publicCase, validateCaseAnswers, validateCasePartAnswer, applyCasePartSubmission, casePartAlreadySubmitted, casePartGradePrompt, casePartFollowUpPrompt, validateCaseFollowUpBody } from './cases.js';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 test('all 40 cases retain subquestions and nonofficial references', () => {
@@ -79,6 +79,18 @@ test('per-part submit keeps other parts unanswered and does not copy their refer
   assert.equal(payload.part.id, q.parts[0].id);
   assert.equal(payload.answer, '第一问作答');
   assert.equal(payload.reference, q.parts[0].reference || '');
+
+  assert.equal(validateCaseFollowUpBody({}), '题目、小问、作答、批改反馈和追问内容为必填项');
+  assert.equal(validateCaseFollowUpBody({
+    questionId: q.id, partId: q.parts[0].id, answer: '答', feedback: '评', message: '为什么错？',
+  }), null);
+  const follow = casePartFollowUpPrompt({
+    question: q, part: q.parts[0], answer: '答', feedback: '评', reference: '参考',
+    history: [{ role: 'user', content: '上一问' }], message: '为什么错？',
+  });
+  assert.match(follow, /继续辅导一道软考高级系统架构设计师案例分析真题/);
+  assert.match(follow, /不要泄露未提交的其他小问答案/);
+  assert.match(follow, /为什么错？/);
 });
 
 test('case tasks require submitted cases; mixed knowledge tasks require both time and a case', async () => {

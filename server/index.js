@@ -7,7 +7,7 @@ import express from 'express';
 import { WebSocketServer, WebSocket } from 'ws';
 import { AcpSession } from './acp-session.js';
 import { loadAllQuestions, listYears } from './zhenti-parser.js';
-import { loadCases, publicCase, validateCasePartAnswer, casePartAlreadySubmitted, applyCasePartSubmission, isLegacyCaseAttempt, caseGradePrompt, casePartGradePrompt } from './cases.js';
+import { loadCases, publicCase, validateCasePartAnswer, casePartAlreadySubmitted, applyCasePartSubmission, isLegacyCaseAttempt, caseGradePrompt, casePartGradePrompt, casePartFollowUpPrompt, validateCaseFollowUpBody } from './cases.js';
 import { getLlmConfig } from './llm.js';
 import { createAgent } from './agent.js';
 import { enrichKnowledgeGraph, loadDecoratedGraph, syncQuestionToGraph } from './knowledge-graph.js';
@@ -199,6 +199,62 @@ app.post('/api/cases/attempts/:id/grade', apiAuth, async (req, res) => {
     });
     res.json({ attempt: saved });
   } catch (error) { res.status(502).json({ error: error.message }); }
+});
+
+// 案例小问追问：基于已批改上下文继续答疑，不写入答题账本。
+app.post('/api/cases/follow-up/stream', apiAuth, async (req, res) => {
+  const validationError = validateCaseFollowUpBody(req.body);
+  if (validationError) return res.status(400).json({ error: validationError });
+  const question = loadCases(root).find(q => q.id === req.body.questionId);
+  const part = question?.parts.find(p => p.id === String(req.body.partId));
+  if (!question || !part) return res.status(404).json({ error: '题目或小问不存在' });
+  try {
+    const { baseURL, apiKey, model, maxOutputTokens } = await getLlmConfig();
+    const prompt = casePartFollowUpPrompt({
+      question,
+      part,
+      answer: req.body.answer,
+      feedback: req.body.feedback,
+      reference: req.body.reference ?? part.reference,
+      history: req.body.history,
+      message: req.body.message,
+    });
+    const upstream = await fetch(`${baseURL}/chat/completions`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.25,
+        max_tokens: maxOutputTokens,
+        stream: true,
+      }),
+    });
+    if (!upstream.ok) throw new Error((await upstream.text()) || `LLM 请求失败（${upstream.status}）`);
+    res.status(200).set({ 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-cache, no-transform', Connection: 'keep-alive', 'X-Accel-Buffering': 'no', 'Content-Encoding': 'identity' });
+    res.flushHeaders();
+    const reader = upstream.body.getReader(); const decoder = new TextDecoder(); let buffer = '';
+    const send = (event, payload) => { if (!res.writableEnded) res.write(`event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`); };
+    const abort = new AbortController();
+    req.on('aborted', () => abort.abort());
+    res.on('close', () => { if (!res.writableEnded) abort.abort(); });
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split(/\r?\n/); buffer = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue;
+        const raw = line.slice(5).trim(); if (raw === '[DONE]') continue;
+        try { const data = JSON.parse(raw); const text = data.choices?.[0]?.delta?.content || ''; if (text) send('token', { text }); } catch {}
+      }
+    }
+    send('done', { model }); res.end();
+  } catch (error) {
+    console.error('[cases/follow-up/stream]', error);
+    if (!res.headersSent) res.status(502).json({ error: error instanceof Error ? error.message : String(error) });
+    else { res.write(`event: error\ndata: ${JSON.stringify({ error: error.message })}\n\n`); res.end(); }
+  }
 });
 
 // 0. 可用年份列表
