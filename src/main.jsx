@@ -1,6 +1,7 @@
 import CasePractice from './CasePractice.jsx';
 import ExamPointsPage from './ExamPoints.jsx';
 import FollowUpPanel from './FollowUpPanel.jsx';
+import { markdownComponents } from './MermaidBlock.jsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Area, AreaChart, PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from 'recharts';
@@ -169,7 +170,11 @@ function Markdown({ content, className = 'markdown-body' }) {
   if (!content) return null;
   return (
     <div className={className}>
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeKatex]}
+        components={markdownComponents}
+      >
         {content}
       </ReactMarkdown>
     </div>

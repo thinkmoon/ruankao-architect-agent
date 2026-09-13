@@ -16,6 +16,7 @@
     "express": "^5.2.1",
     "katex": "^0.16.47",
     "lucide-react": "latest",
+    "mermaid": "^11.17.2",
     "react": "latest",
     "react-dom": "latest",
     "react-markdown": "^10.1.0",
