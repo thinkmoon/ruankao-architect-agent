@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { loadCases, parseCases, publicCase, validateCaseAnswers, validateCasePartAnswer, applyCasePartSubmission, casePartAlreadySubmitted, casePartGradePrompt, casePartFollowUpPrompt, validateCaseFollowUpBody } from './cases.js';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
-test('all 40 cases retain subquestions and nonofficial references', () => {
+test('all 45 cases retain subquestions and nonofficial references', () => {
   const cases = loadCases(root);
-  assert.equal(cases.length, 40);
-  assert.equal(new Set(cases.map(q => q.id)).size, 40);
+  assert.equal(cases.length, 45);
+  assert.equal(new Set(cases.map(q => q.id)).size, 45);
   for (const q of cases) {
     assert.ok(q.parts.length >= 2, q.id);
     assert.ok(q.reference.length > 100, q.id);
@@ -14,6 +14,22 @@ test('all 40 cases retain subquestions and nonofficial references', () => {
     assert.ok(publicCase(q).parts.every(p => !('reference' in p)), q.id);
     for (const p of q.parts) assert.ok(p.text.length > 5, `${q.id}/${p.id}`);
   }
+});
+test('2026 partial recall exposes only answerable parts', () => {
+  const cases = loadCases(root).filter(q => q.year === '2026上');
+  assert.equal(cases.length, 5);
+  assert.deepEqual(cases.map(q => q.parts.map(p => p.id)), [['2', '3'], ['2', '3'], ['1', '2', '3'], ['1', '3'], ['1', '2']]);
+  assert.match(cases[0].material, /缺失小问/);
+  assert.match(cases[0].parts[1].text, /case-1-qos-table\.jpg/);
+  assert.match(cases[0].parts[1].reference, /（6）QoS 2/);
+  assert.ok(cases.every(q => q.parts.every(p => p.reference.length > 0)));
+  assert.match(cases[4].material, /（a）按用户角色/);
+  assert.match(cases[4].material, /（j）向外部节点/);
+  assert.match(cases[1].parts[1].reference, /知识抽取、知识融合、知识加工/);
+});
+test('the misfiled reliability case discloses its source-year conflict in practice', () => {
+  const question = loadCases(root).find(q => q.year === '2023下' && q.num === 3);
+  assert.match(question.material, /2015 年下半年/);
 });
 test('interleaved answers are removed without swallowing later questions and tables', () => {
   const [q] = parseCases('## 试题一（25分）\r\n材料\r\n### 问题 1（12分）\r\n|A|B|\r\n|---|---|\r\n#### 参考答案（非官方）\r\nSECRET_ONE\r\n### 问题 2（13分）\r\n第二问\r\n#### 参考答案（非官方）\r\nSECRET_TWO', '2022下');

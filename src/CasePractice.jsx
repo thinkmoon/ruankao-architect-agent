@@ -19,6 +19,19 @@ function progressMark(question, attempts) {
   if (!n) return '';
   return n >= question.parts.length ? ' ✓' : ` ${n}/${question.parts.length}`;
 }
+const CASE_2026_LABELS = {
+  '2026上-case-1': '选答·智慧养老',
+  '2026上-case-2': '选答·智能辅导',
+  '2026上-case-3': '选答·秒杀并发',
+  '2026上-case-4': '选答·智能安防',
+  '2026上-case-5': '必答题回忆·入侵检测',
+};
+const CASE_2026_ORDER = ['2026上-case-5', '2026上-case-1', '2026上-case-2', '2026上-case-3', '2026上-case-4'];
+
+function displayCases(questions, year) {
+  if (year !== '2026上') return questions;
+  return [...questions].sort((a, b) => CASE_2026_ORDER.indexOf(a.id) - CASE_2026_ORDER.indexOf(b.id));
+}
 function followUpKey(questionId, partId) {
   return `${questionId}:${partId}`;
 }
@@ -69,11 +82,13 @@ export default function CasePractice({ api, Markdown, onSaved }) {
     }).catch(e => { if (alive) setError(e.message); });
     return () => { alive = false; };
   }, [year]);
-  const question = data?.questions[index];
+  const questions = displayCases(data?.questions || [], year);
+  const question = questions[index];
   return <div className="page case-page"><h2>案例分析</h2>
     <div className="filter-row"><select aria-label="案例年份" value={year} onChange={e => setYear(e.target.value)}>{(data?.years || [year]).map(y => <option key={y}>{y}</option>)}</select></div>
+    {year === '2026上' && <div className="case-rule-note"><strong>选题规则：第 1 题必答，后 4 题任选 2 题，共答 3 题。</strong><p>考生考后次日记录和另一机构的回忆整理均把“入侵检测／质量属性”列为必答题；希赛文章的（一）到（五）不能当作正式卷面题号。智慧养老选答方向含 FreeRTOS、ROS 等嵌入式相关技术点，但原填图缺失，具体空位尚不能核验。</p></div>}
     {error && <p role="alert">{error}</p>}{!data && !error && <p>正在加载案例…</p>}
-    {data && <div className="filter-row">{data.questions.map((q, i) => <button key={q.id} className={index === i ? 'active' : ''} onClick={() => setIndex(i)}>第 {q.num} 题{progressMark(q, data.attempts)}</button>)}</div>}
+    {data && <div className="filter-row">{questions.map((q, i) => <button key={q.id} className={index === i ? 'active' : ''} onClick={() => setIndex(i)}>{CASE_2026_LABELS[q.id] || `第 ${q.num} 题`}{progressMark(q, data.attempts)}</button>)}</div>}
     {data && !question && <p>该年份暂无案例题。</p>}
     {question && <CaseAnswer key={question.id} question={question} api={api} Markdown={Markdown} history={data.attempts.filter(a => a.questionId === question.id)} onSaved={attempt => {
       setData(d => d && attempt.year === year ? ({ ...d, attempts: [...d.attempts.filter(a => a.id !== attempt.id), attempt] }) : d); onSaved();
@@ -193,7 +208,7 @@ function CaseAnswer({ question: q, api, Markdown, history, onSaved }) {
     localStorage.removeItem(key);
   };
   return <>
-    <h3>{q.title}</h3><p className="case-source">{q.source} · {q.sourcePath}</p>
+    <h3>{CASE_2026_LABELS[q.id] ? CASE_2026_LABELS[q.id].replace('选答·', '选答方向：').replace('必答题回忆·', '必答题回忆：') : q.title}</h3><p className="case-source">{q.source} · {q.sourcePath}</p>
     <p>按小问提交、当场批改。未提交的小问不露答案、不计零分。参考答案非官方，AI 批改为估算评分；材料缺失的小问不计入可评满分。批改后可继续追问本问。</p>
     <p className="case-progress">已完成 {doneCount} / {q.parts.length} 小问 · 可随时离开，下次接着做</p>
     <Markdown content={q.material}/>

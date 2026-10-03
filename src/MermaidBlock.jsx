@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 let mermaidReady = null;
 
@@ -60,7 +61,35 @@ export default function MermaidBlock({ chart }) {
   return <div className="mermaid-wrap" ref={hostRef} aria-label="流程图"/>;
 }
 
+function MarkdownImage({ src, alt, ...props }) {
+  const [open, setOpen] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [originalSize, setOriginalSize] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = event => { if (event.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [open]);
+  if (!src) return null;
+  return <>
+    {failed ? <p className="markdown-image-error">图片加载失败：<a href={src} target="_blank" rel="noopener noreferrer">打开原图</a></p> :
+      <button className="markdown-image-link" type="button" onClick={() => { setOriginalSize(false); setOpen(true); }} aria-label={`放大查看：${alt || '题图'}`}>
+        <img src={src} alt={alt || '题图'} loading="lazy" decoding="async" onError={() => setFailed(true)} {...props}/>
+        <span>点击放大查看</span>
+      </button>}
+    {open && createPortal(<div className="image-viewer" role="dialog" aria-modal="true" aria-label={alt || '题图'} onClick={() => setOpen(false)}>
+      <div className="image-viewer-panel" onClick={event => event.stopPropagation()}>
+        <div className="image-viewer-bar"><span>{alt || '题图'}</span><div className="image-viewer-actions"><a href={src} target="_blank" rel="noopener noreferrer">单独打开</a><button type="button" onClick={() => setOriginalSize(value => !value)}>{originalSize ? '适应屏幕' : '原尺寸'}</button><button type="button" onClick={() => setOpen(false)} aria-label="关闭图片">关闭</button></div></div>
+        <p className="image-viewer-hint">{originalSize ? '左右滑动可查看图片其余部分' : '整图预览；文字较小时点“原尺寸”'}</p>
+        <div className={`image-viewer-scroll${originalSize ? ' is-original' : ''}`}><img src={src} alt={alt || '题图原尺寸'}/></div>
+      </div>
+    </div>, document.body)}
+  </>;
+}
+
 export const markdownComponents = {
+  img: MarkdownImage,
   pre({ children }) {
     const child = Array.isArray(children) ? children[0] : children;
     const className = child?.props?.className || '';

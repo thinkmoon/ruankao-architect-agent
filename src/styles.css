@@ -56,6 +56,20 @@
 .markdown-body th{background:#f7ead0}
 .markdown-body .katex{font-size:1.05em}
 .markdown-body .katex-display{margin:8px 0;overflow-x:auto;overflow-y:hidden}
+.markdown-body .markdown-image-link{display:block;width:100%;margin:10px 0;padding:0;border:0;background:transparent;cursor:zoom-in;text-align:center}
+.markdown-body .markdown-image-link img{display:block;max-width:100%;height:auto;margin:auto;border-radius:6px}
+.markdown-body .markdown-image-link span{display:block;margin-top:5px;color:#40765f;font-size:12px}
+.markdown-image-error{color:#a33;font-size:13px}
+.image-viewer{position:fixed;inset:0;z-index:100;background:#000b;display:grid;place-items:center;padding:12px}
+.image-viewer-panel{width:min(100%,1100px);height:min(94dvh,900px);background:#fff;border-radius:12px;display:flex;flex-direction:column;overflow:hidden}
+.image-viewer-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;font-size:14px;font-weight:600}
+.image-viewer-bar>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.image-viewer-actions{display:flex;flex:none;gap:6px}
+.image-viewer-actions a,.image-viewer-bar button{border:0;border-radius:8px;padding:7px 12px;background:#e8efea;color:inherit;font:inherit;font-size:12px;text-decoration:none;cursor:pointer}
+.image-viewer-hint{margin:0;padding:0 14px 8px;color:#64746b;font-size:12px}
+.image-viewer-scroll{flex:1;min-height:0;overflow:auto;touch-action:pan-x pan-y pinch-zoom}
+.image-viewer-scroll img{display:block;max-width:100%;width:auto;height:auto;margin:auto}
+.image-viewer-scroll.is-original img{max-width:none}
 .question-title{overflow:hidden}
 .question-stem{min-width:0;overflow-wrap:anywhere}
 .question-stem>*:first-child{margin-top:0}
@@ -93,6 +107,8 @@
 .subject-tabs { padding: 12px 20px 0; }
 .case-page { padding: 16px 20px 100px; }
 .case-page .filter-row { flex-wrap: wrap; gap: 8px; }
+.case-rule-note{margin:10px 0 4px;padding:12px 14px;border:1px solid #c6dfcf;border-radius:12px;background:#edf7ef;color:#244535;font-size:13px;line-height:1.55}
+.case-rule-note p{margin:6px 0 0}
 .case-page select { padding: 8px; border-radius: 8px; }
 .case-source { color: #68766e; font-size: 12px; overflow-wrap: anywhere; }
 .case-part { margin: 24px 0; }

@@ -442,7 +442,8 @@ export function buildExamPoints({ questions, cases, essays, attempts = [], web =
 export function loadExamPoints(root, attempts = []) {
   return buildExamPoints({
     questions: loadAllQuestions().filter(question => question.subject === '综合知识'),
-    cases: loadCases(root),
+    // 2026 上半年仅有部分题面，不能作为完整一套试卷计算历年频次和均分。
+    cases: loadCases(root).filter(item => item.year !== '2026上'),
     essays: loadEssays(root),
     attempts,
     web: readWebOverlay(root),
