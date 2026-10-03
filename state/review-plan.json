@@ -51,11 +51,11 @@
           "metric": "attemptedQuestions",
           "target": 100,
           "label": "累计完成 100 道摸底题",
-          "actual": 240,
+          "actual": 359,
           "met": true
         }
       ],
-      "completedAt": "2026-09-05"
+      "completedAt": "2026-09-29"
     },
     {
       "id": "foundation",
@@ -63,7 +63,7 @@
       "startDate": "2026-09-01",
       "endDate": "2026-09-21",
       "order": 2,
-      "status": "active",
+      "status": "planned",
       "goal": "按模块补齐知识并训练案例结构化作答",
       "subjects": [
         "综合知识",
@@ -82,7 +82,7 @@
           "metric": "studyMinutes",
           "target": 1800,
           "label": "累计学习 30 小时",
-          "actual": 253,
+          "actual": 520,
           "met": false
         }
       ]
@@ -93,7 +93,7 @@
       "startDate": "2026-09-22",
       "endDate": "2026-10-05",
       "order": 3,
-      "status": "planned",
+      "status": "active",
       "goal": "完成论文方向、项目素材和限时写作训练",
       "subjects": [
         "论文"
@@ -546,6 +546,431 @@
         },
         {
           "id": "2026-09-09-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-10": {
+      "date": "2026-09-10",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-10-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-10-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-12": {
+      "date": "2026-09-12",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 210,
+      "tasks": [
+        {
+          "id": "2026-09-12-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-12-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-13": {
+      "date": "2026-09-13",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 210,
+      "tasks": [
+        {
+          "id": "2026-09-13-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-13-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-14": {
+      "date": "2026-09-14",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-14-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-14-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-15": {
+      "date": "2026-09-15",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-15-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-15-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-16": {
+      "date": "2026-09-16",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-16-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-16-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-17": {
+      "date": "2026-09-17",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-17-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-17-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-18": {
+      "date": "2026-09-18",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-18-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-18-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-20": {
+      "date": "2026-09-20",
+      "phaseId": "foundation",
+      "status": "in_progress",
+      "plannedMinutes": 210,
+      "tasks": [
+        {
+          "id": "2026-09-20-knowledge",
+          "type": "knowledge",
+          "title": "复习一个考纲模块并完成对应案例",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-20-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-25": {
+      "date": "2026-09-25",
+      "phaseId": "essay",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-25-essay",
+          "type": "essay",
+          "title": "练习论文结构或项目素材",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-25-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-27": {
+      "date": "2026-09-27",
+      "phaseId": "essay",
+      "status": "in_progress",
+      "plannedMinutes": 210,
+      "tasks": [
+        {
+          "id": "2026-09-27-essay",
+          "type": "essay",
+          "title": "练习论文结构或项目素材",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-27-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-28": {
+      "date": "2026-09-28",
+      "phaseId": "essay",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-28-essay",
+          "type": "essay",
+          "title": "练习论文结构或项目素材",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-28-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-29": {
+      "date": "2026-09-29",
+      "phaseId": "essay",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-29-essay",
+          "type": "essay",
+          "title": "练习论文结构或项目素材",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-29-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-09-30": {
+      "date": "2026-09-30",
+      "phaseId": "essay",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-09-30-essay",
+          "type": "essay",
+          "title": "练习论文结构或项目素材",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-09-30-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-10-01": {
+      "date": "2026-10-01",
+      "phaseId": "essay",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-10-01-essay",
+          "type": "essay",
+          "title": "练习论文结构或项目素材",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-10-01-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-10-02": {
+      "date": "2026-10-02",
+      "phaseId": "essay",
+      "status": "in_progress",
+      "plannedMinutes": 90,
+      "tasks": [
+        {
+          "id": "2026-10-02-essay",
+          "type": "essay",
+          "title": "练习论文结构或项目素材",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-10-02-review",
+          "type": "review",
+          "title": "复习到期错题",
+          "estimatedMinutes": 20,
+          "priority": "medium",
+          "status": "pending"
+        }
+      ],
+      "notes": ""
+    },
+    "2026-10-03": {
+      "date": "2026-10-03",
+      "phaseId": "essay",
+      "status": "in_progress",
+      "plannedMinutes": 210,
+      "tasks": [
+        {
+          "id": "2026-10-03-essay",
+          "type": "essay",
+          "title": "练习论文结构或项目素材",
+          "estimatedMinutes": 90,
+          "priority": "high",
+          "status": "pending"
+        },
+        {
+          "id": "2026-10-03-review",
           "type": "review",
           "title": "复习到期错题",
           "estimatedMinutes": 20,
@@ -1814,13 +2239,20 @@
       "subject": "综合知识",
       "wrongCount": 1,
       "lastWrongAt": "2026-09-02",
-      "nextReviewAt": "2026-09-03",
+      "nextReviewAt": "2026-09-11",
       "intervalDays": 1,
       "ease": 2.5,
       "status": "due",
       "priority": "medium",
-      "consecutiveCorrect": 0,
-      "reviewHistory": []
+      "consecutiveCorrect": 1,
+      "reviewHistory": [
+        {
+          "answeredAt": "2026-09-10T03:10:01.957Z",
+          "correct": true,
+          "intervalDays": 1,
+          "nextReviewAt": "2026-09-11"
+        }
+      ]
     },
     {
       "mistakeId": "2025上-002",
@@ -2436,23 +2868,578 @@
       "priority": "medium",
       "consecutiveCorrect": 0,
       "reviewHistory": []
+    },
+    {
+      "mistakeId": "2025上-072",
+      "sourceRef": "2025上-072",
+      "topic": "英语阅读",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2025上-073",
+      "sourceRef": "2025上-073",
+      "topic": "英语阅读",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2025上-074",
+      "sourceRef": "2025上-074",
+      "topic": "英语阅读",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-003",
+      "sourceRef": "2024上-003",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-005",
+      "sourceRef": "2024上-005",
+      "topic": "信息化与电子政务",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-006",
+      "sourceRef": "2024上-006",
+      "topic": "软件架构设计",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-009",
+      "sourceRef": "2024上-009",
+      "topic": "数学基础",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-010",
+      "sourceRef": "2024上-010",
+      "topic": "数据库",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-013",
+      "sourceRef": "2024上-013",
+      "topic": "嵌入式系统",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-12",
+      "nextReviewAt": "2026-09-13",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-015",
+      "sourceRef": "2024上-015",
+      "topic": "项目管理",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-15",
+      "nextReviewAt": "2026-09-16",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-019",
+      "sourceRef": "2024上-019",
+      "topic": "质量属性与架构评估",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-15",
+      "nextReviewAt": "2026-09-16",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-026",
+      "sourceRef": "2024上-026",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-15",
+      "nextReviewAt": "2026-09-16",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-030",
+      "sourceRef": "2024上-030",
+      "topic": "软件架构设计",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-15",
+      "nextReviewAt": "2026-09-16",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-031",
+      "sourceRef": "2024上-031",
+      "topic": "软件架构设计",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-15",
+      "nextReviewAt": "2026-09-16",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-034",
+      "sourceRef": "2024上-034",
+      "topic": "质量属性与架构评估",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-16",
+      "nextReviewAt": "2026-09-17",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-038",
+      "sourceRef": "2024上-038",
+      "topic": "数据库",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-16",
+      "nextReviewAt": "2026-09-17",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-039",
+      "sourceRef": "2024上-039",
+      "topic": "数据库",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-16",
+      "nextReviewAt": "2026-09-17",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-040",
+      "sourceRef": "2024上-040",
+      "topic": "计算机网络",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-16",
+      "nextReviewAt": "2026-09-17",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-053",
+      "sourceRef": "2024上-053",
+      "topic": "质量属性与架构评估",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-17",
+      "nextReviewAt": "2026-09-18",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-059",
+      "sourceRef": "2024上-059",
+      "topic": "质量属性与架构评估",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-17",
+      "nextReviewAt": "2026-09-18",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-064",
+      "sourceRef": "2024上-064",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-18",
+      "nextReviewAt": "2026-09-19",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2024上-065",
+      "sourceRef": "2024上-065",
+      "topic": "云计算与分布式",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-18",
+      "nextReviewAt": "2026-09-19",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-004",
+      "sourceRef": "2023下-004",
+      "topic": "操作系统",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-20",
+      "nextReviewAt": "2026-09-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-005",
+      "sourceRef": "2023下-005",
+      "topic": "操作系统",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-20",
+      "nextReviewAt": "2026-09-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-007",
+      "sourceRef": "2023下-007",
+      "topic": "计算机系统",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-20",
+      "nextReviewAt": "2026-09-21",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-012",
+      "sourceRef": "2023下-012",
+      "topic": "计算机网络",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-28",
+      "nextReviewAt": "2026-09-29",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-014",
+      "sourceRef": "2023下-014",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-29",
+      "nextReviewAt": "2026-09-30",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-015",
+      "sourceRef": "2023下-015",
+      "topic": "计算机系统",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-29",
+      "nextReviewAt": "2026-09-30",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-021",
+      "sourceRef": "2023下-021",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-29",
+      "nextReviewAt": "2026-09-30",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-023",
+      "sourceRef": "2023下-023",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-29",
+      "nextReviewAt": "2026-09-30",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-024",
+      "sourceRef": "2023下-024",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-29",
+      "nextReviewAt": "2026-09-30",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-027",
+      "sourceRef": "2023下-027",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-29",
+      "nextReviewAt": "2026-09-30",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-028",
+      "sourceRef": "2023下-028",
+      "topic": "软件工程",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-29",
+      "nextReviewAt": "2026-09-30",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-032",
+      "sourceRef": "2023下-032",
+      "topic": "项目管理",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-09-29",
+      "nextReviewAt": "2026-09-30",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-041",
+      "sourceRef": "2023下-041",
+      "topic": "质量属性与架构评估",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-10-01",
+      "nextReviewAt": "2026-10-02",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-042",
+      "sourceRef": "2023下-042",
+      "topic": "质量属性与架构评估",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-10-01",
+      "nextReviewAt": "2026-10-02",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
+    },
+    {
+      "mistakeId": "2023下-043",
+      "sourceRef": "2023下-043",
+      "topic": "软件架构设计",
+      "subject": "综合知识",
+      "wrongCount": 1,
+      "lastWrongAt": "2026-10-02",
+      "nextReviewAt": "2026-10-03",
+      "intervalDays": 1,
+      "ease": 2.5,
+      "status": "due",
+      "priority": "medium",
+      "consecutiveCorrect": 0,
+      "reviewHistory": []
     }
   ],
   "stats": {
-    "asOf": "2026-09-09",
-    "attemptedQuestions": 240,
-    "studyMinutes": 253,
+    "asOf": "2026-10-03",
+    "attemptedQuestions": 359,
+    "studyMinutes": 520,
     "completedDays": 1,
     "masteredMistakes": 2,
-    "last20Accuracy": 40,
+    "last20Accuracy": 65,
     "today": {
-      "date": "2026-09-09",
+      "date": "2026-10-03",
       "attemptedQuestions": 0,
       "correctQuestions": 0,
-      "dueReviews": 115,
-      "studyMinutes": 0,
-      "plannedMinutes": 90
+      "dueReviews": 152,
+      "studyMinutes": 7,
+      "plannedMinutes": 210
     }
   },
-  "updatedAt": "2026-09-09T04:53:38.980Z"
+  "updatedAt": "2026-10-03T13:35:32.022Z"
 }
