@@ -71,7 +71,7 @@ function VerifyPanel({ verification }) {
     {latest && <article className="ep-latest">
       <span>LATEST SITTING</span>
       <h3>{latest.year} 考生回忆 · {latest.examDate}</h3>
-      <p>{latest.tier}。本地 zhenti/ 还没有这一场。</p>
+      <p>{latest.tier}。本地已收录 2026 上半年案例分析的部分回忆题面；缺失小问和原图仍待核验，考点统计暂不纳入这一场。</p>
       <p>案例必做：{latest.case?.required}</p>
       {latest.case?.optional?.length > 0 && <p>选做：{latest.case.optional.join(' · ')}</p>}
       {latest.essay?.length > 0 && <p>论文：{latest.essay.join(' · ')}</p>}
