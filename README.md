@@ -1,244 +1,113 @@
-# 架构上岸：软考高级系统架构设计师备考助手
+# 架构上岸：系统架构设计师备考助手
 
-面向 2026 年下半年软考高级「系统架构设计师」的本地备考工具。它把历年真题练习、错题复习、学习计划、阶段路线、刷题打卡和 AI 答疑放在同一个移动端 Web 界面中。
+面向软考高级「系统架构设计师」的本地移动端 Web 应用。把综合知识真题、案例分析、知识地图、考点分布、错题复习、阶段计划和 AI 答疑放在同一套学习记录上。题目和个人进度保存在本地文件中；AI 功能需要自行配置模型服务。
 
-项目同时保留 Claude Code / HAPI 备考工作区能力：Web 应用负责可视化学习闭环，Agent 负责资料检索、答疑和备考协作。
+## 页面实拍
 
-## 软件界面
+以下截图由 Playwright 在当前代码的移动端视口下拍摄，使用仓库现有学习记录。截图只证明页面可展示及入口可到达，AI 回答和批改效果还取决于模型配置。
 
-<p align="center">
-  <img src="docs/screenshots/homepage.png" width="230" alt="架构上岸首页" />
-  <img src="docs/screenshots/practice.png" width="230" alt="历年真题刷题页" />
-</p>
+| 学习首页 | 综合知识刷题 | 案例分析 |
+| --- | --- | --- |
+| <img src="docs/screenshots/homepage.png" width="230" alt="今日计划、学习统计与功能入口" /> | <img src="docs/screenshots/practice.png" width="230" alt="年份、题目进度和综合知识真题" /> | <img src="docs/screenshots/case-practice.png" width="230" alt="按小问作答的案例分析页面" /> |
+| **2026 上半年回忆题** | **错题本** | **复习计划** |
+| <img src="docs/screenshots/case-2026.png" width="230" alt="2026 上半年案例选题规则与来源说明" /> | <img src="docs/screenshots/mistakes.png" width="230" alt="错题分类与再做一次入口" /> | <img src="docs/screenshots/review-plan.png" width="230" alt="今日任务、阶段进度和到期错题" /> |
+| **刷题日历** | **知识画像** | **考点分布** |
+| <img src="docs/screenshots/practice-calendar.png" width="230" alt="真实答题记录形成的月度日历" /> | <img src="docs/screenshots/insights.png" width="230" alt="掌握度、趋势与薄弱项" /> | <img src="docs/screenshots/exam-points.png" width="230" alt="三科考点分值与证据口径" /> |
+| **知识地图** | **AI 助手** | **题图放大** |
+| <img src="docs/screenshots/knowledge-map.png" width="230" alt="可展开的知识领域和概念树" /> | <img src="docs/screenshots/ai-assistant.png" width="230" alt="流式问答与图片上传入口" /> | <img src="docs/screenshots/case-image-zoom.png" width="230" alt="QoS 题图放大预览" /> |
 
-<p align="center">
-  <strong>学习首页</strong> · 今日计划、连续学习、正确率与知识画像 &nbsp;&nbsp;&nbsp;
-  <strong>真题练习</strong> · 按年份刷题、自动判分与错题收录
-</p>
+## 现在能做什么
 
-<p align="center">
-  <img src="docs/screenshots/review-plan.png" width="230" alt="复习计划与刷题打卡" />
-  <img src="docs/screenshots/ai-assistant.png" width="230" alt="AI 备考助手" />
-</p>
+### 综合知识真题
 
-<p align="center">
-  <strong>复习计划</strong> · 阶段路线、真实任务状态与刷题打卡 &nbsp;&nbsp;&nbsp;
-  <strong>AI 助手</strong> · 流式答疑、资料检索与截图识题
-</p>
+- 从 `zhenti/` 的 Markdown 解析 2020–2025 年综合知识题，按年份和题号练习，记录每题进度。
+- 交卷后判定正误并显示解析入口；错题进入复习账本，可从错题页回到原题重做。
+- AI 解析和批改后的追问使用流式接口，需要 `config/llm.json` 中可用的模型服务。
 
-## 核心功能
+### 案例分析
 
-### 真题练习
+- 收录 2020–2025 年 8 个考期共 40 道案例，另有 2026 上半年 5 道**部分题面回忆版**，合计 45 道。
+- 按小问保存作答和 AI 估算评分；未提交的小问不显示参考答案，也不计零分。批改后可针对当前小问追问。浏览器会保留未提交草稿。
+- 历年题图放在 `public/case-images/`；点击题图可放大、查看原尺寸。部分图是参考图或考生回忆图，页面和资料保留来源说明。
+- 2026 上半年页面按“必答题回忆／选答方向”显示。公开资料存在题序冲突，部分题干或原图缺失；缺失的小问不开放作答。该场**不纳入完整历年考点频次和均分**。详见 [真题说明](zhenti/README.md) 与 [完整度审计](cases/research/案例分析题完整度审计-2026-09-28.md)。
+- 参考答案及 AI 评分均非官方，不能当作正式成绩。
 
-- 从 `zhenti/` 解析历年系统架构设计师真题。
-- 支持按年份切换和题目进度记忆。
-- 提交答案后判定正误，再展示解析入口。
-- 答错自动收录到错题本，避免只依赖浏览器 `localStorage`。
-- 支持从错题本直接跳回原题重做。
+### 复习与分析
 
-### 错题复习
+- 错题按待复习、已掌握分类，复习周期根据实际答题结果推进。
+- 首页和复习计划展示当日任务、阶段路线、到期错题、学习时长与月度刷题日历。任务状态由答题和学习记录计算。
+- 知识画像展示掌握度、正确率趋势与薄弱知识点；知识地图可展开领域、概念和关联真题。
+- 考点分布按综合知识、案例分析、论文三科展示历史权重，并区分官方规则、机构估算与考生回忆。论文目前提供考点分布与素材，**没有独立的论文写作或 AI 批改页面**。
 
-- 错题列表、待复习和已掌握分类。
-- 复习周期由真实答题记录派生，不由“点击进入页面”推进。
-- 周期按连续答对推进，例如 `1 → 3 → 7 → 14` 天。
-- 连续正确达到策略阈值后才标记为已掌握。
+### AI 助手与 Agent
 
-### 复习计划与阶段路线
+- AI 助手支持文本问答、截图识题、本地资料检索、真题检索、错题和进度查询；响应按 token 流式展示。
+- Web 端的 AI 能力依赖 OpenAI 兼容的模型接口配置。应用还包含 WebSocket + ACP 会话接入代码；本地网页的核心刷题功能不依赖 ACP。
+- `knowledge/`、`reference/`、`cases/` 和 `essays/` 保存可检索的备考资料。
 
-- 今日任务、阶段路线、到期错题和量化目标集中展示。
-- 任务完成状态由答题、错题复习和学习活跃记录自动判定。
-- 后端拒绝直接 PATCH 伪造任务完成状态。
-- 阶段完成依赖量化条件，不会仅因为日期到了就自动冒充完成。
+## 快速启动
 
-### 刷题打卡日历
-
-- 复习计划页提供月度刷题打卡日历。
-- 有真实答题记录的日期会点亮，并显示当天题数。
-- 支持切换上月和下月。
-- 日历数据由 `/api/stats` 的 `calendar` 字段提供。
-
-### 自动学习活跃计时
-
-- 不需要用户手动点击“开始计时”或“结束计时”。
-- 在前端刷题页、页面可见时自动累计活跃学习时间。
-- 离开刷题页、页面进入后台或标签页隐藏时停止累计。
-- 前端每 30 秒节流上报一次，页面隐藏或组件销毁时补写剩余增量。
-- 服务端以 `clientId` 做幂等处理，避免重复计时和重复写入。
-- 记录文件为 `state/study-sessions.json`。
-
-### AI 备考助手
-
-- `/api/chat/stream` 提供真正的上游流式响应。
-- 前端按 token 增量渲染回答，不等完整内容生成后再伪切块。
-- 支持本地资料检索、真题查询、错题复盘和进度查询。
-- 支持上传题目截图并进行识别和考点分析。
-- 支持工具调用，最多 10 轮模型—工具往返。
-- 真题默认只出题不提前泄露答案；提交后再解析和评分。
-
-## 技术结构
-
-```text
-React + Vite              前端移动端界面
-Express + Node.js ESM     本地 API、状态写入、SSE 流式接口
-Markdown                  历年真题和复习资料
-JSON                      进度、答题、错题、计划和学习活跃账本
-WebSocket + ACP           Claude Code 会话接入
-```
-
-主要目录：
-
-```text
-src/                  React 页面、交互和样式
-server/               Express API、真题解析、Agent 和计划快照
-state/                本地学习状态与结构化账本
-zhenti/               可直接使用的历年真题
-reference/            清洗后的复习参考资料
-knowledge/            知识卡片
-cases/                案例分析训练
-essays/               论文训练素材
-docs/screenshots/     README 展示截图
-scripts/              校验和 ACP 冒烟脚本
-```
-
-## 本地运行 Web 应用
-
-### 环境要求
-
-- Node.js，建议使用当前项目已验证的 Node 版本。
-- 已安装依赖：
+需要 Node.js 24（本次验证版本为 24.13.0）和 npm。
 
 ```bash
 npm install
-```
-
-### 开发模式
-
-```bash
 npm run dev
 ```
 
-开发服务器默认监听：
+默认地址为 `http://localhost:5174/?token=Thinkmoon`。若端口已占用，可用 `PORT=5175 npm run dev`，再访问 5175 端口。服务启动时也会打印当前地址。浏览器验证成功后会把 Token 存入本地存储，并从地址栏移除。
 
-```text
-http://localhost:5174/?token=thinkmoon
+**当前 Token 在 `server/index.js` 中固定为 `Thinkmoon`（区分大小写）。** 这是本地访问控制，不适合作为公开部署的认证方案。所有 `/api/*` 请求均需携带 `X-API-Token: Thinkmoon` 或 `?token=Thinkmoon`。
+
+AI 功能还需要创建 `config/llm.json`（该文件已加入 `.gitignore`）：
+
+```json
+{
+  "baseURL": "http://你的模型服务/v1",
+  "apiKey": "你的密钥",
+  "model": "模型名称"
+}
 ```
 
-当前 Web API 使用同一个访问令牌。生产环境不要直接复用示例令牌，应同步修改 `server/index.js` 的鉴权配置和访问方式。
+服务端要求这三个字段均非空；`baseURL` 应指向兼容 `/chat/completions` 的接口。未配置时，真题浏览与已有学习记录仍可使用，AI 请求无法完成。模型名称由配置决定，页面上的模型标签只是当前界面文案。
 
-### 生产构建
+生产构建与检查：
 
 ```bash
 npm run build
 npm start
+node --test server/*.test.js
+bash scripts/validate.sh
 ```
 
-也可以使用 Vite 预览构建产物：
+`npm start` 以生产模式从 `dist/` 提供页面；`npm run preview` 只预览 Vite 构建产物。构建或启动前先运行 `npm install`。
 
-```bash
-npm run preview
-```
+## 数据与目录
 
-### 可用脚本
-
-| 命令 | 作用 |
+| 路径 | 内容 |
 | --- | --- |
-| `npm run dev` | 启动 Express + Vite 开发服务 |
-| `npm run build` | 构建前端生产产物 |
-| `npm start` | 以生产模式启动服务 |
-| `npm run preview` | 预览 Vite 构建产物 |
-| `./scripts/validate.sh` | 执行项目结构校验 |
+| `src/` | React 页面、交互、样式 |
+| `server/` | Express API、真题解析、计划计算、Agent 与 ACP |
+| `zhenti/` | 历年综合知识、案例、论文 Markdown |
+| `public/case-images/` | 案例题图及标明来源的参考图 |
+| `knowledge/`、`reference/` | 知识地图、考点核对资料和复习材料 |
+| `cases/`、`essays/` | 案例研究与论文素材 |
+| `state/` | 答题、错题、案例作答、计划和学习时间账本 |
+| `docs/screenshots/` | README 使用的 Playwright 页面截图 |
 
-## 状态与数据边界
-
-以下文件是学习闭环的核心账本：
-
-| 文件 | 内容 | 权威性 |
-| --- | --- | --- |
-| `state/attempts.json` | 每次真实答题记录 | 事实账本 |
-| `state/mistakes.json` | 错题收录列表 | 事实账本 |
-| `state/study-sessions.json` | 刷题活跃时间和学习会话 | 事实账本 |
-| `state/review-plan.json` | 今日计划、错题队列和阶段快照 | 派生快照 |
-| `state/progress.json` | 兼容统计镜像和历史分数 | 兼容镜像 |
-| `state/current.md` | 当前阶段和下一入口说明 | 人类可读状态 |
-| `state/profile.json` | 用户画像、考试目标和偏好 | 用户配置 |
-
-修改 JSON 状态后必须保持合法 JSON。不要为了演示界面直接手工修改完成状态、学习时长或错题复习周期；这些状态会在 API 读取和真实学习事件发生时重新计算。
+核心状态文件：`attempts.json` 记综合知识答题，`case-attempts.json` 记案例小问，`mistakes.json` 记错题，`study-sessions.json` 记学习活跃时间，`knowledge-graph.json` 记知识图谱，`review-plan.json` 是可重新计算的计划快照。仓库目前追踪这些状态文件；公开分享或部署前应按自己的数据需求检查其内容。
 
 ## 主要 API
 
-所有 API 默认使用 `X-API-Token: thinkmoon` 请求头鉴权。
-
-| 方法 | 路径 | 说明 |
+| 方法 | 路径 | 用途 |
 | --- | --- | --- |
-| `GET` | `/api/questions` | 按年份读取真题 |
-| `GET` | `/api/years` | 获取可用真题年份 |
-| `GET` | `/api/stats` | 首页统计、日历和计划摘要 |
-| `GET` | `/api/state` | 读取进度、错题和答题状态 |
-| `GET` | `/api/review-plan` | 获取重算后的计划快照 |
-| `POST` | `/api/attempts` | 写入一次答题事实 |
-| `POST` | `/api/mistakes` | 添加或移除错题 |
-| `POST` | `/api/study-activity` | 节流写入刷题活跃秒数 |
-| `POST` | `/api/chat/stream` | AI 助手 SSE 流式对话 |
-| `POST` | `/api/explain/stream` | 真题解析 SSE 流式生成 |
+| GET | `/api/years`、`/api/questions` | 年份列表和综合知识题 |
+| GET | `/api/cases?year=2026上` | 按考期读取案例与已有作答 |
+| POST | `/api/cases/attempts` | 保存一个案例小问 |
+| POST | `/api/cases/attempts/:id/grade` | 为已提交小问请求 AI 估算评分 |
+| POST | `/api/cases/follow-up/stream` | 案例批改后追问 |
+| GET | `/api/stats`、`/api/state`、`/api/review-plan` | 学习统计、账本和计划 |
+| POST | `/api/attempts`、`/api/mistakes`、`/api/study-activity` | 记录答题、错题和活跃时间 |
+| GET | `/api/knowledge-graph`、`/api/exam-points` | 知识地图与考点分布 |
+| POST | `/api/chat/stream`、`/api/explain/stream` | AI 问答与真题解析 |
 
-## 使用 Claude Code
-
-在项目目录启动：
-
-```bash
-cd /home/liqinsi/Documents/project/ruankao-architect-agent
-claude
-```
-
-可以直接说：
-
-- `介绍一下你会怎么辅助我，不要启动正式备考`
-- `开始备考`
-- `今晚我有 90 分钟，开始学习`
-- `给我一道可核验来源的真题`
-- `查看当前进度`
-- `复盘今天的错题`
-
-## 通过 HAPI 使用
-
-HAPI 对 Claude Code 使用原生 TUI/Agent SDK 集成，不需要 ACP 适配器。先在一个终端启动 Hub：
-
-```bash
-hapi hub --relay
-```
-
-再在另一个终端启动本项目的 Claude 会话：
-
-```bash
-cd /home/liqinsi/Documents/project/ruankao-architect-agent
-hapi claude
-```
-
-`hapi` 是 `hapi claude` 的简写。务必从本项目目录创建会话，才能自动加载项目配置。若将来换机器且尚未全局安装 HAPI，可把命令替换成 `npx @twsxtd/hapi ...`。
-
-## 设计原则
-
-- **真实记录优先**：答题、错题和学习活跃时间先写事实，再派生统计。
-- **禁止手工伪造**：任务完成和阶段完成不接受前端直接点击伪造。
-- **流式优先**：AI 上游流式生成，前端增量展示。
-- **考试约束优先**：真题来源、答案揭示和评分流程遵守项目规则。
-- **资深开发者视角**：不泛泛科普，重点补齐考试定义、关键词、比较维度和答题表达。
-
-## 校验
-
-```bash
-npm run build
-node --check server/agent.js
-node --check server/index.js
-node --check server/review-plan.js
-git diff --check
-./scripts/validate.sh
-```
-
-### 案例分析练习
-
-进入「真题练习」后切换到「案例分析」，可按年份选择本地 8 个批次、40 道案例大题。每道大题按小问作答：提交一问即保存并 AI 估算批改，未提交的小问不露参考答案、不计零分；批改完成后可对本问继续追问（流式答疑，不写入答题账本）。浏览器草稿按题恢复，离开后可继续未完成的小问。批改失败不丢失已提交答案，可在当前小问或历史记录中重试；客观题正确率不混入案例评分。
-
-案例接口：`GET /api/cases?year=2025下`、`POST /api/cases/attempts`（`questionId`、`partId`、`answer`，续做时带 `attemptId`）、`POST /api/cases/attempts/:id/grade`（`partId`）、`POST /api/cases/follow-up/stream`（批改后对本问追问），均使用现有 API 鉴权。提交前列表不返回参考答案，提交某小问后只返回该问参考答案。记录保存在 `state/case-attempts.json`；复习计划以当日实际提交过的大题数量核验案例任务（提交任一小问即计入该大题），包含案例的知识任务还需满足学习时长。资料属于非官方整理，缺失图表和不可评分部分仍保留原资料说明，批改不替代官方评分。
-
-验证：`node --test server/cases.test.js`、`bash scripts/validate.sh`、`npm run build`。
+技术栈：React、Vite、Express、Node.js ESM、Markdown、JSON、SSE、WebSocket 和 ACP。
